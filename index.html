@@ -215,12 +215,49 @@
     </div>
 
     <script>
-      const API_URL = "api.php";
+      const API_URL = "http://localhost/restapi/api.php";
 
+      function switchTab(tab) {
+        document.querySelectorAll(".tab-btn").forEach((btn) => {
+          btn.classList.remove("active-tab", "bg-white", "text-purple-600");
+          btn.classList.add("bg-white/80", "text-gray-700");
+        });
+        document.querySelectorAll(".section").forEach((section) => {
+          section.classList.add("hidden");
+        });
+
+        event.target.classList.add("active-tab", "bg-white", "text-purple-600");
+        event.target.classList.remove("bg-white/80", "text-gray-700");
+        document.getElementById(tab).classList.remove("hidden");
+
+        if (tab === "products") {
+          loadProducts();
+        } else {
+          loadTransactions();
+          loadProductsForSelect();
+        }
+      }
+
+      // Show alert message
+      function showAlert(message, type = "success") {
+        const alertDiv = document.getElementById("alert");
+        const bgColor =
+          type === "success"
+            ? "bg-green-100 border-green-400 text-green-700"
+            : "bg-red-100 border-red-400 text-red-700";
+        alertDiv.innerHTML = `
+                <div class="${bgColor} border-2 px-6 py-4 rounded-xl font-semibold shadow-lg animate-pulse">
+                    ${type === "success" ? "✅" : "❌"} ${message}
+                </div>
+            `;
+        setTimeout(() => (alertDiv.innerHTML = ""), 3000);
+      }
+
+      // ========== PRODUCTS ==========
       async function loadProducts() {
         try {
-          const res = await fetch("${API_URL}?endpoint=products");
-          const products = await res.json;
+          const res = await fetch(`${API_URL}?endpoint=products`);
+          const products = await res.json();
           const tbody = document.getElementById("productsTable");
 
           if (products.length === 0) {
@@ -228,7 +265,40 @@
               '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No products found</td></tr>';
             return;
           }
+
+          tbody.innerHTML = products
+            .map(
+              (p, i) => `
+                    <tr class="hover:bg-blue-50 transition-all ${
+                      i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    }">
+                        <td class="px-6 py-4 font-semibold text-gray-700">${
+                          p.id
+                        }</td>
+                        <td class="px-6 py-4 font-medium text-gray-800">${
+                          p.name
+                        }</td>
+                        <td class="px-6 py-4 text-green-600 font-bold">Rp ${parseFloat(
+                          p.price
+                        ).toLocaleString("id-ID")}</td>
+                        <td class="px-6 py-4">
+                            <button onclick="editProduct(${
+                              p.id
+                            })" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all mr-2 font-semibold">
+                                ✏️ Edit
+                            </button>
+                            <button onclick="deleteProduct(${
+                              p.id
+                            })" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all font-semibold">
+                                🗑️ Delete
+                            </button>
+                        </td>
+                    </tr>
+                `
+            )
+            .join("");
         } catch (err) {
+         console.log(err);
           showAlert("failed to load products", "error");
         }
       }
@@ -236,6 +306,7 @@
       // add products function to send
       async function saveProduct(e) {
         e.preventDefault();
+
         const id = document.getElementById("productId").value;
         const name = document.getElementById("productName").value;
         const price = document.getElementById("productPrice").value;
@@ -248,16 +319,28 @@
           //  using post or put method as URL by ternary operator
           const method = id ? "PUT" : "POST";
 
-          //
+          //fetching data using json API control in js method to php method encode
           const res = await fetch(url, {
             method: method,
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, price }),
+
+            // remind : this is the data went through out
+            body: JSON.stringify({
+              name, // name of the products
+              price, // price of the products
+            }),
           });
 
+          //  waiting response from method PHP to send what the data is send or not
           const data = await res.json();
+
+          //  triggering the php file to send the response data json message using json
           showAlert(data.message);
+
+          //  function for clearing the form
           resetProductForm();
+
+          //  function to reload the product that have been added after execute
           loadProducts();
         } catch (err) {
           showAlert("Failed to save product", "error");
@@ -266,19 +349,204 @@
 
       // edit products
       async function editProduct(id) {
-            try {
-                const res = await fetch(`${API_URL}?endpoint=products&id=${id}`);
-                const product = await res.json();
-                
-                document.getElementById('productId').value = product.id;
-                document.getElementById('productName').value = product.name;
-                document.getElementById('productPrice').value = product.price;
-                document.getElementById('productSubmitBtn').innerHTML = '💾 Update Product';
-                window.scrollTo(0, 0);
-            } catch (err) {
-                showAlert('Failed to load product', 'error');
-            }
+        try {
+          const res = await fetch(`${API_URL}?endpoint=products&id=${id}`);
+          const product = await res.json();
+
+          document.getElementById("productId").value = product.id;
+          document.getElementById("productName").value = product.name;
+          document.getElementById("productPrice").value = product.price;
+          document.getElementById("productSubmitBtn").innerHTML =
+            "💾 Update Product";
+          window.scrollTo(0, 0);
+        } catch (err) {
+          showAlert("Failed to load product", "error");
         }
+      }
+
+      // delete products
+      async function deleteProduct(id) {
+        // loop for asking the data will deleted, while cancel while returning the data
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        // the logic for deleting the data using the ID to sent it to PHP method
+        try {
+          const res = await fetch(`${API_URL}?endpoint=products&id=${id}`, {
+            // method in php will trigger this
+            method: "DELETE",
+          });
+          //  same function like before
+          const data = await res.json();
+          showAlert(data.message);
+          loadProducts();
+        } catch (err) {
+          // this allert will appear if the data unable to delete due error or something wrong
+          showAlert("Failed to delete product", "error");
+        }
+      }
+
+      // reset products form
+      function resetProductForm() {
+        document.getElementById("productForm").reset();
+        document.getElementById("productId").value = "";
+        document.getElementById("productSubmitBtn").innerHTML =
+          "➕ Add Product";
+      }
+
+      // ========== TRANSACTIONS ==========
+      async function loadProductsForSelect() {
+        try {
+          const res = await fetch(`${API_URL}?endpoint=products`);
+          const products = await res.json();
+          const select = document.getElementById("transactionProduct");
+
+          select.innerHTML =
+            '<option value="">-- Select Product --</option>' +
+            products
+              .map(
+                (p) =>
+                  `<option value="${p.id}">${p.name} - Rp ${parseFloat(
+                    p.price
+                  ).toLocaleString("id-ID")}</option>`
+              )
+              .join("");
+        } catch (err) {
+          showAlert("Failed to load products", "error");
+        }
+      }
+
+      async function loadTransactions() {
+        try {
+          const res = await fetch(`${API_URL}?endpoint=transactions`);
+          const transactions = await res.json();
+          const tbody = document.getElementById("transactionsTable");
+
+          if (transactions.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No transactions found</td></tr>';
+            document.getElementById("totalRevenue").textContent = "Rp 0";
+            return;
+          }
+
+          let totalRevenue = 0;
+          tbody.innerHTML = transactions
+            .map((t, i) => {
+              const total = t.quantity * parseFloat(t.product_price || 0);
+              totalRevenue += total;
+              return `
+                        <tr class="hover:bg-green-50 transition-all ${
+                          i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                        }">
+                            <td class="px-6 py-4 font-semibold text-gray-700">${
+                              t.id
+                            }</td>
+                            <td class="px-6 py-4 font-medium text-gray-800">${
+                              t.product_name || "N/A"
+                            }</td>
+                            <td class="px-6 py-4 text-blue-600 font-bold">${
+                              t.quantity
+                            }x</td>
+                            <td class="px-6 py-4 text-gray-600">Rp ${parseFloat(
+                              t.product_price || 0
+                            ).toLocaleString("id-ID")}</td>
+                            <td class="px-6 py-4 text-green-600 font-bold text-lg">Rp ${total.toLocaleString(
+                              "id-ID"
+                            )}</td>
+                            <td class="px-6 py-4">
+                                <button onclick="editTransaction(${
+                                  t.id
+                                })" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all mr-2 font-semibold">
+                                    ✏️ Edit
+                                </button>
+                                <button onclick="deleteTransaction(${
+                                  t.id
+                                })" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all font-semibold">
+                                    🗑️ Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+            })
+            .join("");
+
+          document.getElementById(
+            "totalRevenue"
+          ).textContent = `Rp ${totalRevenue.toLocaleString("id-ID")}`;
+        } catch (err) {
+          showAlert("Failed to load transactions", "error");
+        }
+      }
+
+      async function saveTransaction(e) {
+        e.preventDefault();
+        const id = document.getElementById("transactionId").value;
+        const product_id = document.getElementById("transactionProduct").value;
+        const quantity = document.getElementById("transactionQuantity").value;
+
+        try {
+          const url = id
+            ? `${API_URL}?endpoint=transactions&id=${id}`
+            : `${API_URL}?endpoint=transactions`;
+          const method = id ? "PUT" : "POST";
+
+          const res = await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ product_id, quantity }),
+          });
+
+          const data = await res.json();
+          showAlert(data.message);
+          resetTransactionForm();
+          loadTransactions();
+        } catch (err) {
+          showAlert("Failed to save transaction", "error");
+        }
+      }
+
+      async function editTransaction(id) {
+        try {
+          const res = await fetch(`${API_URL}?endpoint=transactions&id=${id}`);
+          const transaction = await res.json();
+
+          document.getElementById("transactionId").value = transaction.id;
+          document.getElementById("transactionProduct").value =
+            transaction.product_id;
+          document.getElementById("transactionQuantity").value =
+            transaction.quantity;
+          document.getElementById("transactionSubmitBtn").innerHTML =
+            "💾 Update Transaction";
+          window.scrollTo(0, 0);
+        } catch (err) {
+          showAlert("Failed to load transaction", "error");
+        }
+      }
+
+      async function deleteTransaction(id) {
+        if (!confirm("Are you sure you want to delete this transaction?"))
+          return;
+
+        try {
+          const res = await fetch(`${API_URL}?endpoint=transactions&id=${id}`, {
+            method: "DELETE",
+          });
+          const data = await res.json();
+          showAlert(data.message);
+          loadTransactions();
+        } catch (err) {
+          showAlert("Failed to delete transaction", "error");
+        }
+      }
+
+      function resetTransactionForm() {
+        document.getElementById("transactionForm").reset();
+        document.getElementById("transactionId").value = "";
+        document.getElementById("transactionSubmitBtn").innerHTML =
+          "➕ Add Transaction";
+      }
+
+      // Load initial data
+      loadProducts();
     </script>
   </body>
 </html>
