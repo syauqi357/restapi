@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./src/output.css" />
+  </head>
+  <body>
+    <div class="container mx-auto px-4 py-8">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-5xl font-bold text-slate-700 mb-2">
+          🚰 Galon Management System
+        </h1>
+        <p class="text-white text-lg opacity-90">
+          Manage your water gallon business with ease
+        </p>
+      </div>
+
+      <!-- Alert -->
+      <div id="alert" class="mb-6"></div>
+
+      <!-- Tabs -->
+      <div class="flex gap-2 mb-0">
+        <button
+          onclick="switchTab('products')"
+          class="tab-btn flex-1 bg-white text-purple-600 font-bold py-4 px-6 rounded-t-2xl shadow-lg hover:bg-gray-50 transition-all active-tab"
+        >
+          📦 Products
+        </button>
+        <button
+          onclick="switchTab('transactions')"
+          class="tab-btn flex-1 bg-white/80 text-gray-700 font-bold py-4 px-6 rounded-t-2xl hover:bg-white transition-all"
+        >
+          💰 Transactions
+        </button>
+      </div>
+
+      <!-- Content Card -->
+      <div class="bg-white rounded-b-2xl rounded-tr-2xl shadow-2xl p-8">
+        <!-- Products Section -->
+        <div id="products" class="section">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Products</h2>
+
+          <form
+            id="productForm"
+            onsubmit="saveProduct(event)"
+            class="bg-slate-100 p-6 rounded-xl mb-8 border-2 border-blue-200"
+          >
+            <input type="hidden" id="productId" />
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2"
+                  >Galon Name</label
+                >
+                <input
+                  type="text"
+                  id="productName"
+                  required
+                  placeholder="e.g., Aqua 19L"
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-all"
+                />
+              </div>
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2"
+                  >Price (Rp)</label
+                >
+                <input
+                  type="number"
+                  id="productPrice"
+                  required
+                  placeholder="e.g., 20000"
+                  step="0.01"
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-all"
+                />
+              </div>
+            </div>
+
+            <div class="flex gap-3">
+              <button
+                type="submit"
+                id="productSubmitBtn"
+                class="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-3 px-8 rounded-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg"
+              >
+                ➕ Add Product
+              </button>
+              <button
+                type="button"
+                onclick="resetProductForm()"
+                class="bg-gray-400 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-500 transition-all"
+              >
+                ❌ Cancel
+              </button>
+            </div>
+          </form>
+
+          <!-- Products Table -->
+          <div class="overflow-x-auto rounded-xl border-2 border-gray-200">
+            <table class="w-full">
+              <thead
+                class="bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+              >
+                <tr>
+                  <th class="px-6 py-4 text-left font-bold">ID</th>
+                  <th class="px-6 py-4 text-left font-bold">Name</th>
+                  <th class="px-6 py-4 text-left font-bold">Price (Rp)</th>
+                  <th class="px-6 py-4 text-left font-bold">Actions</th>
+                </tr>
+              </thead>
+              <tbody
+                id="productsTable"
+                class="divide-y divide-gray-200"
+              ></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div id="transactions" class="section hidden">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">
+            Manage Transactions
+          </h2>
+
+          <!-- Total Revenue Box -->
+          <div
+            class="bg-gradient-to-r from-green-400 to-blue-500 text-white p-8 rounded-2xl mb-8 shadow-xl"
+          >
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xl opacity-90 mb-2">💵 Total Revenue</p>
+                <p class="text-5xl font-bold" id="totalRevenue">Rp 0</p>
+              </div>
+              <div class="text-8xl opacity-20">📊</div>
+            </div>
+          </div>
+
+          <form
+            id="transactionForm"
+            onsubmit="saveTransaction(event)"
+            class="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl mb-8 border-2 border-green-200"
+          >
+            <input type="hidden" id="transactionId" />
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2"
+                  >Select Product</label
+                >
+                <select
+                  id="transactionProduct"
+                  required
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-all"
+                >
+                  <option value="">-- Select Product --</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-gray-700 font-semibold mb-2"
+                  >Quantity</label
+                >
+                <input
+                  type="number"
+                  id="transactionQuantity"
+                  required
+                  placeholder="e.g., 5"
+                  min="1"
+                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-all"
+                />
+              </div>
+            </div>
+
+            <div class="flex gap-3">
+              <button
+                type="submit"
+                id="transactionSubmitBtn"
+                class="bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:from-green-600 hover:to-blue-700 transform hover:scale-105 transition-all shadow-lg"
+              >
+                ➕ Add Transaction
+              </button>
+              <button
+                type="button"
+                onclick="resetTransactionForm()"
+                class="bg-gray-400 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-500 transition-all"
+              >
+                ❌ Cancel
+              </button>
+            </div>
+          </form>
+
+          <!-- Transactions Table -->
+          <div class="overflow-x-auto rounded-xl border-2 border-gray-200">
+            <table class="w-full">
+              <thead
+                class="bg-gradient-to-r from-green-500 to-blue-600 text-white"
+              >
+                <tr>
+                  <th class="px-6 py-4 text-left font-bold">ID</th>
+                  <th class="px-6 py-4 text-left font-bold">Product</th>
+                  <th class="px-6 py-4 text-left font-bold">Quantity</th>
+                  <th class="px-6 py-4 text-left font-bold">Price</th>
+                  <th class="px-6 py-4 text-left font-bold">Total</th>
+                  <th class="px-6 py-4 text-left font-bold">Actions</th>
+                </tr>
+              </thead>
+              <tbody
+                id="transactionsTable"
+                class="divide-y divide-gray-200"
+              ></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_URL = "api.php";
+
+      async function loadProducts() {
+        try {
+          const res = await fetch("${API_URL}?endpoint=products");
+          const products = await res.json;
+          const tbody = document.getElementById("productsTable");
+
+          if (products.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No products found</td></tr>';
+            return;
+          }
+        } catch (err) {
+          showAlert("failed to load products", "error");
+        }
+      }
+
+      // add products function to send
+      async function saveProduct(e) {
+        e.preventDefault();
+        const id = document.getElementById("productId").value;
+        const name = document.getElementById("productName").value;
+        const price = document.getElementById("productPrice").value;
+
+        try {
+          const url = id
+            ? `${API_URL}?endpoint=products&id=${id}`
+            : `${API_URL}?endpoint=products`;
+
+          //  using post or put method as URL by ternary operator
+          const method = id ? "PUT" : "POST";
+
+          //
+          const res = await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, price }),
+          });
+
+          const data = await res.json();
+          showAlert(data.message);
+          resetProductForm();
+          loadProducts();
+        } catch (err) {
+          showAlert("Failed to save product", "error");
+        }
+      }
+
+      // edit products
+      async function editProduct(id) {
+            try {
+                const res = await fetch(`${API_URL}?endpoint=products&id=${id}`);
+                const product = await res.json();
+                
+                document.getElementById('productId').value = product.id;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productSubmitBtn').innerHTML = '💾 Update Product';
+                window.scrollTo(0, 0);
+            } catch (err) {
+                showAlert('Failed to load product', 'error');
+            }
+        }
+    </script>
+  </body>
+</html>
