@@ -17,7 +17,8 @@ define('DB_PASS', '');
 define('DB_NAME', 'galondb');
 
 // Database connection
-function getConnection() {
+function getConnection()
+{
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if ($conn->connect_error) {
         sendResponse(500, ['error' => 'Database connection failed: ' . $conn->connect_error]);
@@ -26,7 +27,8 @@ function getConnection() {
 }
 
 // Send JSON response
-function sendResponse($code, $data) {
+function sendResponse($code, $data)
+{
     http_response_code($code);
     echo json_encode($data);
     exit();
@@ -53,10 +55,13 @@ switch ($request) {
 }
 
 // ============ PRODUCTS HANDLERS ============
-function handleProducts($method, $id, $input) {
+function handleProducts($method, $id, $input)
+{
     $conn = getConnection();
-    
+
     switch ($method) {
+
+        // get data
         case 'GET':
             if ($id) {
                 // Get single product
@@ -64,7 +69,7 @@ function handleProducts($method, $id, $input) {
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $result = $stmt->get_result();
-                
+
                 if ($row = $result->fetch_assoc()) {
                     sendResponse(200, $row);
                 } else {
@@ -80,16 +85,16 @@ function handleProducts($method, $id, $input) {
                 sendResponse(200, $products);
             }
             break;
-            
+        // post or add data
         case 'POST':
             // Create new product
             if (!isset($input['name']) || !isset($input['price'])) {
                 sendResponse(400, ['error' => 'Name and price are required']);
             }
-            
+
             $stmt = $conn->prepare("INSERT INTO products (name, price) VALUES (?, ?)");
             $stmt->bind_param("sd", $input['name'], $input['price']);
-            
+
             if ($stmt->execute()) {
                 sendResponse(201, [
                     'message' => 'Product created successfully',
@@ -99,17 +104,18 @@ function handleProducts($method, $id, $input) {
                 sendResponse(500, ['error' => 'Failed to create product']);
             }
             break;
-            
+
+        // edit data
         case 'PUT':
             // Update product
             if (!$id) {
                 sendResponse(400, ['error' => 'Product ID is required']);
             }
-            
+
             $fields = [];
             $types = "";
             $values = [];
-            
+
             if (isset($input['name'])) {
                 $fields[] = "name = ?";
                 $types .= "s";
@@ -120,18 +126,18 @@ function handleProducts($method, $id, $input) {
                 $types .= "d";
                 $values[] = $input['price'];
             }
-            
+
             if (empty($fields)) {
                 sendResponse(400, ['error' => 'No fields to update']);
             }
-            
+
             $values[] = $id;
             $types .= "i";
-            
+
             $sql = "UPDATE products SET " . implode(", ", $fields) . " WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param($types, ...$values);
-            
+
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
                     sendResponse(200, ['message' => 'Product updated successfully']);
@@ -142,16 +148,17 @@ function handleProducts($method, $id, $input) {
                 sendResponse(500, ['error' => 'Failed to update product']);
             }
             break;
-            
+
+        // delete method
         case 'DELETE':
             // Delete product
             if (!$id) {
                 sendResponse(400, ['error' => 'Product ID is required']);
             }
-            
+
             $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
             $stmt->bind_param("i", $id);
-            
+
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
                     sendResponse(200, ['message' => 'Product deleted successfully']);
@@ -162,16 +169,17 @@ function handleProducts($method, $id, $input) {
                 sendResponse(500, ['error' => 'Failed to delete product']);
             }
             break;
-            
+
         default:
             sendResponse(405, ['error' => 'Method not allowed']);
     }
 }
 
 // ============ TRANSACTIONS HANDLERS ============
-function handleTransactions($method, $id, $input) {
+function handleTransactions($method, $id, $input)
+{
     $conn = getConnection();
-    
+
     switch ($method) {
         case 'GET':
             if ($id) {
@@ -185,7 +193,7 @@ function handleTransactions($method, $id, $input) {
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $result = $stmt->get_result();
-                
+
                 if ($row = $result->fetch_assoc()) {
                     sendResponse(200, $row);
                 } else {
@@ -206,16 +214,16 @@ function handleTransactions($method, $id, $input) {
                 sendResponse(200, $transactions);
             }
             break;
-            
+
         case 'POST':
             // Create new transaction
             if (!isset($input['product_id']) || !isset($input['quantity'])) {
                 sendResponse(400, ['error' => 'Product ID and quantity are required']);
             }
-            
+
             $stmt = $conn->prepare("INSERT INTO transactions (product_id, quantity) VALUES (?, ?)");
             $stmt->bind_param("ii", $input['product_id'], $input['quantity']);
-            
+
             if ($stmt->execute()) {
                 sendResponse(201, [
                     'message' => 'Transaction created successfully',
@@ -225,17 +233,17 @@ function handleTransactions($method, $id, $input) {
                 sendResponse(500, ['error' => 'Failed to create transaction']);
             }
             break;
-            
+
         case 'PUT':
             // Update transaction
             if (!$id) {
                 sendResponse(400, ['error' => 'Transaction ID is required']);
             }
-            
+
             $fields = [];
             $types = "";
             $values = [];
-            
+
             if (isset($input['product_id'])) {
                 $fields[] = "product_id = ?";
                 $types .= "i";
@@ -246,18 +254,18 @@ function handleTransactions($method, $id, $input) {
                 $types .= "i";
                 $values[] = $input['quantity'];
             }
-            
+
             if (empty($fields)) {
                 sendResponse(400, ['error' => 'No fields to update']);
             }
-            
+
             $values[] = $id;
             $types .= "i";
-            
+
             $sql = "UPDATE transactions SET " . implode(", ", $fields) . " WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param($types, ...$values);
-            
+
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
                     sendResponse(200, ['message' => 'Transaction updated successfully']);
@@ -268,16 +276,16 @@ function handleTransactions($method, $id, $input) {
                 sendResponse(500, ['error' => 'Failed to update transaction']);
             }
             break;
-            
+
         case 'DELETE':
             // Delete transaction
             if (!$id) {
                 sendResponse(400, ['error' => 'Transaction ID is required']);
             }
-            
+
             $stmt = $conn->prepare("DELETE FROM transactions WHERE id = ?");
             $stmt->bind_param("i", $id);
-            
+
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
                     sendResponse(200, ['message' => 'Transaction deleted successfully']);
@@ -288,9 +296,8 @@ function handleTransactions($method, $id, $input) {
                 sendResponse(500, ['error' => 'Failed to delete transaction']);
             }
             break;
-            
+
         default:
             sendResponse(405, ['error' => 'Method not allowed']);
     }
 }
-?>
