@@ -6,6 +6,7 @@ integration with android using retrofit and gson
 
 retrofit is library for showing and translate the json data
 gson is... idk... but ill try it :)
+okhttp is library to take the http response
 
 -->
 
