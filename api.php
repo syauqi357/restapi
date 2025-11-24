@@ -1,3 +1,14 @@
+<!-- 
+ 
+incoming work
+
+integration with android using retrofit and gson
+
+retrofit is library for showing and translate the json data
+gson is... idk... but ill try it :)
+
+-->
+
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
