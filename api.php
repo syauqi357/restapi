@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'galondb');
+define('DB_NAME', 'jadwal');
 
 // Database connection
 function getConnection()
@@ -44,87 +44,126 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 // Router
 switch ($request) {
-    case 'products':
-        handleProducts($method, $id, $input);
+    case 'guru':
+        handleTeacher($method, $id, $input);
         break;
-    case 'transactions':
-        handleTransactions($method, $id, $input);
+    case 'jadwal':
+        handleJadwal($method, $id, $input);
         break;
     default:
         sendResponse(404, ['error' => 'Endpoint not found']);
 }
 
-// ============ PRODUCTS HANDLERS ============
-function handleProducts($method, $id, $input)
+// ============ TEACHERS HANDLER WITH JADWAL RELATIONSHIP ============
+function handleTeacher($method, $id, $input)
 {
     $conn = getConnection();
 
     switch ($method) {
 
-        // get data
+        // GET data with jadwal relationship
         case 'GET':
             if ($id) {
-                // Get single product
-                $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+                // Get single teacher WITH their jadwal
+                $stmt = $conn->prepare("
+                    SELECT g.*, 
+                           GROUP_CONCAT(
+                               CONCAT(j.mapel, '|', j.hari, '|', j.jam) 
+                               SEPARATOR ';;'
+                           ) as jadwal_list
+                    FROM guru g
+                    LEFT JOIN jadwalsekolah j ON g.nama_guru = j.guru
+                    WHERE g.id = ?
+                    GROUP BY g.id
+                ");
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $result = $stmt->get_result();
 
                 if ($row = $result->fetch_assoc()) {
+                    // Parse jadwal list into array
+                    if ($row['jadwal_list']) {
+                        $jadwal_items = explode(';;', $row['jadwal_list']);
+                        $jadwal_array = [];
+                        foreach ($jadwal_items as $item) {
+                            $parts = explode('|', $item);
+                            $jadwal_array[] = [
+                                'mapel' => $parts[0],
+                                'hari' => $parts[1],
+                                'jam' => $parts[2]
+                            ];
+                        }
+                        $row['jadwal'] = $jadwal_array;
+                    } else {
+                        $row['jadwal'] = [];
+                    }
+                    unset($row['jadwal_list']);
+
                     sendResponse(200, $row);
                 } else {
-                    sendResponse(404, ['error' => 'Product not found']);
+                    sendResponse(404, ['error' => 'Teacher not found']);
                 }
             } else {
-                // Get all products
-                $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
-                $products = [];
+                // Get all teachers WITH jadwal count
+                $result = $conn->query("
+                    SELECT g.*, 
+                           COUNT(j.id_matkul) as total_jadwal
+                    FROM guru g
+                    LEFT JOIN jadwalsekolah j ON g.nama_guru = j.guru
+                    GROUP BY g.id
+                    ORDER BY g.id ASC
+                ");
+                $teachers = [];
                 while ($row = $result->fetch_assoc()) {
-                    $products[] = $row;
+                    $teachers[] = $row;
                 }
-                sendResponse(200, $products);
+                sendResponse(200, $teachers);
             }
             break;
-        // post or add data
+
+        // POST - Add new teacher
         case 'POST':
-            // Create new product
-            if (!isset($input['name']) || !isset($input['price'])) {
-                sendResponse(400, ['error' => 'Name and price are required']);
+            if (!isset($input['nama_guru']) || !isset($input['mata_pelajaran']) || !isset($input['no_telepon'])) {
+                sendResponse(400, ['error' => 'Nama guru, mata pelajaran, and no telepon are required']);
             }
 
-            $stmt = $conn->prepare("INSERT INTO products (name, price) VALUES (?, ?)");
-            $stmt->bind_param("sd", $input['name'], $input['price']);
+            $stmt = $conn->prepare("INSERT INTO guru (nama_guru, mata_pelajaran, no_telepon) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $input['nama_guru'], $input['mata_pelajaran'], $input['no_telepon']);
 
             if ($stmt->execute()) {
                 sendResponse(201, [
-                    'message' => 'Product created successfully',
+                    'message' => 'Teacher inserted successfully! 👨‍🏫',
                     'id' => $conn->insert_id
                 ]);
             } else {
-                sendResponse(500, ['error' => 'Failed to create product']);
+                sendResponse(500, ['error' => 'Failed to insert teacher']);
             }
             break;
 
-        // edit data
+        // PUT - Update teacher
         case 'PUT':
-            // Update product
             if (!$id) {
-                sendResponse(400, ['error' => 'Product ID is required']);
+                sendResponse(400, ['error' => 'Teacher ID is required']);
             }
 
             $fields = [];
             $types = "";
             $values = [];
 
-            if (isset($input['name'])) {
-                $fields[] = "name = ?";
+            if (isset($input['nama_guru'])) {
+                $fields[] = "nama_guru = ?";
                 $types .= "s";
-                $values[] = $input['name'];
+                $values[] = $input['nama_guru'];
             }
-            if (isset($input['price'])) {
-                $fields[] = "price = ?";
-                $types .= "d";
-                $values[] = $input['price'];
+            if (isset($input['mata_pelajaran'])) {
+                $fields[] = "mata_pelajaran = ?";
+                $types .= "s";
+                $values[] = $input['mata_pelajaran'];
+            }
+            if (isset($input['no_telepon'])) {
+                $fields[] = "no_telepon = ?";
+                $types .= "s";
+                $values[] = $input['no_telepon'];
             }
 
             if (empty($fields)) {
@@ -134,39 +173,63 @@ function handleProducts($method, $id, $input)
             $values[] = $id;
             $types .= "i";
 
-            $sql = "UPDATE products SET " . implode(", ", $fields) . " WHERE id = ?";
+            $sql = "UPDATE guru SET " . implode(", ", $fields) . " WHERE id = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param($types, ...$values);
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Product updated successfully']);
+                    sendResponse(200, ['message' => 'Teacher updated successfully! 📝']);
                 } else {
-                    sendResponse(404, ['error' => 'Product not found']);
+                    sendResponse(404, ['error' => 'Teacher not found']);
                 }
             } else {
-                sendResponse(500, ['error' => 'Failed to update product']);
+                sendResponse(500, ['error' => 'Failed to update teacher']);
             }
             break;
 
-        // delete method
+        // DELETE teacher (with warning if has jadwal)
         case 'DELETE':
-            // Delete product
             if (!$id) {
-                sendResponse(400, ['error' => 'Product ID is required']);
+                sendResponse(400, ['error' => 'Teacher ID is required']);
             }
 
-            $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
+            // Check if teacher has jadwal
+            $check = $conn->prepare("
+                SELECT COUNT(*) as jadwal_count, g.nama_guru
+                FROM guru g
+                LEFT JOIN jadwalsekolah j ON g.nama_guru = j.guru
+                WHERE g.id = ?
+                GROUP BY g.id
+            ");
+            $check->bind_param("i", $id);
+            $check->execute();
+            $result = $check->get_result();
+            $data = $result->fetch_assoc();
+
+            if (!$data) {
+                sendResponse(404, ['error' => 'Teacher not found']);
+            }
+
+            if ($data['jadwal_count'] > 0) {
+                sendResponse(400, [
+                    'error' => 'Cannot delete teacher with existing jadwal',
+                    'jadwal_count' => $data['jadwal_count'],
+                    'message' => 'Please delete all jadwal for this teacher first'
+                ]);
+            }
+
+            $stmt = $conn->prepare("DELETE FROM guru WHERE id = ?");
             $stmt->bind_param("i", $id);
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Product deleted successfully']);
+                    sendResponse(200, ['message' => 'Teacher deleted successfully! 🗑️']);
                 } else {
-                    sendResponse(404, ['error' => 'Product not found']);
+                    sendResponse(404, ['error' => 'Teacher not found']);
                 }
             } else {
-                sendResponse(500, ['error' => 'Failed to delete product']);
+                sendResponse(500, ['error' => 'Failed to delete teacher']);
             }
             break;
 
@@ -176,19 +239,21 @@ function handleProducts($method, $id, $input)
 }
 
 // ============ TRANSACTIONS HANDLERS ============
-function handleTransactions($method, $id, $input)
+function handleJadwal($method, $id, $input)
 {
     $conn = getConnection();
 
     switch ($method) {
         case 'GET':
             if ($id) {
-                // Get single transaction with product details
+                // Get single jadwal WITH teacher info
                 $stmt = $conn->prepare("
-                    SELECT t.*, p.name as product_name, p.price as product_price 
-                    FROM transactions t 
-                    LEFT JOIN products p ON t.product_id = p.id 
-                    WHERE t.id = ?
+                    SELECT j.*, 
+                           g.mata_pelajaran as guru_mapel,
+                           g.no_telepon as guru_telepon
+                    FROM jadwalsekolah j
+                    LEFT JOIN guru g ON j.guru = g.nama_guru
+                    WHERE j.id_matkul = ?
                 ");
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
@@ -197,62 +262,109 @@ function handleTransactions($method, $id, $input)
                 if ($row = $result->fetch_assoc()) {
                     sendResponse(200, $row);
                 } else {
-                    sendResponse(404, ['error' => 'Transaction not found']);
+                    sendResponse(404, ['error' => 'Jadwal not found']);
                 }
             } else {
-                // Get all transactions with product details
+                // Get all jadwal WITH teacher info
                 $result = $conn->query("
-                    SELECT t.*, p.name as product_name, p.price as product_price 
-                    FROM transactions t 
-                    LEFT JOIN products p ON t.product_id = p.id 
-                    ORDER BY t.id DESC
+                    SELECT j.*, 
+                           g.mata_pelajaran as guru_mapel,
+                           g.no_telepon as guru_telepon
+                    FROM jadwalsekolah j
+                    LEFT JOIN guru g ON j.guru = g.nama_guru
+                    ORDER BY j.hari ASC, j.jam ASC
                 ");
-                $transactions = [];
+                $jadwal = [];
                 while ($row = $result->fetch_assoc()) {
-                    $transactions[] = $row;
+                    $jadwal[] = $row;
                 }
-                sendResponse(200, $transactions);
+                sendResponse(200, $jadwal);
             }
             break;
 
         case 'POST':
-            // Create new transaction
-            if (!isset($input['product_id']) || !isset($input['quantity'])) {
-                sendResponse(400, ['error' => 'Product ID and quantity are required']);
+            // Validate required fields
+            if (!isset($input['guru']) || !isset($input['mapel']) || !isset($input['hari']) || !isset($input['jam'])) {
+                sendResponse(400, ['error' => 'Guru, Mapel, Hari, and Jam are required']);
             }
 
-            $stmt = $conn->prepare("INSERT INTO transactions (product_id, quantity) VALUES (?, ?)");
-            $stmt->bind_param("ii", $input['product_id'], $input['quantity']);
+            // Check if teacher exists
+            $check = $conn->prepare("SELECT id FROM guru WHERE nama_guru = ?");
+            $check->bind_param("s", $input['guru']);
+            $check->execute();
+            $result = $check->get_result();
+
+            if ($result->num_rows == 0) {
+                sendResponse(400, [
+                    'error' => 'Teacher not found',
+                    'message' => 'Please add the teacher first before creating jadwal'
+                ]);
+            }
+
+            $stmt = $conn->prepare("
+                INSERT INTO jadwalsekolah (id_matkul, guru, mapel, hari, jam) 
+                VALUES (?, ?, ?, ?, ?)
+            ");
+
+            $id_matkul = isset($input['id_matkul']) ? $input['id_matkul'] : null;
+
+            $stmt->bind_param(
+                "issss",
+                $id_matkul,
+                $input['guru'],
+                $input['mapel'],
+                $input['hari'],
+                $input['jam']
+            );
 
             if ($stmt->execute()) {
                 sendResponse(201, [
-                    'message' => 'Transaction created successfully',
-                    'id' => $conn->insert_id
+                    'message' => 'Jadwal created successfully! 🎓',
+                    'id_matkul' => $id_matkul ?: $conn->insert_id
                 ]);
             } else {
-                sendResponse(500, ['error' => 'Failed to create transaction']);
+                sendResponse(500, ['error' => 'Failed to create jadwal']);
             }
             break;
 
         case 'PUT':
-            // Update transaction
             if (!$id) {
-                sendResponse(400, ['error' => 'Transaction ID is required']);
+                sendResponse(400, ['error' => 'ID Matkul is required']);
             }
 
             $fields = [];
             $types = "";
             $values = [];
 
-            if (isset($input['product_id'])) {
-                $fields[] = "product_id = ?";
-                $types .= "i";
-                $values[] = $input['product_id'];
+            if (isset($input['guru'])) {
+                // Validate teacher exists
+                $check = $conn->prepare("SELECT id FROM guru WHERE nama_guru = ?");
+                $check->bind_param("s", $input['guru']);
+                $check->execute();
+                $result = $check->get_result();
+
+                if ($result->num_rows == 0) {
+                    sendResponse(400, ['error' => 'Teacher not found']);
+                }
+
+                $fields[] = "guru = ?";
+                $types .= "s";
+                $values[] = $input['guru'];
             }
-            if (isset($input['quantity'])) {
-                $fields[] = "quantity = ?";
-                $types .= "i";
-                $values[] = $input['quantity'];
+            if (isset($input['mapel'])) {
+                $fields[] = "mapel = ?";
+                $types .= "s";
+                $values[] = $input['mapel'];
+            }
+            if (isset($input['hari'])) {
+                $fields[] = "hari = ?";
+                $types .= "s";
+                $values[] = $input['hari'];
+            }
+            if (isset($input['jam'])) {
+                $fields[] = "jam = ?";
+                $types .= "s";
+                $values[] = $input['jam'];
             }
 
             if (empty($fields)) {
@@ -262,38 +374,37 @@ function handleTransactions($method, $id, $input)
             $values[] = $id;
             $types .= "i";
 
-            $sql = "UPDATE transactions SET " . implode(", ", $fields) . " WHERE id = ?";
+            $sql = "UPDATE jadwalsekolah SET " . implode(", ", $fields) . " WHERE id_matkul = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param($types, ...$values);
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Transaction updated successfully']);
+                    sendResponse(200, ['message' => 'Jadwal updated successfully! 📝']);
                 } else {
-                    sendResponse(404, ['error' => 'Transaction not found']);
+                    sendResponse(404, ['error' => 'Jadwal not found']);
                 }
             } else {
-                sendResponse(500, ['error' => 'Failed to update transaction']);
+                sendResponse(500, ['error' => 'Failed to update jadwal']);
             }
             break;
 
         case 'DELETE':
-            // Delete transaction
             if (!$id) {
-                sendResponse(400, ['error' => 'Transaction ID is required']);
+                sendResponse(400, ['error' => 'ID Matkul is required']);
             }
 
-            $stmt = $conn->prepare("DELETE FROM transactions WHERE id = ?");
+            $stmt = $conn->prepare("DELETE FROM jadwalsekolah WHERE id_matkul = ?");
             $stmt->bind_param("i", $id);
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Transaction deleted successfully']);
+                    sendResponse(200, ['message' => 'Jadwal deleted successfully! 🗑️']);
                 } else {
-                    sendResponse(404, ['error' => 'Transaction not found']);
+                    sendResponse(404, ['error' => 'Jadwal not found']);
                 }
             } else {
-                sendResponse(500, ['error' => 'Failed to delete transaction']);
+                sendResponse(500, ['error' => 'Failed to delete jadwal']);
             }
             break;
 
