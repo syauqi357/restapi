@@ -54,7 +54,7 @@ switch ($request) {
         sendResponse(404, ['error' => 'Endpoint not found']);
 }
 
-// ============ TEACHERS HANDLER WITH JADWAL RELATIONSHIP ============
+
 function handleTeacher($method, $id, $input)
 {
     $conn = getConnection();
