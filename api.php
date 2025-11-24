@@ -132,7 +132,7 @@ function handleTeacher($method, $id, $input)
 
             if ($stmt->execute()) {
                 sendResponse(201, [
-                    'message' => 'Teacher inserted successfully! 👨‍🏫',
+                    'message' => 'Teacher inserted successfully!',
                     'id' => $conn->insert_id
                 ]);
             } else {
@@ -179,7 +179,7 @@ function handleTeacher($method, $id, $input)
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Teacher updated successfully! 📝']);
+                    sendResponse(200, ['message' => 'Teacher updated successfully!']);
                 } else {
                     sendResponse(404, ['error' => 'Teacher not found']);
                 }
@@ -224,7 +224,7 @@ function handleTeacher($method, $id, $input)
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Teacher deleted successfully! 🗑️']);
+                    sendResponse(200, ['message' => 'Teacher deleted successfully!']);
                 } else {
                     sendResponse(404, ['error' => 'Teacher not found']);
                 }
@@ -380,7 +380,7 @@ function handleJadwal($method, $id, $input)
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Jadwal updated successfully! 📝']);
+                    sendResponse(200, ['message' => 'Jadwal updated successfully!']);
                 } else {
                     sendResponse(404, ['error' => 'Jadwal not found']);
                 }
@@ -399,7 +399,7 @@ function handleJadwal($method, $id, $input)
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Jadwal deleted successfully! 🗑️']);
+                    sendResponse(200, ['message' => 'Jadwal deleted successfully!']);
                 } else {
                     sendResponse(404, ['error' => 'Jadwal not found']);
                 }
