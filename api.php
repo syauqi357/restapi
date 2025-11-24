@@ -44,12 +44,17 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 // Router
 switch ($request) {
+
+    // product route
     case 'products':
         handleProducts($method, $id, $input);
         break;
+
+    // transaction route
     case 'transactions':
         handleTransactions($method, $id, $input);
         break;
+    // this error show up when the route just localhost/api.php without putting endpoint either products or transaction
     default:
         sendResponse(404, ['error' => 'Endpoint not found']);
 }
@@ -58,6 +63,19 @@ switch ($request) {
 function handleProducts($method, $id, $input)
 {
     $conn = getConnection();
+
+    /*
+
+query
+
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+*/
 
     switch ($method) {
 
@@ -69,6 +87,10 @@ function handleProducts($method, $id, $input)
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $result = $stmt->get_result();
+
+                // this code is showing the products or GET the products from id the code on URL should be
+                // api.php?endpoint=products&id=1, (get one)
+                // reminder : after localhost
 
                 if ($row = $result->fetch_assoc()) {
                     sendResponse(200, $row);
@@ -88,9 +110,22 @@ function handleProducts($method, $id, $input)
         // post or add data
         case 'POST':
             // Create new product
+
+            // name of the content table 
+            //name of the key : name, price <- be able to changed
+
             if (!isset($input['name']) || !isset($input['price'])) {
                 sendResponse(400, ['error' => 'Name and price are required']);
             }
+
+            // method POST by adding the name and price via postman or REST CLIENT 
+
+            // the code as json should be like this :
+            /*
+            
+            
+
+            */
 
             $stmt = $conn->prepare("INSERT INTO products (name, price) VALUES (?, ?)");
             $stmt->bind_param("sd", $input['name'], $input['price']);
