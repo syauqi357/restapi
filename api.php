@@ -1,4 +1,6 @@
-<!-- 
+<?php
+
+/*
  
 incoming work
 
@@ -8,9 +10,8 @@ retrofit is library for showing and translate the json data
 gson is... idk... but ill try it :)
 okhttp is library to take the http response
 
--->
+*/
 
-<?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
