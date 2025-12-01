@@ -73,25 +73,25 @@
           <form
             id="productForm"
             onsubmit="saveProduct(event)"
-            class="bg-slate-100 p-6 rounded-xl mb-8 border border-blue-200"
+            class="bg-slate-50 p-6 rounded-lg mb-8 border border-blue-300"
           >
             <input type="hidden" id="productId" />
 
-            <div class="flex md:flex-row items-center flex-col gap-6 mb-3">
+            <div class="flex md:flex-row items-start flex-col gap-6 mb-3">
               <!-- input text -->
               <div class="w-full max-w-sm min-w-[200px]">
                 <div class="relative">
                   <input
                     type="text"
                     id="productName"
-                    required
-                    class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm"
+                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
                   />
                   <label
-                    class="capitalize absolute cursor-text bg-slate-100 px-1 left-2.5 top-2.5 text-slate-600 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90"
+                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600"
                   >
-                    add or edit
+                    Product Name
                   </label>
+                  <span id="productNameError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
                 </div>
               </div>
 
@@ -101,14 +101,14 @@
                   <input
                     type="number"
                     id="productPrice"
-                    required
-                    class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
                   />
                   <label
-                    class="capitalize absolute cursor-text bg-slate-100 px-1 left-2.5 top-2.5 text-slate-600 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90"
+                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600"
                   >
-                    price
+                    Price
                   </label>
+                  <span id="productPriceError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
                 </div>
               </div>
             </div>
@@ -118,7 +118,7 @@
               <button
                 type="submit"
                 id="productSubmitBtn"
-                class="flex items-center gap-2 bg-blue-700 text-slate-200 text-sm md:text-md font-bold py-3 px-8 rounded-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg"
+                class="flex items-center gap-2 bg-blue-600 text-white text-sm md:text-md font-bold py-3 px-8 rounded-lg hover:bg-blue-700"
               >
                 <span>
                   <svg
@@ -148,7 +148,7 @@
               <button
                 type="button"
                 onclick="resetProductForm()"
-                class="flex items-center gap-2 bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-all"
+                class="flex items-center gap-2 bg-gray-400 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-500"
               >
                 <span>
                   <svg
@@ -177,9 +177,9 @@
           </form>
 
           <!-- Products Table -->
-          <div class="overflow-x-auto rounded-xl border-2 border-gray-200">
+          <div class="overflow-x-auto rounded-lg border border-blue-300">
             <table class="w-full">
-              <thead class="bg-blue-800 text-white">
+              <thead class="bg-blue-600 text-white">
                 <tr>
                   <th class="px-6 py-4 text-left font-bold">ID</th>
                   <th class="px-6 py-4 text-left font-bold">Name</th>
@@ -204,7 +204,7 @@
 
           <!-- Total Revenue Box -->
           <div
-            class="bg-linear-65 from-blue-500 to-blue-700 text-white p-8 rounded-2xl mb-8 border-blue-950 border"
+            class="bg-blue-600 text-white p-8 rounded-lg mb-8 border border-blue-700"
           >
             <div class="flex items-center justify-between">
               <div>
@@ -236,19 +236,19 @@
           <form
             id="transactionForm"
             onsubmit="saveTransaction(event)"
-            class="flex flex-col bg-sky-100 p-6 rounded-xl mb-8 border border-blue-200"
+            class="flex flex-col bg-blue-50 p-6 rounded-lg mb-8 border border-blue-300"
           >
             <input type="hidden" id="transactionId" />
 
-            <div class="flex flex-col mb-6 gap-2 items-center md:flex-row">
-              <div>
+            <div class="flex flex-col mb-6 gap-2 items-start md:flex-row md:items-center">
+              <div class="w-full md:w-auto">
                 <select
                   id="transactionProduct"
-                  required
-                  class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                  class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
                 >
                   <option value="">-- Select Product --</option>
                 </select>
+                <span id="transactionProductError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
               </div>
 
               <!-- input quantity -->
@@ -257,37 +257,24 @@
                   <input
                     type="number"
                     id="transactionQuantity"
-                    required
                     min="1"
-                    class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
                   />
                   <label
-                    class="capitalize absolute cursor-text bg-sky-100 px-1 left-2.5 top-2.5 text-slate-600 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90"
+                    class="capitalize absolute cursor-text bg-blue-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600"
                   >
-                    jumlah
+                    Jumlah (Quantity)
                   </label>
+                  <span id="transactionQuantityError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
                 </div>
               </div>
-              <!-- <div>
-                <label class="block text-gray-700 font-semibold mb-2"
-                  >Quantity</label
-                >
-                <input
-                  type="number"
-                  id="transactionQuantity"
-                  required
-                  placeholder="e.g., 5"
-                  min="1"
-                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-all"
-                />
-              </div> -->
             </div>
 
             <div class="flex gap-3">
               <button
                 type="submit"
                 id="transactionSubmitBtn"
-                class="flex items-center gap-2 bg-sky-500 text-blue-100 font-bold py-3 px-8 rounded-lg transform hover:scale-105 transition-all shadow-lg"
+                class="flex items-center gap-2 bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700"
               >
                 <span
                   ><svg
@@ -314,7 +301,7 @@
               <button
                 type="button"
                 onclick="resetTransactionForm()"
-                class="flex items-center gap-2 bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-all"
+                class="flex items-center gap-2 bg-gray-400 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-500"
               >
                 <span
                   ><svg
@@ -342,9 +329,9 @@
           </form>
 
           <!-- Transactions Table -->
-          <div class="overflow-x-auto rounded-xl border-2 border-gray-200">
+          <div class="overflow-x-auto rounded-lg border border-blue-300">
             <table class="w-full">
-              <thead class="bg-linear-165 from-sky-600 to-blue-600 text-white">
+              <thead class="bg-blue-600 text-white">
                 <tr>
                   <th class="px-6 py-4 text-left font-bold">ID</th>
                   <th class="px-6 py-4 text-left font-bold">Product</th>
@@ -400,7 +387,7 @@
             ? "bg-green-100 border-green-400 text-green-700"
             : "bg-red-100 border-red-400 text-red-700";
         alertDiv.innerHTML = `
-                <div class="${bgColor} flex items-center gap-2 border-2 px-6 py-4 rounded-xl font-semibold shadow-lg animate-pulse">
+                <div class="${bgColor} flex items-center gap-2 border px-6 py-4 rounded-lg font-semibold">
                     ${
                       type === "success"
                         ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" id="Check--Streamline-Core" height="14" width="14">
@@ -434,7 +421,7 @@
           tbody.innerHTML = products
             .map(
               (p, i) => `
-                    <tr class="hover:bg-blue-50 transition-all ${
+                    <tr class="hover:bg-blue-50 ${
                       i % 2 === 0 ? "bg-gray-50" : "bg-white"
                     }">
                         <td class="px-6 py-4 font-semibold text-xs md:text-base text-gray-700">${
@@ -443,13 +430,13 @@
                         <td class="px-6 py-4 font-medium text-xs md:text-base text-gray-800 capitalize">${
                           p.name
                         }</td>
-                        <td class="px-6 py-4 text-sky-600 text-xs md:text-base font-bold">Rp ${parseFloat(
+                        <td class="px-6 py-4 text-blue-600 text-xs md:text-base font-bold">Rp ${parseFloat(
                           p.price
                         ).toLocaleString("id-ID")}</td>
                         <td class="px-6 py-4 flex ">
                             <button onclick="editProduct(${
                               p.id
-                            })" class="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all mr-2 font-semibold">
+                            })" class="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 mr-2 font-semibold">
                                 <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="16" width="16">
   <desc>
     Edit Streamline Icon: https://streamlinehq.com
@@ -459,24 +446,18 @@
   <path d="M12.7 4.5c0.4 -0.4 0.4 -1 0 -1.4l-1.8 -1.8c-0.4 -0.4 -1 -0.4 -1.4 0l-7.5 7.5V12h3.2l7.5 -7.5zm-2.5 -2.5L12 3.8l-1.5 1.5L8.7 3.5l1.5 -1.5zM3 11v-1.8l5 -5 1.8 1.8 -5 5H3z" fill="currentColor" stroke-width="0.5"></path>
   <path id="_Transparent_Rectangle_" d="M0 0h16v16H0Z" fill="none" stroke-width="0.5"></path>
 </svg></span> 
-<span class="text-xs md:text-base">
-
-  Edit
-</span>
+<span class="text-xs md:text-base">Edit</span>
                             </button>
                             <button onclick="deleteProduct(${
                               p.id
-                            })" class=" flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all font-semibold">
+                            })" class=" flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-semibold">
                                 <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="24" width="24">
   <desc>
     Trash X Streamline Icon: https://streamlinehq.com
   </desc>
   <path d="M20 6a1 1 0 0 1 0.117 1.993L20 8h-0.081L19 19a3 3 0 0 1 -2.824 2.995L16 22H8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-0.005 -0.167L4.08 8H4a1 1 0 0 1 -0.117 -1.993L4 6h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567L10.585 14l-1.292 1.293 -0.083 0.094a1 1 0 0 0 1.497 1.32L12 15.415l1.293 1.292 0.094 0.083a1 1 0 0 0 1.32 -1.497L13.415 14l1.292 -1.293 0.083 -0.094a1 1 0 0 0 -1.497 -1.32L12 12.585l-1.293 -1.292 -0.094 -0.083z" stroke-width="1"></path>
   <path d="M14 2a2 2 0 0 1 2 2 1 1 0 0 1 -1.993 0.117L14 4h-4l-0.007 0.117A1 1 0 0 1 8 4a2 2 0 0 1 1.85 -1.995L10 2h4z" stroke-width="1"></path>
-</svg></span> <span class="text-xs md:text-base">
-
-  Delete
-</span> 
+</svg></span> <span class="text-xs md:text-base">Delete</span> 
                             </button>
                         </td>
                     </tr>
@@ -493,41 +474,64 @@
       async function saveProduct(e) {
         e.preventDefault();
 
+        const nameInput = document.getElementById("productName");
+        const priceInput = document.getElementById("productPrice");
+        const nameError = document.getElementById("productNameError");
+        const priceError = document.getElementById("productPriceError");
+        
+        // Reset errors
+        nameError.style.display = "none";
+        priceError.style.display = "none";
+        
+        const name = nameInput.value.trim();
+        const price = priceInput.value;
+        
+        // Validation
+        let hasError = false;
+        if (!name) {
+          nameError.textContent = "Product name is required";
+          nameError.style.display = "block";
+          nameInput.classList.add("border-red-500");
+          hasError = true;
+        } else {
+          nameInput.classList.remove("border-red-500");
+        }
+        
+        if (!price || price <= 0) {
+          priceError.textContent = "Price must be greater than 0";
+          priceError.style.display = "block";
+          priceInput.classList.add("border-red-500");
+          hasError = true;
+        } else {
+          priceInput.classList.remove("border-red-500");
+        }
+        
+        if (hasError) return;
+
         const id = document.getElementById("productId").value;
-        const name = document.getElementById("productName").value;
-        const price = document.getElementById("productPrice").value;
 
         try {
           const url = id
             ? `${API_URL}?endpoint=products&id=${id}`
             : `${API_URL}?endpoint=products`;
 
-          //  using post or put method as URL by ternary operator
           const method = id ? "PUT" : "POST";
 
-          //fetching data using json API control in js method to php method encode
           const res = await fetch(url, {
             method: method,
             headers: { "Content-Type": "application/json" },
-
-            // remind : this is the data went through out
-            body: JSON.stringify({
-              name, // name of the products
-              price, // price of the products
-            }),
+            body: JSON.stringify({ name, price }),
           });
 
-          //  waiting response from method PHP to send what the data is send or not
           const data = await res.json();
-
-          //  triggering the php file to send the response data json message using json
-          showAlert(data.message);
-
-          //  function for clearing the form
-          resetProductForm();
-
-          //  function to reload the product that have been added after execute
-          loadProducts();
+          
+          if (!res.ok) {
+            showAlert(data.error || data.message, "error");
+          } else {
+            showAlert(data.message);
+            resetProductForm();
+            loadProducts();
+          }
         } catch (err) {
           showAlert("Failed to save product", "error");
         }
@@ -542,6 +546,13 @@
           document.getElementById("productId").value = product.id;
           document.getElementById("productName").value = product.name;
           document.getElementById("productPrice").value = product.price;
+          
+          // Clear errors
+          document.getElementById("productNameError").style.display = "none";
+          document.getElementById("productPriceError").style.display = "none";
+          document.getElementById("productName").classList.remove("border-red-500");
+          document.getElementById("productPrice").classList.remove("border-red-500");
+          
           document.getElementById(
             "productSubmitBtn"
           ).innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Save--Streamline-Rounded-Material" height="24" width="24">
@@ -643,7 +654,7 @@
               const total = t.quantity * parseFloat(t.product_price || 0);
               totalRevenue += total;
               return `
-                        <tr class="hover:bg-green-50 transition-all ${
+                        <tr class="hover:bg-blue-50 ${
                           i % 2 === 0 ? "bg-gray-50" : "bg-white"
                         }">
                             <td class="px-6 py-4 font-semibold text-gray-700">${
@@ -658,13 +669,13 @@
                             <td class="px-6 py-4 text-gray-600">Rp ${parseFloat(
                               t.product_price || 0
                             ).toLocaleString("id-ID")}</td>
-                            <td class="px-6 py-4 text-green-600 font-bold text-lg">Rp ${total.toLocaleString(
+                            <td class="px-6 py-4 text-blue-600 font-bold text-lg">Rp ${total.toLocaleString(
                               "id-ID"
                             )}</td>
                             <td class="px-6 py-4 flex items-center">
                                 <button onclick="editTransaction(${
                                   t.id
-                                })" class=" flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all mr-2 font-semibold">
+                                })" class=" flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 mr-2 font-semibold">
                                     <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="16" width="16">
   <desc>
     Edit Streamline Icon: https://streamlinehq.com
@@ -677,7 +688,7 @@
                                 </button>
                                 <button onclick="deleteTransaction(${
                                   t.id
-                                })" class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all font-semibold">
+                                })" class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-semibold">
                                     <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="24" width="24">
   <desc>
     Trash X Streamline Icon: https://streamlinehq.com
@@ -702,9 +713,40 @@
 
       async function saveTransaction(e) {
         e.preventDefault();
+        
+        const productSelect = document.getElementById("transactionProduct");
+        const quantityInput = document.getElementById("transactionQuantity");
+        const productError = document.getElementById("transactionProductError");
+        const quantityError = document.getElementById("transactionQuantityError");
+        
+        // Reset errors
+        productError.style.display = "none";
+        quantityError.style.display = "none";
+        productSelect.classList.remove("border-red-500");
+        quantityInput.classList.remove("border-red-500");
+        
+        const product_id = productSelect.value;
+        const quantity = quantityInput.value;
+        
+        // Validation
+        let hasError = false;
+        if (!product_id) {
+          productError.textContent = "Please select a product";
+          productError.style.display = "block";
+          productSelect.classList.add("border-red-500");
+          hasError = true;
+        }
+        
+        if (!quantity || quantity <= 0) {
+          quantityError.textContent = "Quantity must be greater than 0";
+          quantityError.style.display = "block";
+          quantityInput.classList.add("border-red-500");
+          hasError = true;
+        }
+        
+        if (hasError) return;
+        
         const id = document.getElementById("transactionId").value;
-        const product_id = document.getElementById("transactionProduct").value;
-        const quantity = document.getElementById("transactionQuantity").value;
 
         try {
           const url = id
@@ -719,9 +761,14 @@
           });
 
           const data = await res.json();
-          showAlert(data.message);
-          resetTransactionForm();
-          loadTransactions();
+          
+          if (!res.ok) {
+            showAlert(data.error || data.message, "error");
+          } else {
+            showAlert(data.message);
+            resetTransactionForm();
+            loadTransactions();
+          }
         } catch (err) {
           showAlert("Failed to save transaction", "error");
         }
@@ -737,6 +784,13 @@
             transaction.product_id;
           document.getElementById("transactionQuantity").value =
             transaction.quantity;
+          
+          // Clear errors
+          document.getElementById("transactionProductError").style.display = "none";
+          document.getElementById("transactionQuantityError").style.display = "none";
+          document.getElementById("transactionProduct").classList.remove("border-red-500");
+          document.getElementById("transactionQuantity").classList.remove("border-red-500");
+          
           document.getElementById(
             "transactionSubmitBtn"
           ).innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Save--Streamline-Rounded-Material" height="24" width="24">

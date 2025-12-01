@@ -104,9 +104,30 @@ function handleProducts($method, $id, $input)
             if (!isset($input['name']) || !isset($input['price'])) {
                 sendResponse(400, ['error' => 'Name and price are required']);
             }
+            
+            $name = trim($input['name']);
+            $price = $input['price'];
+            
+            if (empty($name)) {
+                sendResponse(400, ['error' => 'Name cannot be empty']);
+            }
+            
+            if ($price <= 0) {
+                sendResponse(400, ['error' => 'Price must be greater than 0']);
+            }
+            
+            // Check for exact duplicate product name
+            $checkStmt = $conn->prepare("SELECT id FROM products WHERE LOWER(TRIM(name)) = LOWER(TRIM(?))");
+            $checkStmt->bind_param("s", $name);
+            $checkStmt->execute();
+            $checkResult = $checkStmt->get_result();
+            
+            if ($checkResult->num_rows > 0) {
+                sendResponse(409, ['error' => 'A product with this name already exists. Please use a different name if you want to add a variant.']);
+            }
 
             $stmt = $conn->prepare("INSERT INTO products (name, price) VALUES (?, ?)");
-            $stmt->bind_param("sd", $input['name'], $input['price']);
+            $stmt->bind_param("sd", $name, $price);
 
             if ($stmt->execute()) {
                 sendResponse(201, [
@@ -130,11 +151,38 @@ function handleProducts($method, $id, $input)
             $values = [];
 
             if (isset($input['name'])) {
+                $name = trim($input['name']);
+                if (empty($name)) {
+                    sendResponse(400, ['error' => 'Product name cannot be empty']);
+                }
+                
+                // Check if name is being changed and if new name already exists
+                $currentStmt = $conn->prepare("SELECT name FROM products WHERE id = ?");
+                $currentStmt->bind_param("i", $id);
+                $currentStmt->execute();
+                $currentResult = $currentStmt->get_result();
+                $currentRow = $currentResult->fetch_assoc();
+                
+                if ($currentRow && strtolower(trim($currentRow['name'])) !== strtolower($name)) {
+                    // Name is being changed, check if new name exists
+                    $checkStmt = $conn->prepare("SELECT id FROM products WHERE LOWER(TRIM(name)) = LOWER(TRIM(?)) AND id != ?");
+                    $checkStmt->bind_param("si", $name, $id);
+                    $checkStmt->execute();
+                    $checkResult = $checkStmt->get_result();
+                    
+                    if ($checkResult->num_rows > 0) {
+                        sendResponse(409, ['error' => 'A product with this name already exists. Please use a different name.']);
+                    }
+                }
+                
                 $fields[] = "name = ?";
                 $types .= "s";
-                $values[] = $input['name'];
+                $values[] = $name;
             }
             if (isset($input['price'])) {
+                if ($input['price'] <= 0) {
+                    sendResponse(400, ['error' => 'Price must be greater than 0']);
+                }
                 $fields[] = "price = ?";
                 $types .= "d";
                 $values[] = $input['price'];
@@ -233,9 +281,30 @@ function handleTransactions($method, $id, $input)
             if (!isset($input['product_id']) || !isset($input['quantity'])) {
                 sendResponse(400, ['error' => 'Product ID and quantity are required']);
             }
+            
+            $product_id = intval($input['product_id']);
+            $quantity = intval($input['quantity']);
+            
+            if ($product_id <= 0) {
+                sendResponse(400, ['error' => 'Invalid product ID']);
+            }
+            
+            if ($quantity <= 0) {
+                sendResponse(400, ['error' => 'Quantity must be greater than 0']);
+            }
+            
+            // Verify product exists
+            $verifyStmt = $conn->prepare("SELECT id FROM products WHERE id = ?");
+            $verifyStmt->bind_param("i", $product_id);
+            $verifyStmt->execute();
+            $verifyResult = $verifyStmt->get_result();
+            
+            if ($verifyResult->num_rows === 0) {
+                sendResponse(404, ['error' => 'Selected product does not exist']);
+            }
 
             $stmt = $conn->prepare("INSERT INTO transactions (product_id, quantity) VALUES (?, ?)");
-            $stmt->bind_param("ii", $input['product_id'], $input['quantity']);
+            $stmt->bind_param("ii", $product_id, $quantity);
 
             if ($stmt->execute()) {
                 sendResponse(201, [
