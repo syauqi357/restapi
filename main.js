@@ -1,32 +1,34 @@
 const API_URL = "http://localhost/restapi/api.php";
 
-function switchTab(tab) {
+function switchTab(tab, event) {
+  // Reset all tab buttons
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.classList.remove(
       "active-tab",
       "text-blue-600",
-      "border-b-4",
       "border-blue-600"
     );
-    btn.classList.add("text-slate-500", "border-b-4", "border-transparent");
+    btn.classList.add("text-slate-500", "border-transparent");
   });
+
+  // Hide all sections
   document.querySelectorAll(".section").forEach((section) => {
     section.classList.add("hidden");
   });
 
-  event.target.classList.add(
+  // Activate clicked tab button
+  const btn = event.currentTarget;
+  btn.classList.add(
     "active-tab",
     "text-blue-600",
-    "border-b-4",
     "border-blue-600"
   );
-  event.target.classList.remove(
-    "text-slate-500",
-    "border-b-4",
-    "border-transparent"
-  );
+  btn.classList.remove("text-slate-500", "border-transparent");
+
+  // Show selected section
   document.getElementById(tab).classList.remove("hidden");
 
+  // Load data
   if (tab === "products") {
     loadProducts();
   } else {
@@ -34,6 +36,7 @@ function switchTab(tab) {
     loadProductsForSelect();
   }
 }
+
 
 // Show alert message
 function showAlert(message, type = "success") {
