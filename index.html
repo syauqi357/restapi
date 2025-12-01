@@ -49,18 +49,18 @@
       <div id="alert" class="mb-6"></div>
 
       <!-- Tabs -->
-      <div class="flex gap-2 mb-0">
+      <div class="flex gap-2 mb-0 border-b-2 border-slate-200">
         <button
           onclick="switchTab('products')"
-          class="tab-btn flex-1 text-cyan-700 font-bold py-4 px-6 rounded-t-2xl hover:bg-slate-200 transition-all active-tab"
+          class=" tab-btn flex-1 text-blue-600 font-bold py-4 px-6 border-b-4 border-blue-600 hover:bg-blue-50 active-tab"
         >
-          <span></span> Products
+          Products
         </button>
         <button
           onclick="switchTab('transactions')"
-          class="tab-btn flex-1 text-cyan-700 font-bold py-4 px-6 rounded-t-2xl hover:bg-slate-200 transition-all"
+          class="tab-btn flex-1 text-slate-500 font-bold py-4 px-6 border-b-4 border-transparent hover:bg-slate-100"
         >
-          <span></span> Transactions
+          Transactions
         </button>
       </div>
 
@@ -84,10 +84,10 @@
                   <input
                     type="text"
                     id="productName"
-                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
                   />
                   <label
-                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600"
+                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600 transition-all duration-200"
                   >
                     Product Name
                   </label>
@@ -101,10 +101,10 @@
                   <input
                     type="number"
                     id="productPrice"
-                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
                   />
                   <label
-                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600"
+                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600 transition-all duration-200"
                   >
                     Price
                   </label>
@@ -244,7 +244,7 @@
               <div class="w-full md:w-auto">
                 <select
                   id="transactionProduct"
-                  class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+                  class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
                 >
                   <option value="">-- Select Product --</option>
                 </select>
@@ -258,10 +258,10 @@
                     type="number"
                     id="transactionQuantity"
                     min="1"
-                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
                   />
                   <label
-                    class="capitalize absolute cursor-text bg-blue-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600"
+                    class="capitalize absolute cursor-text bg-blue-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600 transition-all duration-200"
                   >
                     Jumlah (Quantity)
                   </label>
@@ -356,19 +356,15 @@
 
       function switchTab(tab) {
         document.querySelectorAll(".tab-btn").forEach((btn) => {
-          btn.classList.remove("active-tab", "bg-white", "text-purple-600");
-          btn.classList.add("bg-white/80", "text-gray-700");
+          btn.classList.remove("active-tab", "text-blue-600", "border-b-4", "border-blue-600");
+          btn.classList.add("text-slate-500", "border-b-4", "border-transparent");
         });
         document.querySelectorAll(".section").forEach((section) => {
           section.classList.add("hidden");
         });
 
-        event.target.classList.add(
-          "active-tab",
-          "bg-slate-50",
-          "text-cyan-700"
-        );
-        event.target.classList.remove("bg-white/80", "text-gray-700");
+        event.target.classList.add("active-tab", "text-blue-600", "border-b-4", "border-blue-600");
+        event.target.classList.remove("text-slate-500", "border-b-4", "border-transparent");
         document.getElementById(tab).classList.remove("hidden");
 
         if (tab === "products") {
