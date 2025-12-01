@@ -3,11 +3,7 @@ const API_URL = "http://localhost/restapi/api.php";
 function switchTab(tab, event) {
   // Reset all tab buttons
   document.querySelectorAll(".tab-btn").forEach((btn) => {
-    btn.classList.remove(
-      "active-tab",
-      "text-blue-600",
-      "border-blue-600"
-    );
+    btn.classList.remove("active-tab", "text-blue-600", "border-blue-600");
     btn.classList.add("text-slate-500", "border-transparent");
   });
 
@@ -18,11 +14,7 @@ function switchTab(tab, event) {
 
   // Activate clicked tab button
   const btn = event.currentTarget;
-  btn.classList.add(
-    "active-tab",
-    "text-blue-600",
-    "border-blue-600"
-  );
+  btn.classList.add("active-tab", "text-blue-600", "border-blue-600");
   btn.classList.remove("text-slate-500", "border-transparent");
 
   // Show selected section
@@ -36,7 +28,6 @@ function switchTab(tab, event) {
     loadProductsForSelect();
   }
 }
-
 
 // Show alert message
 function showAlert(message, type = "success") {
@@ -73,30 +64,28 @@ async function loadProducts() {
 
     if (products.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No products found</td></tr>';
+        '<tr><td colspan="4" class="px-4 py-4 text-center text-slate-500 text-sm">No products found</td></tr>';
       return;
     }
 
     tbody.innerHTML = products
       .map(
         (p, i) => `
-                    <tr class="hover:bg-blue-50 ${
-                      i % 2 === 0 ? "bg-gray-50" : "bg-white"
-                    }">
-                        <td class="px-6 py-4 font-semibold text-xs md:text-base text-gray-700">${
+                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-100">
+                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-700 font-medium">${
                           p.id
                         }</td>
-                        <td class="px-6 py-4 font-medium text-xs md:text-base text-gray-800 capitalize">${
+                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-800 font-medium capitalize">${
                           p.name
                         }</td>
-                        <td class="px-6 py-4 text-blue-600 text-xs md:text-base font-bold">Rp ${parseFloat(
+                        <td class="px-4 py-2.5 text-xs md:text-sm text-blue-600 font-semibold">Rp ${parseFloat(
                           p.price
                         ).toLocaleString("id-ID")}</td>
-                        <td class="px-6 py-4 flex ">
+                        <td class="px-4 py-2.5 flex gap-1">
                             <button onclick="editProduct(${
                               p.id
-                            })" class="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 mr-2 font-semibold">
-                                <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="16" width="16">
+                            })" class="flex items-center justify-center gap-1 border-amber-600 border hover:bg-amber-500 bg-amber-400 hover:border-amber-700 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
+                                <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="14" width="14">
   <desc>
     Edit Streamline Icon: https://streamlinehq.com
   </desc>
@@ -105,18 +94,18 @@ async function loadProducts() {
   <path d="M12.7 4.5c0.4 -0.4 0.4 -1 0 -1.4l-1.8 -1.8c-0.4 -0.4 -1 -0.4 -1.4 0l-7.5 7.5V12h3.2l7.5 -7.5zm-2.5 -2.5L12 3.8l-1.5 1.5L8.7 3.5l1.5 -1.5zM3 11v-1.8l5 -5 1.8 1.8 -5 5H3z" fill="currentColor" stroke-width="0.5"></path>
   <path id="_Transparent_Rectangle_" d="M0 0h16v16H0Z" fill="none" stroke-width="0.5"></path>
 </svg></span> 
-<span class="text-xs md:text-base">Edit</span>
+<span class="hidden md:inline">Edit</span>
                             </button>
                             <button onclick="deleteProduct(${
                               p.id
-                            })" class=" flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-semibold">
-                                <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="24" width="24">
+                            })" class="flex items-center justify-center gap-1 border-red-500 border bg-red-400 hover:bg-red-500 hover:border-red-600 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
+                                <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="14" width="14">
   <desc>
     Trash X Streamline Icon: https://streamlinehq.com
   </desc>
   <path d="M20 6a1 1 0 0 1 0.117 1.993L20 8h-0.081L19 19a3 3 0 0 1 -2.824 2.995L16 22H8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-0.005 -0.167L4.08 8H4a1 1 0 0 1 -0.117 -1.993L4 6h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567L10.585 14l-1.292 1.293 -0.083 0.094a1 1 0 0 0 1.497 1.32L12 15.415l1.293 1.292 0.094 0.083a1 1 0 0 0 1.32 -1.497L13.415 14l1.292 -1.293 0.083 -0.094a1 1 0 0 0 -1.497 -1.32L12 12.585l-1.293 -1.292 -0.094 -0.083z" stroke-width="1"></path>
   <path d="M14 2a2 2 0 0 1 2 2 1 1 0 0 1 -1.993 0.117L14 4h-4l-0.007 0.117A1 1 0 0 1 8 4a2 2 0 0 1 1.85 -1.995L10 2h4z" stroke-width="1"></path>
-</svg></span> <span class="text-xs md:text-base">Delete</span> 
+</svg></span> <span class="hidden md:inline">Delete</span> 
                             </button>
                         </td>
                     </tr>
@@ -302,7 +291,7 @@ async function loadTransactions() {
 
     if (transactions.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No transactions found</td></tr>';
+        '<tr><td colspan="6" class="px-4 py-4 text-center text-slate-500 text-sm">No transactions found</td></tr>';
       document.getElementById("totalRevenue").textContent = "Rp 0";
       return;
     }
@@ -313,29 +302,27 @@ async function loadTransactions() {
         const total = t.quantity * parseFloat(t.product_price || 0);
         totalRevenue += total;
         return `
-                        <tr class="hover:bg-blue-50 ${
-                          i % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        }">
-                            <td class="px-6 py-4 font-semibold text-gray-700">${
+                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-100">
+                            <td class="px-4 py-2.5 font-semibold text-xs md:text-sm text-slate-700">${
                               t.id
                             }</td>
-                            <td class="px-6 py-4 font-medium text-gray-800">${
+                            <td class="px-4 py-2.5 font-medium text-xs md:text-sm text-slate-800">${
                               t.product_name || "N/A"
                             }</td>
-                            <td class="px-6 py-4 text-blue-600 font-bold">${
+                            <td class="px-4 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">${
                               t.quantity
                             }x</td>
-                            <td class="px-6 py-4 text-gray-600">Rp ${parseFloat(
+                            <td class="px-4 py-2.5 text-slate-600 text-xs md:text-sm">Rp ${parseFloat(
                               t.product_price || 0
                             ).toLocaleString("id-ID")}</td>
-                            <td class="px-6 py-4 text-blue-600 font-bold text-lg">Rp ${total.toLocaleString(
+                            <td class="px-4 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">Rp ${total.toLocaleString(
                               "id-ID"
                             )}</td>
-                            <td class="px-6 py-4 flex items-center">
+                            <td class="px-4 py-2.5 flex gap-1">
                                 <button onclick="editTransaction(${
                                   t.id
-                                })" class=" flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 mr-2 font-semibold">
-                                    <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="16" width="16">
+                                })" class="flex items-center justify-center gap-1 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
+                                    <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="14" width="14">
   <desc>
     Edit Streamline Icon: https://streamlinehq.com
   </desc>
@@ -343,18 +330,18 @@ async function loadTransactions() {
   <path d="M1 13h14v1H1Z" fill="currentColor" stroke-width="0.5"></path>
   <path d="M12.7 4.5c0.4 -0.4 0.4 -1 0 -1.4l-1.8 -1.8c-0.4 -0.4 -1 -0.4 -1.4 0l-7.5 7.5V12h3.2l7.5 -7.5zm-2.5 -2.5L12 3.8l-1.5 1.5L8.7 3.5l1.5 -1.5zM3 11v-1.8l5 -5 1.8 1.8 -5 5H3z" fill="currentColor" stroke-width="0.5"></path>
   <path id="_Transparent_Rectangle_" d="M0 0h16v16H0Z" fill="none" stroke-width="0.5"></path>
-</svg></span> Edit
+</svg></span> <span class="hidden md:inline">Edit</span>
                                 </button>
                                 <button onclick="deleteTransaction(${
                                   t.id
-                                })" class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-semibold">
-                                    <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="24" width="24">
+                                })" class="flex items-center justify-center gap-1 border-red-500 border bg-red-400 hover:bg-red-500 hover:border-red-600 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="14" width="14">
   <desc>
     Trash X Streamline Icon: https://streamlinehq.com
   </desc>
   <path d="M20 6a1 1 0 0 1 0.117 1.993L20 8h-0.081L19 19a3 3 0 0 1 -2.824 2.995L16 22H8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-0.005 -0.167L4.08 8H4a1 1 0 0 1 -0.117 -1.993L4 6h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567L10.585 14l-1.292 1.293 -0.083 0.094a1 1 0 0 0 1.497 1.32L12 15.415l1.293 1.292 0.094 0.083a1 1 0 0 0 1.32 -1.497L13.415 14l1.292 -1.293 0.083 -0.094a1 1 0 0 0 -1.497 -1.32L12 12.585l-1.293 -1.292 -0.094 -0.083z" stroke-width="1"></path>
   <path d="M14 2a2 2 0 0 1 2 2 1 1 0 0 1 -1.993 0.117L14 4h-4l-0.007 0.117A1 1 0 0 1 8 4a2 2 0 0 1 1.85 -1.995L10 2h4z" stroke-width="1"></path>
-</svg></span> Delete
+</svg></span> <span class="hidden md:inline">Delete</span>
                                 </button>
                             </td>
                         </tr>
