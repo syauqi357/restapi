@@ -1,5 +1,9 @@
 const API_URL = "http://localhost/restapi/api.php";
 
+// Sorting state
+let productSort = { field: null, order: "asc" };
+let transactionSort = { field: null, order: "asc" };
+
 function switchTab(tab, event) {
   // Reset all tab buttons
   document.querySelectorAll(".tab-btn").forEach((btn) => {
@@ -56,16 +60,93 @@ function showAlert(message, type = "success") {
 }
 
 // ========== PRODUCTS ==========
+/**
+ * SORT PRODUCTS FUNCTION
+ * Handles sorting of products table by clicking column headers
+ * 
+ * HOW IT WORKS:
+ * 1. If user clicks the SAME column header twice:
+ *    - First click: sort ASCENDING (asc)
+ *    - Second click: sort DESCENDING (desc)
+ *    - This is called a "toggle"
+ * 
+ * 2. If user clicks a DIFFERENT column header:
+ *    - Reset to ASCENDING (asc) order
+ *    - Start sorting by the new column
+ * 
+ * EXAMPLE:
+ * - Click "Name" header → sorts A-Z (asc)
+ * - Click "Name" header again → sorts Z-A (desc)
+ * - Click "Price" header → sorts by price lowest to highest (asc)
+ */
+function sortProducts(field) {
+  // Check if user clicked the same column header
+  if (productSort.field === field) {
+    // Toggle between ascending and descending
+    productSort.order = productSort.order === "asc" ? "desc" : "asc";
+  } else {
+    // User clicked a different column, so set new field and reset to ascending
+    productSort.field = field;  // Which column to sort by (id, name, price)
+    productSort.order = "asc";   // Always start with ascending for new column
+  }
+  // Reload and re-render the products table with new sort applied
+  loadProducts();
+}
+
 async function loadProducts() {
   try {
     const res = await fetch(`${API_URL}?endpoint=products`);
-    const products = await res.json();
+    let products = await res.json();
     const tbody = document.getElementById("productsTable");
 
     if (products.length === 0) {
       tbody.innerHTML =
         '<tr><td colspan="4" class="px-4 py-4 text-center text-slate-500 text-sm">No products found</td></tr>';
       return;
+    }
+
+    // ===== APPLY SORTING =====
+    // Only sort if a sorting field has been selected (productSort.field is not null)
+    if (productSort.field) {
+      products.sort((a, b) => {
+        // Get the values from both products for the column being sorted
+        // Example: if sorting by "price", aVal = product1.price, bVal = product2.price
+        let aVal = a[productSort.field];
+        let bVal = b[productSort.field];
+
+        // STEP 1: Determine data type (number or text)
+        // isNaN() checks if value is NOT a number
+        // If both values are numbers, convert them to floats for proper numeric comparison
+        // (otherwise "10" < "2" alphabetically, which is wrong)
+        if (!isNaN(aVal) && !isNaN(bVal)) {
+          // NUMERIC COMPARISON: Convert to numbers
+          // Example: "10" becomes 10, "2" becomes 2, so 10 > 2 correctly
+          aVal = parseFloat(aVal);
+          bVal = parseFloat(bVal);
+        } else {
+          // STRING COMPARISON: Convert to lowercase for case-insensitive sorting
+          // Example: "Apple" and "banana" both become lowercase for fair comparison
+          aVal = String(aVal).toLowerCase();
+          bVal = String(bVal).toLowerCase();
+        }
+
+        // STEP 2: Compare values and return sort order
+        // JavaScript sort() expects:
+        //   - Return 1 if a should come AFTER b
+        //   - Return -1 if a should come BEFORE b
+        //   - Return 0 if they're equal
+        if (productSort.order === "asc") {
+          // ASCENDING (asc): A-Z, 1-100
+          // If aVal > bVal, put it after (return 1)
+          // If aVal < bVal, put it before (return -1)
+          return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+        } else {
+          // DESCENDING (desc): Z-A, 100-1
+          // Reverse the logic: if aVal < bVal, put it after (return 1)
+          // If aVal > bVal, put it before (return -1)
+          return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+        }
+      });
     }
 
     tbody.innerHTML = products
@@ -283,10 +364,43 @@ async function loadProductsForSelect() {
   }
 }
 
+// ========== TRANSACTIONS ==========
+/**
+ * SORT TRANSACTIONS FUNCTION
+ * Same logic as sortProducts, but for the transactions table
+ * 
+ * HOW IT WORKS:
+ * 1. If user clicks the SAME column header twice:
+ *    - First click: sort ASCENDING (asc)
+ *    - Second click: sort DESCENDING (desc)
+ * 
+ * 2. If user clicks a DIFFERENT column header:
+ *    - Reset to ASCENDING (asc) order
+ *    - Start sorting by the new column
+ * 
+ * EXAMPLE:
+ * - Click "Quantity" header → sorts from smallest to largest quantity (asc)
+ * - Click "Quantity" header again → sorts from largest to smallest quantity (desc)
+ * - Click "Total" header → sorts by total revenue (asc)
+ */
+function sortTransactions(field) {
+  // Check if user clicked the same column header
+  if (transactionSort.field === field) {
+    // Toggle between ascending and descending
+    transactionSort.order = transactionSort.order === "asc" ? "desc" : "asc";
+  } else {
+    // User clicked a different column, so set new field and reset to ascending
+    transactionSort.field = field;    // Which column to sort by (id, product_name, quantity, etc)
+    transactionSort.order = "asc";     // Always start with ascending for new column
+  }
+  // Reload and re-render the transactions table with new sort applied
+  loadTransactions();
+}
+
 async function loadTransactions() {
   try {
     const res = await fetch(`${API_URL}?endpoint=transactions`);
-    const transactions = await res.json();
+    let transactions = await res.json();
     const tbody = document.getElementById("transactionsTable");
 
     if (transactions.length === 0) {
@@ -294,6 +408,50 @@ async function loadTransactions() {
         '<tr><td colspan="6" class="px-4 py-4 text-center text-slate-500 text-sm">No transactions found</td></tr>';
       document.getElementById("totalRevenue").textContent = "Rp 0";
       return;
+    }
+
+    // ===== APPLY SORTING =====
+    // Only sort if a sorting field has been selected (transactionSort.field is not null)
+    if (transactionSort.field) {
+      transactions.sort((a, b) => {
+        // Get the values from both transactions for the column being sorted
+        // Example: if sorting by "quantity", aVal = transaction1.quantity, bVal = transaction2.quantity
+        let aVal = a[transactionSort.field];
+        let bVal = b[transactionSort.field];
+
+        // STEP 1: Determine data type (number or text)
+        // isNaN() checks if value is NOT a number
+        // If both values are numbers, convert them to floats for proper numeric comparison
+        // (otherwise "100" < "20" alphabetically, which is wrong for numbers)
+        if (!isNaN(aVal) && !isNaN(bVal)) {
+          // NUMERIC COMPARISON: Convert to numbers
+          // Example: quantity "5" becomes 5, "15" becomes 15, so 15 > 5 correctly
+          aVal = parseFloat(aVal);
+          bVal = parseFloat(bVal);
+        } else {
+          // STRING COMPARISON: Convert to lowercase for case-insensitive sorting
+          // Example: "Apple" and "Banana" both become lowercase for fair comparison
+          aVal = String(aVal).toLowerCase();
+          bVal = String(bVal).toLowerCase();
+        }
+
+        // STEP 2: Compare values and return sort order
+        // JavaScript sort() expects:
+        //   - Return 1 if a should come AFTER b
+        //   - Return -1 if a should come BEFORE b
+        //   - Return 0 if they're equal
+        if (transactionSort.order === "asc") {
+          // ASCENDING (asc): A-Z, 1-100
+          // If aVal > bVal, put it after (return 1)
+          // If aVal < bVal, put it before (return -1)
+          return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+        } else {
+          // DESCENDING (desc): Z-A, 100-1
+          // Reverse the logic: if aVal < bVal, put it after (return 1)
+          // If aVal > bVal, put it before (return -1)
+          return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+        }
+      });
     }
 
     let totalRevenue = 0;

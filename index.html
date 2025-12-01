@@ -68,149 +68,208 @@
       <div class="bg-slate-50 rounded-xl p-8">
         <!-- Products Section -->
         <div id="products" class="section">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Products</h2>
-
-          <form
-            id="productForm"
-            onsubmit="saveProduct(event)"
-            class="bg-slate-50 p-6 rounded-lg mb-8 border border-blue-300"
-          >
-            <input type="hidden" id="productId" />
-
-            <div class="flex md:flex-row items-start flex-col gap-6 mb-3">
-              <!-- input text -->
-              <div class="w-full max-w-sm min-w-[200px]">
-                <div class="relative">
-                  <input
-                    type="text"
-                    id="productName"
-                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
-                  />
-                  <label for="productName"
-                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600 transition-all duration-200"
-                  >
-                    Product Name
-                  </label>
-                  <span id="productNameError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
-                </div>
-              </div>
-
-              <!-- input price or number -->
-              <div class="w-full max-w-sm min-w-[200px]">
-                <div class="relative">
-                  <input 
-                    type="number"
-                    id="productPrice"
-                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
-                  />
-                  <label for="productPrice"
-                    class="capitalize absolute cursor-text bg-slate-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600 transition-all duration-200"
-                  >
-                    Price
-                  </label>
-                  <span id="productPriceError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="flex gap-3">
-              <!-- add or edit button -->
-              <button
-                type="submit"
-                id="productSubmitBtn"
-                class="flex items-center gap-2 bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 md:text-md text-xs transition-all ease-in-out "
-              >
-                <span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Plus-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Plus Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM12.75 8c0 -0.41421 -0.3358 -0.75 -0.75 -0.75s-0.75 0.33579 -0.75 0.75v3.25H8c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h3.25V16c0 0.4142 0.3358 0.75 0.75 0.75s0.75 -0.3358 0.75 -0.75v-3.25H16c0.4142 0 0.75 -0.3358 0.75 -0.75s-0.3358 -0.75 -0.75 -0.75h-3.25V8Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path>
-                  </svg>
-                </span>
+          <h2 class="text-3xl font-bold text-slate-700 mb-6">Manage Products</h2>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Form Section -->
+            <div class="lg:col-span-1">
+            <form
+              id="productForm"
+              onsubmit="saveProduct(event)"
+              class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm sticky top-6"
+            >
+              <h3 class="text-lg font-semibold text-slate-700 mb-4">
                 Add Product
-              </button>
-
-              <!-- cancel button -->
-              <button
-                type="button"
-                onclick="resetProductForm()"
-                class="flex items-center gap-2 bg-gray-400 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-500 md:text-md text-xs"
-              >
-                <span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Xmark-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Xmark Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM9.70164 8.64124c-0.29289 -0.29289 -0.76776 -0.29289 -1.06066 0 -0.29289 0.2929 -0.29289 0.76777 0 1.06066L10.9391 12l-2.29812 2.2981c-0.29289 0.2929 -0.29289 0.7678 0 1.0607 0.2929 0.2929 0.76777 0.2929 1.06066 0l2.29806 -2.2981 2.2981 2.2981c0.2929 0.2929 0.7678 0.2929 1.0607 0 0.2929 -0.2929 0.2929 -0.7678 0 -1.0607L13.0604 12l2.2981 -2.2981c0.2929 -0.29289 0.2929 -0.76776 0 -1.06066 -0.2929 -0.29289 -0.7678 -0.29289 -1.0607 0l-2.2981 2.29806 -2.29806 -2.29806Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path>
-                  </svg>
-                </span>
-                Cancel
-              </button>
-            </div>
-          </form>
-
-          <!-- Products Table -->
-          <div class="overflow-x-auto rounded-xl border border-slate-200">
-            <table class="w-full">
-              <thead class="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">ID</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Name</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Price (Rp)</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Actions</th>
-                </tr>
-              </thead>
-              <tbody
-                id="productsTable"
-                class="divide-y divide-gray-200"
-              ></tbody>
-            </table>
+              </h3>
+              <input type="hidden" id="productId" />
+  
+              <div class="flex flex-col gap-4">
+                <!-- input text -->
+                <div class="w-full">
+                  <div class="relative">
+                    <input
+                      type="text"
+                      id="productName"
+                      class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
+                    />
+                    <label
+                      for="productName"
+                      class="capitalize absolute cursor-text bg-white px-1 left-3 top-2.5 text-slate-500 text-xs font-medium peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white transition-all duration-200"
+                    >
+                      Product Name
+                    </label>
+                    <span
+                      id="productNameError"
+                      class="text-red-600 text-xs mt-1 block"
+                      style="display: none"
+                    ></span>
+                  </div>
+                </div>
+  
+                <!-- input price or number -->
+                <div class="w-full">
+                  <div class="relative">
+                    <input
+                      type="number"
+                      id="productPrice"
+                      class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
+                    />
+                    <label
+                      for="productPrice"
+                      class="capitalize absolute cursor-text bg-white px-1 left-3 top-2.5 text-slate-500 text-xs font-medium peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white transition-all duration-200"
+                    >
+                      Price (Rp)
+                    </label>
+                    <span
+                      id="productPriceError"
+                      class="text-red-600 text-xs mt-1 block"
+                      style="display: none"
+                    ></span>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="flex flex-col gap-2 mt-6">
+                <!-- add or edit button -->
+                <button
+                  type="submit"
+                  id="productSubmitBtn"
+                  class="flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 w-full"
+                >
+                  <span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      id="Plus-Circle--Streamline-Iconoir"
+                      height="20"
+                      width="20"
+                    >
+                      <desc>
+                        Plus Circle Streamline Icon: https://streamlinehq.com
+                      </desc>
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM12.75 8c0 -0.41421 -0.3358 -0.75 -0.75 -0.75s-0.75 0.33579 -0.75 0.75v3.25H8c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h3.25V16c0 0.4142 0.3358 0.75 0.75 0.75s0.75 -0.3358 0.75 -0.75v-3.25H16c0.4142 0 0.75 -0.3358 0.75 -0.75s-0.3358 -0.75 -0.75 -0.75h-3.25V8Z"
+                        fill="currentColor"
+                        stroke-width="1"
+                      ></path>
+                    </svg>
+                  </span>
+                  Add Product
+                </button>
+  
+                <!-- cancel button -->
+                <button
+                  type="button"
+                  onclick="resetProductForm()"
+                  class="flex items-center justify-center gap-2 bg-slate-300 text-slate-700 font-semibold py-2.5 px-4 rounded-lg hover:bg-slate-400 transition-colors duration-200 w-full"
+                >
+                  <span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      id="Xmark-Circle--Streamline-Iconoir"
+                      height="20"
+                      width="20"
+                    >
+                      <desc>
+                        Xmark Circle Streamline Icon: https://streamlinehq.com
+                      </desc>
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM9.70164 8.64124c-0.29289 -0.29289 -0.76776 -0.29289 -1.06066 0 -0.29289 0.2929 -0.29289 0.76777 0 1.06066L10.9391 12l-2.29812 2.2981c-0.29289 0.2929 -0.29289 0.7678 0 1.0607 0.2929 0.2929 0.76777 0.2929 1.06066 0l2.29806 -2.2981 2.2981 2.2981c0.2929 0.2929 0.7678 0.2929 1.0607 0 0.2929 -0.2929 0.2929 -0.7678 0 -1.0607L13.0604 12l2.2981 -2.2981c0.2929 -0.29289 0.2929 -0.76776 0 -1.06066 -0.2929 -0.29289 -0.7678 -0.29289 -1.0607 0l-2.2981 2.29806 -2.29806 -2.29806Z"
+                        fill="currentColor"
+                        stroke-width="1"
+                      ></path>
+                    </svg>
+                  </span>
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
+  
+          <!-- Table Section -->
+          <div class="lg:col-span-2">
+            <div
+              class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm"
+            >
+              <table class="w-full">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    <th
+                      class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                      onclick="sortProducts('id')"
+                      title="Click to sort"
+                    >
+                      <span class="flex items-center gap-1.5">
+                        ID
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                        </svg>
+                      </span>
+                    </th>
+                    <th
+                      class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                      onclick="sortProducts('name')"
+                      title="Click to sort"
+                    >
+                      <span class="flex items-center gap-1.5">
+                        Name
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                        </svg>
+                      </span>
+                    </th>
+                    <th
+                      class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                      onclick="sortProducts('price')"
+                      title="Click to sort"
+                    >
+                      <span class="flex items-center gap-1.5">
+                        Price (Rp)
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                        </svg>
+                      </span>
+                    </th>
+                    <th
+                      class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="productsTable"
+                  class="divide-y divide-slate-100"
+                ></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
         </div>
 
         <!-- diff section -->
         <!-- Transactions Section -->
+
+        <!-- diff section -->
+        <!-- Transactions Section -->
         <div id="transactions" class="section hidden">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6">
+          <h2 class="text-3xl font-bold text-slate-700 mb-6">
             Manage Transactions
           </h2>
 
           <!-- Total Revenue Box -->
-          <div
-            class="bg-linear-45 from-blue-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% text-white p-8 rounded-lg mb-8"
-          >
+          <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8 rounded-lg mb-6 shadow-md">
             <div class="flex items-center justify-between">
               <div>
-                <p class="flex items-center gap-2 text-xl opacity-90 mb-2">
-                  <span
-                    ><svg
+                <p class="flex items-center gap-2 text-lg font-medium opacity-90 mb-2">
+                  <span>
+                    <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -224,8 +283,9 @@
                           d="M19 22H5v-2h14zm1 -4H4v-2h16zm0 -16c0.5523 0 1 0.44772 1 1v10c0 0.5523 -0.4477 1 -1 1H4c-0.55228 0 -1 -0.4477 -1 -1V3c0 -0.55228 0.44772 -1 1 -1zM7.43457 4c0.04123 0.15999 0.06543 0.32714 0.06543 0.5 0 1.10457 -0.89543 2 -2 2 -0.17295 0 -0.33994 -0.02514 -0.5 -0.06641v3.13184C5.15999 9.5242 5.32714 9.5 5.5 9.5c1.10457 0 2 0.8954 2 2 0 0.1729 -0.0242 0.34 -0.06543 0.5h9.13083c-0.0412 -0.16 -0.0654 -0.3271 -0.0654 -0.5 0 -1.1046 0.8954 -2 2 -2 0.1729 0 0.34 0.0242 0.5 0.06543V6.43359c-0.1601 0.04127 -0.3271 0.06641 -0.5 0.06641 -1.1046 0 -2 -0.89543 -2 -2 0 -0.17286 0.0242 -0.34001 0.0654 -0.5zM12 5c1.6569 0 3 1.34315 3 3s-1.3431 3 -3 3 -3 -1.34315 -3 -3 1.3431 -3 3 -3"
                           stroke-width="1"
                         ></path>
-                      </g></svg
-                  ></span>
+                      </g>
+                    </svg>
+                  </span>
                   Total Revenue
                 </p>
                 <p class="text-5xl font-bold" id="totalRevenue">Rp 0</p>
@@ -233,125 +293,203 @@
             </div>
           </div>
 
-          <form
-            id="transactionForm"
-            onsubmit="saveTransaction(event)"
-            class="flex flex-col bg-blue-50 p-6 rounded-lg mb-8 border border-blue-300"
-          >
-            <input type="hidden" id="transactionId" />
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Form Section -->
+            <div class="lg:col-span-1">
+              <form
+                id="transactionForm"
+                onsubmit="saveTransaction(event)"
+                class="bg-white p-6 rounded-lg border border-slate-200 shadow-sm sticky top-6"
+              >
+                <h3 class="text-lg font-semibold text-slate-700 mb-4">Add Transaction</h3>
+                <input type="hidden" id="transactionId" />
 
-            <div class="flex flex-col mb-6 gap-2 items-start md:flex-row md:items-center">
-              <div class="w-full md:w-auto">
-                <select
-                  id="transactionProduct"
-                  class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
-                >
-                  <option value="">-- Select Product --</option>
-                </select>
-                <span id="transactionProductError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
-              </div>
+                <div class="flex flex-col gap-4">
+                  <!-- Product Select -->
+                  <div class="w-full">
+                    <label class="text-xs font-medium text-slate-600 mb-1.5 block">Select Product</label>
+                    <select
+                      id="transactionProduct"
+                      class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
+                    >
+                      <option value="">-- Select Product --</option>
+                    </select>
+                    <span
+                      id="transactionProductError"
+                      class="text-red-600 text-xs mt-1 block"
+                      style="display: none"
+                    ></span>
+                  </div>
 
-              <!-- input quantity -->
-              <div class="w-full max-w-sm min-w-[200px]">
-                <div class="relative">
-                  <input
-                    type="number"
-                    id="transactionQuantity"
-                    min="1"
-                    class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-blue-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
-                  />
-                  <label
-                    class="capitalize absolute cursor-text bg-blue-50 px-1 left-2.5 top-2.5 text-slate-600 text-sm peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-blue-600 transition-all duration-200"
-                  >
-                    Jumlah (Quantity)
-                  </label>
-                  <span id="transactionQuantityError" class="text-red-600 text-xs mt-1 block" style="display: none;"></span>
+                  <!-- Quantity Input -->
+                  <div class="w-full">
+                    <div class="relative">
+                      <input
+                        type="number"
+                        id="transactionQuantity"
+                        min="1"
+                        class="peer w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border-2 border-slate-200 rounded-lg px-3 py-2.5 focus:outline-none focus:border-blue-500 focus:shadow-md focus:shadow-blue-200 transition-all duration-200"
+                      />
+                      <label
+                        class="capitalize absolute cursor-text bg-white px-1 left-3 top-2.5 text-slate-500 text-xs font-medium peer-focus:-top-2 peer-focus:left-3 peer-focus:text-xs peer-focus:text-blue-600 peer-focus:bg-white transition-all duration-200"
+                      >
+                        Quantity
+                      </label>
+                      <span
+                        id="transactionQuantityError"
+                        class="text-red-600 text-xs mt-1 block"
+                        style="display: none"
+                      ></span>
+                    </div>
+                  </div>
                 </div>
+
+                <div class="flex flex-col gap-2 mt-6">
+                  <button
+                    type="submit"
+                    id="transactionSubmitBtn"
+                    class="flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 w-full"
+                  >
+                    <span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="Plus-Circle--Streamline-Iconoir"
+                        height="20"
+                        width="20"
+                      >
+                        <desc>
+                          Plus Circle Streamline Icon: https://streamlinehq.com
+                        </desc>
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM12.75 8c0 -0.41421 -0.3358 -0.75 -0.75 -0.75s-0.75 0.33579 -0.75 0.75v3.25H8c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h3.25V16c0 0.4142 0.3358 0.75 0.75 0.75s0.75 -0.3358 0.75 -0.75v-3.25H16c0.4142 0 0.75 -0.3358 0.75 -0.75s-0.3358 -0.75 -0.75 -0.75h-3.25V8Z"
+                          fill="currentColor"
+                          stroke-width="1"
+                        ></path>
+                      </svg>
+                    </span>
+                    Add Transaction
+                  </button>
+                  <button
+                    type="button"
+                    onclick="resetTransactionForm()"
+                    class="flex items-center justify-center gap-2 bg-slate-300 text-slate-700 font-semibold py-2.5 px-4 rounded-lg hover:bg-slate-400 transition-colors duration-200 w-full"
+                  >
+                    <span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        id="Xmark-Circle--Streamline-Iconoir"
+                        height="20"
+                        width="20"
+                      >
+                        <desc>
+                          Xmark Circle Streamline Icon: https://streamlinehq.com
+                        </desc>
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM9.70164 8.64124c-0.29289 -0.29289 -0.76776 -0.29289 -1.06066 0 -0.29289 0.2929 -0.29289 0.76777 0 1.06066L10.9391 12l-2.29812 2.2981c-0.29289 0.2929 -0.29289 0.7678 0 1.0607 0.2929 0.2929 0.76777 0.2929 1.06066 0l2.29806 -2.2981 2.2981 2.2981c0.2929 0.2929 0.7678 0.2929 1.0607 0 0.2929 -0.2929 0.2929 -0.7678 0 -1.0607L13.0604 12l2.2981 -2.2981c0.2929 -0.29289 0.2929 -0.76776 0 -1.06066 -0.2929 -0.29289 -0.7678 -0.29289 -1.0607 0l-2.2981 2.29806 -2.29806 -2.29806Z"
+                          fill="currentColor"
+                          stroke-width="1"
+                        ></path>
+                      </svg>
+                    </span>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Table Section -->
+            <div class="lg:col-span-2">
+              <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm">
+                <table class="w-full">
+                  <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                        onclick="sortTransactions('id')"
+                        title="Click to sort"
+                      >
+                        <span class="flex items-center gap-1.5">
+                          ID
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                          </svg>
+                        </span>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                        onclick="sortTransactions('product_name')"
+                        title="Click to sort"
+                      >
+                        <span class="flex items-center gap-1.5">
+                          Product
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                          </svg>
+                        </span>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                        onclick="sortTransactions('quantity')"
+                        title="Click to sort"
+                      >
+                        <span class="flex items-center gap-1.5">
+                          Quantity
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                          </svg>
+                        </span>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                        onclick="sortTransactions('product_price')"
+                        title="Click to sort"
+                      >
+                        <span class="flex items-center gap-1.5">
+                          Price
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                          </svg>
+                        </span>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors"
+                        onclick="sortTransactions('total')"
+                        title="Click to sort"
+                      >
+                        <span class="flex items-center gap-1.5">
+                          Total
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z"/>
+                          </svg>
+                        </span>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide"
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    id="transactionsTable"
+                    class="divide-y divide-slate-100"
+                  ></tbody>
+                </table>
               </div>
             </div>
-
-            <div class="flex gap-3">
-              <button
-                type="submit"
-                id="transactionSubmitBtn"
-                class="flex items-center gap-2 bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 md:text-md text-xs"
-              >
-                <span
-                  ><svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Plus-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Plus Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM12.75 8c0 -0.41421 -0.3358 -0.75 -0.75 -0.75s-0.75 0.33579 -0.75 0.75v3.25H8c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h3.25V16c0 0.4142 0.3358 0.75 0.75 0.75s0.75 -0.3358 0.75 -0.75v-3.25H16c0.4142 0 0.75 -0.3358 0.75 -0.75s-0.3358 -0.75 -0.75 -0.75h-3.25V8Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path></svg
-                ></span>
-                Add Transaction
-              </button>
-              <button
-                type="button"
-                onclick="resetTransactionForm()"
-                class="flex items-center gap-2 bg-gray-400 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-500"
-              >
-                <span
-                  ><svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Xmark-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Xmark Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM9.70164 8.64124c-0.29289 -0.29289 -0.76776 -0.29289 -1.06066 0 -0.29289 0.2929 -0.29289 0.76777 0 1.06066L10.9391 12l-2.29812 2.2981c-0.29289 0.2929 -0.29289 0.7678 0 1.0607 0.2929 0.2929 0.76777 0.2929 1.06066 0l2.29806 -2.2981 2.2981 2.2981c0.2929 0.2929 0.7678 0.2929 1.0607 0 0.2929 -0.2929 0.2929 -0.7678 0 -1.0607L13.0604 12l2.2981 -2.2981c0.2929 -0.29289 0.2929 -0.76776 0 -1.06066 -0.2929 -0.29289 -0.7678 -0.29289 -1.0607 0l-2.2981 2.29806 -2.29806 -2.29806Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path></svg
-                ></span>
-                Cancel
-              </button>
-            </div>
-          </form>
-
-          <!-- Transactions Table -->
-          <div class="overflow-x-auto rounded-xl border border-slate-200">
-            <table class="w-full">
-              <thead class="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">ID</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Product</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Quantity</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Price</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Total</th>
-                  <th class="px-4 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wide">Actions</th>
-                </tr>
-              </thead>
-              <tbody
-                id="transactionsTable"
-                class="divide-y divide-gray-200"
-              ></tbody>
-            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <script src="main.js">
-    </script>
+    <script src="main.js"></script>
   </body>
 </html>
