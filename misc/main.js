@@ -1,4 +1,5 @@
-const API_URL = "http://localhost/restapi/api.php";
+// const API_URL = "http://localhost/restapi/api.php";
+const API_URL = "http://192.168.1.7/restapi/api.php";
 
 // Sorting state
 let productSort = { field: null, order: "asc" };
@@ -63,17 +64,17 @@ function showAlert(message, type = "success") {
 /**
  * SORT PRODUCTS FUNCTION
  * Handles sorting of products table by clicking column headers
- * 
+ *
  * HOW IT WORKS:
  * 1. If user clicks the SAME column header twice:
  *    - First click: sort ASCENDING (asc)
  *    - Second click: sort DESCENDING (desc)
  *    - This is called a "toggle"
- * 
+ *
  * 2. If user clicks a DIFFERENT column header:
  *    - Reset to ASCENDING (asc) order
  *    - Start sorting by the new column
- * 
+ *
  * EXAMPLE:
  * - Click "Name" header → sorts A-Z (asc)
  * - Click "Name" header again → sorts Z-A (desc)
@@ -86,8 +87,8 @@ function sortProducts(field) {
     productSort.order = productSort.order === "asc" ? "desc" : "asc";
   } else {
     // User clicked a different column, so set new field and reset to ascending
-    productSort.field = field;  // Which column to sort by (id, name, price)
-    productSort.order = "asc";   // Always start with ascending for new column
+    productSort.field = field; // Which column to sort by (id, name, price)
+    productSort.order = "asc"; // Always start with ascending for new column
   }
   // Reload and re-render the products table with new sort applied
   loadProducts();
@@ -152,14 +153,14 @@ async function loadProducts() {
     tbody.innerHTML = products
       .map(
         (p, i) => `
-                    <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-100">
-                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-700 font-medium">${
+                    <tr class="border-b border-slate-100 dark:border-slate-600 dark:hover:bg-slate-700 hover:bg-slate-50 transition-colors duration-100">
+                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-700 dark:text-slate-200 font-medium">${
                           p.id
                         }</td>
-                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-800 font-medium capitalize">${
+                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-800 dark:text-slate-200 font-medium capitalize">${
                           p.name
                         }</td>
-                        <td class="px-4 py-2.5 text-xs md:text-sm text-blue-600 font-semibold">Rp ${parseFloat(
+                        <td class="px-4 py-2.5 text-xs md:text-sm text-blue-600 dark:text-blue-300 font-semibold">Rp ${parseFloat(
                           p.price
                         ).toLocaleString("id-ID")}</td>
                         <td class="px-4 py-2.5 flex gap-1">
@@ -218,7 +219,7 @@ async function saveProduct(e) {
   // Validation
   let hasError = false;
   if (!name) {
-    nameError.textContent = "Product name is required";
+    nameError.textContent = "nama barang harus di isi";
     nameError.style.display = "block";
     nameInput.classList.add("border-red-500");
     hasError = true;
@@ -227,7 +228,7 @@ async function saveProduct(e) {
   }
 
   if (!price || price <= 0) {
-    priceError.textContent = "Price must be greater than 0";
+    priceError.textContent = "harga wajib ada";
     priceError.style.display = "block";
     priceInput.classList.add("border-red-500");
     hasError = true;
@@ -368,16 +369,16 @@ async function loadProductsForSelect() {
 /**
  * SORT TRANSACTIONS FUNCTION
  * Same logic as sortProducts, but for the transactions table
- * 
+ *
  * HOW IT WORKS:
  * 1. If user clicks the SAME column header twice:
  *    - First click: sort ASCENDING (asc)
  *    - Second click: sort DESCENDING (desc)
- * 
+ *
  * 2. If user clicks a DIFFERENT column header:
  *    - Reset to ASCENDING (asc) order
  *    - Start sorting by the new column
- * 
+ *
  * EXAMPLE:
  * - Click "Quantity" header → sorts from smallest to largest quantity (asc)
  * - Click "Quantity" header again → sorts from largest to smallest quantity (desc)
@@ -390,18 +391,44 @@ function sortTransactions(field) {
     transactionSort.order = transactionSort.order === "asc" ? "desc" : "asc";
   } else {
     // User clicked a different column, so set new field and reset to ascending
-    transactionSort.field = field;    // Which column to sort by (id, product_name, quantity, etc)
-    transactionSort.order = "asc";     // Always start with ascending for new column
+    transactionSort.field = field; // Which column to sort by (id, product_name, quantity, etc)
+    transactionSort.order = "asc"; // Always start with ascending for new column
   }
   // Reload and re-render the transactions table with new sort applied
   loadTransactions();
 }
 
+// Add this variable at the top with your other variables (near transactionSort)
+let searchQuery = "";
+
+// Add this search function
+function searchTransactions() {
+  const searchBar = document.getElementById("searchBar");
+  searchQuery = searchBar.value.toLowerCase().trim();
+  loadTransactions(); // Reload transactions with filter applied
+}
+
+// Updated loadTransactions function with search functionality
 async function loadTransactions() {
   try {
     const res = await fetch(`${API_URL}?endpoint=transactions`);
     let transactions = await res.json();
     const tbody = document.getElementById("transactionsTable");
+
+    // ===== APPLY SEARCH FILTER =====
+    if (searchQuery) {
+      transactions = transactions.filter((t) => {
+        // Search across multiple fields: product name, ID, quantity, price
+        const searchFields = [
+          String(t.id),
+          String(t.product_name || "").toLowerCase(),
+          String(t.quantity),
+          String(t.product_price || ""),
+        ].join(" ");
+
+        return searchFields.includes(searchQuery);
+      });
+    }
 
     if (transactions.length === 0) {
       tbody.innerHTML =
@@ -411,44 +438,22 @@ async function loadTransactions() {
     }
 
     // ===== APPLY SORTING =====
-    // Only sort if a sorting field has been selected (transactionSort.field is not null)
     if (transactionSort.field) {
       transactions.sort((a, b) => {
-        // Get the values from both transactions for the column being sorted
-        // Example: if sorting by "quantity", aVal = transaction1.quantity, bVal = transaction2.quantity
         let aVal = a[transactionSort.field];
         let bVal = b[transactionSort.field];
 
-        // STEP 1: Determine data type (number or text)
-        // isNaN() checks if value is NOT a number
-        // If both values are numbers, convert them to floats for proper numeric comparison
-        // (otherwise "100" < "20" alphabetically, which is wrong for numbers)
         if (!isNaN(aVal) && !isNaN(bVal)) {
-          // NUMERIC COMPARISON: Convert to numbers
-          // Example: quantity "5" becomes 5, "15" becomes 15, so 15 > 5 correctly
           aVal = parseFloat(aVal);
           bVal = parseFloat(bVal);
         } else {
-          // STRING COMPARISON: Convert to lowercase for case-insensitive sorting
-          // Example: "Apple" and "Banana" both become lowercase for fair comparison
           aVal = String(aVal).toLowerCase();
           bVal = String(bVal).toLowerCase();
         }
 
-        // STEP 2: Compare values and return sort order
-        // JavaScript sort() expects:
-        //   - Return 1 if a should come AFTER b
-        //   - Return -1 if a should come BEFORE b
-        //   - Return 0 if they're equal
         if (transactionSort.order === "asc") {
-          // ASCENDING (asc): A-Z, 1-100
-          // If aVal > bVal, put it after (return 1)
-          // If aVal < bVal, put it before (return -1)
           return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
         } else {
-          // DESCENDING (desc): Z-A, 100-1
-          // Reverse the logic: if aVal < bVal, put it after (return 1)
-          // If aVal > bVal, put it before (return -1)
           return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
         }
       });
@@ -460,50 +465,42 @@ async function loadTransactions() {
         const total = t.quantity * parseFloat(t.product_price || 0);
         totalRevenue += total;
         return `
-                        <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-100">
-                            <td class="px-4 py-2.5 font-semibold text-xs md:text-sm text-slate-700">${
-                              t.id
-                            }</td>
-                            <td class="px-4 py-2.5 font-medium text-xs md:text-sm text-slate-800">${
-                              t.product_name || "N/A"
-                            }</td>
-                            <td class="px-4 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">${
-                              t.quantity
-                            }x</td>
-                            <td class="px-4 py-2.5 text-slate-600 text-xs md:text-sm">Rp ${parseFloat(
-                              t.product_price || 0
-                            ).toLocaleString("id-ID")}</td>
-                            <td class="px-4 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">Rp ${total.toLocaleString(
-                              "id-ID"
-                            )}</td>
-                            <td class="px-4 py-2.5 flex gap-1">
-                                <button onclick="editTransaction(${
-                                  t.id
-                                })" class="flex items-center justify-center gap-1 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
-                                    <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="14" width="14">
-  <desc>
-    Edit Streamline Icon: https://streamlinehq.com
-  </desc>
-  <title>edit</title>
-  <path d="M1 13h14v1H1Z" fill="currentColor" stroke-width="0.5"></path>
-  <path d="M12.7 4.5c0.4 -0.4 0.4 -1 0 -1.4l-1.8 -1.8c-0.4 -0.4 -1 -0.4 -1.4 0l-7.5 7.5V12h3.2l7.5 -7.5zm-2.5 -2.5L12 3.8l-1.5 1.5L8.7 3.5l1.5 -1.5zM3 11v-1.8l5 -5 1.8 1.8 -5 5H3z" fill="currentColor" stroke-width="0.5"></path>
-  <path id="_Transparent_Rectangle_" d="M0 0h16v16H0Z" fill="none" stroke-width="0.5"></path>
-</svg></span> <span class="hidden md:inline">Edit</span>
-                                </button>
-                                <button onclick="deleteTransaction(${
-                                  t.id
-                                })" class="flex items-center justify-center gap-1 border-red-500 border bg-red-400 hover:bg-red-500 hover:border-red-600 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
-                                    <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="14" width="14">
-  <desc>
-    Trash X Streamline Icon: https://streamlinehq.com
-  </desc>
-  <path d="M20 6a1 1 0 0 1 0.117 1.993L20 8h-0.081L19 19a3 3 0 0 1 -2.824 2.995L16 22H8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-0.005 -0.167L4.08 8H4a1 1 0 0 1 -0.117 -1.993L4 6h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567L10.585 14l-1.292 1.293 -0.083 0.094a1 1 0 0 0 1.497 1.32L12 15.415l1.293 1.292 0.094 0.083a1 1 0 0 0 1.32 -1.497L13.415 14l1.292 -1.293 0.083 -0.094a1 1 0 0 0 -1.497 -1.32L12 12.585l-1.293 -1.292 -0.094 -0.083z" stroke-width="1"></path>
-  <path d="M14 2a2 2 0 0 1 2 2 1 1 0 0 1 -1.993 0.117L14 4h-4l-0.007 0.117A1 1 0 0 1 8 4a2 2 0 0 1 1.85 -1.995L10 2h4z" stroke-width="1"></path>
-</svg></span> <span class="hidden md:inline">Delete</span>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+          <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-100">
+            <td class="px-4 py-2.5 font-semibold text-xs md:text-sm text-slate-700">${
+              t.id
+            }</td>
+            <td class="px-4 py-2.5 font-medium text-xs md:text-sm text-slate-800">${
+              t.product_name || "N/A"
+            }</td>
+            <td class="px-4 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">${
+              t.quantity
+            }x</td>
+            <td class="px-4 py-2.5 text-slate-600 text-xs md:text-sm">Rp ${parseFloat(
+              t.product_price || 0
+            ).toLocaleString("id-ID")}</td>
+            <td class="px-5 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">Rp ${total.toLocaleString(
+              "id-ID"
+            )}</td>
+            <td class="px-4 py-2.5 flex gap-1">
+              <button onclick="editTransaction(${
+                t.id
+              })" class="flex items-center justify-center gap-1 bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
+                <span><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" height="14" width="14">
+                  <path d="M1 13h14v1H1Z" fill="currentColor" stroke-width="0.5"></path>
+                  <path d="M12.7 4.5c0.4 -0.4 0.4 -1 0 -1.4l-1.8 -1.8c-0.4 -0.4 -1 -0.4 -1.4 0l-7.5 7.5V12h3.2l7.5 -7.5zm-2.5 -2.5L12 3.8l-1.5 1.5L8.7 3.5l1.5 -1.5zM3 11v-1.8l5 -5 1.8 1.8 -5 5H3z" fill="currentColor" stroke-width="0.5"></path>
+                </svg></span> <span class="hidden md:inline">Edit</span>
+              </button>
+              <button onclick="deleteTransaction(${
+                t.id
+              })" class="flex items-center justify-center gap-1 border-red-500 border bg-red-400 hover:bg-red-500 hover:border-red-600 text-white px-3 py-1.5 rounded-md font-medium text-xs transition-colors duration-100">
+                <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" height="14" width="14">
+                  <path d="M20 6a1 1 0 0 1 0.117 1.993L20 8h-0.081L19 19a3 3 0 0 1 -2.824 2.995L16 22H8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-0.005 -0.167L4.08 8H4a1 1 0 0 1 -0.117 -1.993L4 6h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567L10.585 14l-1.292 1.293 -0.083 0.094a1 1 0 0 0 1.497 1.32L12 15.415l1.293 1.292 0.094 0.083a1 1 0 0 0 1.32 -1.497L13.415 14l1.292 -1.293 0.083 -0.094a1 1 0 0 0 -1.497 -1.32L12 12.585l-1.293 -1.292 -0.094 -0.083z" stroke-width="1"></path>
+                  <path d="M14 2a2 2 0 0 1 2 2 1 1 0 0 1 -1.993 0.117L14 4h-4l-0.007 0.117A1 1 0 0 1 8 4a2 2 0 0 1 1.85 -1.995L10 2h4z" stroke-width="1"></path>
+                </svg></span> <span class="hidden md:inline">Delete</span>
+              </button>
+            </td>
+          </tr>
+        `;
       })
       .join("");
 
@@ -514,6 +511,32 @@ async function loadTransactions() {
     showAlert("Failed to load transactions", "error");
   }
 }
+
+// Add event listener to search bar (add this at the bottom of your script)
+document.addEventListener("DOMContentLoaded", function () {
+  const searchBar = document.getElementById("searchBar");
+
+  if (searchBar) {
+    // Search as user types (with slight delay for performance)
+    let searchTimeout;
+    searchBar.addEventListener("input", function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchTransactions();
+      }, 300); // Wait 300ms after user stops typing
+    });
+
+    // Optional: Clear search functionality
+    const clearSearchBtn = document.getElementById("clearSearch");
+    if (clearSearchBtn) {
+      clearSearchBtn.addEventListener("click", function () {
+        searchBar.value = "";
+        searchQuery = "";
+        loadTransactions();
+      });
+    }
+  }
+});
 
 async function saveTransaction(e) {
   e.preventDefault();
