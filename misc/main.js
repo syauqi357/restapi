@@ -340,7 +340,7 @@ function resetProductForm() {
                       fill="currentColor"
                       stroke-width="1"
                     ></path></svg
-                > Add Product`;
+                > tambah produk`;
 }
 
 // ========== TRANSACTIONS ==========
@@ -465,20 +465,20 @@ async function loadTransactions() {
         const total = t.quantity * parseFloat(t.product_price || 0);
         totalRevenue += total;
         return `
-          <tr class="border-b border-slate-100 hover:bg-slate-50 transition-colors duration-100">
-            <td class="px-4 py-2.5 font-semibold text-xs md:text-sm text-slate-700">${
+          <tr class="border-b border-slate-100 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-100">
+            <td class="px-4 py-2.5 font-semibold text-xs md:text-sm text-slate-700 dark:text-slate-200">${
               t.id
             }</td>
-            <td class="px-4 py-2.5 font-medium text-xs md:text-sm text-slate-800">${
+            <td class="px-4 py-2.5 font-medium text-xs md:text-sm text-slate-800 dark:text-slate-200">${
               t.product_name || "N/A"
             }</td>
-            <td class="px-4 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">${
+            <td class="px-4 py-2.5 text-blue-600 dark:text-blue-300 font-semibold text-xs md:text-sm">${
               t.quantity
             }x</td>
-            <td class="px-4 py-2.5 text-slate-600 text-xs md:text-sm">Rp ${parseFloat(
+            <td class="px-4 py-2.5 text-slate-600 dark:text-slate-200 text-xs md:text-sm">Rp ${parseFloat(
               t.product_price || 0
             ).toLocaleString("id-ID")}</td>
-            <td class="px-5 py-2.5 text-blue-600 font-semibold text-xs md:text-sm">Rp ${total.toLocaleString(
+            <td class="px-5 py-2.5 text-blue-600 dark:text-blue-200 font-semibold text-xs md:text-sm">Rp ${total.toLocaleString(
               "id-ID"
             )}</td>
             <td class="px-4 py-2.5 flex gap-1">
