@@ -70,6 +70,10 @@ switch ($request) {
 // ============ PRODUCTS HANDLERS ============
 function handleProducts($method, $id, $input)
 {
+    // For PUT requests with multipart/form-data, we need to parse the input manually
+    // as PHP doesn't populate $_POST for PUT. A common workaround is to use POST for updates.
+    // Here we will handle both JSON input and form-data for flexibility.
+
     $conn = getConnection();
 
     switch ($method) {
@@ -90,9 +94,14 @@ function handleProducts($method, $id, $input)
                 }
             } else {
                 // Get all products
+                $baseUrl = "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']) . '/uploads/';
                 $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
                 $products = [];
                 while ($row = $result->fetch_assoc()) {
+                    // Prepend the base URL to the image filename
+                    if (!empty($row['image'])) {
+                        $row['image_url'] = $baseUrl . $row['image'];
+                    }
                     $products[] = $row;
                 }
                 sendResponse(200, $products);
@@ -101,12 +110,15 @@ function handleProducts($method, $id, $input)
         // post or add data
         case 'POST':
             // Create new product
-            if (!isset($input['name']) || !isset($input['price'])) {
+            // Switched from $input to $_POST to handle multipart/form-data
+            if (!isset($_POST['name']) || !isset($_POST['price'])) {
                 sendResponse(400, ['error' => 'Name and price are required']);
             }
             
-            $name = trim($input['name']);
-            $price = $input['price'];
+            $name = trim($_POST['name']);
+            $price = $_POST['price'];
+            $imagePath = null;
+
             
             if (empty($name)) {
                 sendResponse(400, ['error' => 'Name cannot be empty']);
@@ -126,8 +138,27 @@ function handleProducts($method, $id, $input)
                 sendResponse(409, ['error' => 'A product with this name already exists. Please use a different name if you want to add a variant.']);
             }
 
-            $stmt = $conn->prepare("INSERT INTO products (name, price) VALUES (?, ?)");
-            $stmt->bind_param("sd", $name, $price);
+            // Handle file upload
+            if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+                $uploadDir = 'uploads/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                $fileExtension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                $imagePath = uniqid('product_', true) . '.' . $fileExtension;
+                $uploadFile = $uploadDir . $imagePath;
+
+                // Check if file is an image
+                $check = getimagesize($_FILES['image']['tmp_name']);
+                if($check === false) {
+                    sendResponse(400, ['error' => 'File is not an image.']);
+                }
+
+                move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile);
+            }
+
+            $stmt = $conn->prepare("INSERT INTO products (name, price, image) VALUES (?, ?, ?)");
+            $stmt->bind_param("sds", $name, $price, $imagePath);
 
             if ($stmt->execute()) {
                 sendResponse(201, [
@@ -140,16 +171,21 @@ function handleProducts($method, $id, $input)
             break;
 
         // edit data
-        case 'PUT':
+        case 'PUT': // Note: Standard HTML forms don't support PUT with multipart/form-data.
+                    // This case assumes you are either sending JSON or using a JS-based POST request to this endpoint.
+                    // For file uploads on edit, it's better to use POST and check for an ID.
+                    // The provided JS will use POST for edits with files.
+
             // Update product
             if (!$id) {
                 sendResponse(400, ['error' => 'Product ID is required']);
             }
 
+            // This part remains for JSON-based updates without file changes.
             $fields = [];
             $types = "";
             $values = [];
-
+            
             if (isset($input['name'])) {
                 $name = trim($input['name']);
                 if (empty($name)) {
@@ -263,7 +299,7 @@ function handleTransactions($method, $id, $input)
             } else {
                 // Get all transactions with product details
                 $result = $conn->query("
-                    SELECT t.*, p.name as product_name, p.price as product_price 
+                    SELECT t.*, p.name as product_name, p.price as product_price
                     FROM transactions t 
                     LEFT JOIN products p ON t.product_id = p.id 
                     ORDER BY t.id DESC

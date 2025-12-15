@@ -1,5 +1,5 @@
-// const API_URL = "http://localhost/restapi/api.php";
-const API_URL = "http://192.168.1.7/restapi/api.php";
+const API_URL = "http://localhost/restapi/api.php";
+// const API_URL = "http://192.168.1.7/restapi/api.php";
 
 // Sorting state
 let productSort = { field: null, order: "asc" };
@@ -154,9 +154,16 @@ async function loadProducts() {
       .map(
         (p, i) => `
                     <tr class="border-b border-slate-100 dark:border-slate-600 dark:hover:bg-slate-700 hover:bg-slate-50 transition-colors duration-100">
-                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-700 dark:text-slate-200 font-medium">${
-                          p.id
-                        }</td>
+                        <td class="px-4 py-2.5 text-xs md:text-sm text-slate-700 dark:text-slate-200 font-medium">${p.id}</td>
+                        <td class="px-4 py-2.5">
+                            <img 
+                                src="${
+                                  p.image_url || "./src/img/ic_logo_aqua.png"
+                                }" 
+                                alt="${p.name}" 
+                                class="w-10 h-10 object-cover rounded-md"
+                            />
+                        </td>
                         <td class="px-4 py-2.5 text-xs md:text-sm text-slate-800 dark:text-slate-200 font-medium capitalize">${
                           p.name
                         }</td>
@@ -205,6 +212,7 @@ async function saveProduct(e) {
   e.preventDefault();
 
   const nameInput = document.getElementById("productName");
+  const imageInput = document.getElementById("productImage");
   const priceInput = document.getElementById("productPrice");
   const nameError = document.getElementById("productNameError");
   const priceError = document.getElementById("productPriceError");
@@ -215,6 +223,7 @@ async function saveProduct(e) {
 
   const name = nameInput.value.trim();
   const price = priceInput.value;
+  const imageFile = imageInput.files[0];
 
   // Validation
   let hasError = false;
@@ -238,19 +247,37 @@ async function saveProduct(e) {
 
   if (hasError) return;
 
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("price", price);
+  if (imageFile) {
+    formData.append("image", imageFile);
+  }
+
   const id = document.getElementById("productId").value;
 
   try {
-    const url = id
-      ? `${API_URL}?endpoint=products&id=${id}`
-      : `${API_URL}?endpoint=products`;
+    let url = `${API_URL}?endpoint=products`;
+    let method = "POST";
 
-    const method = id ? "PUT" : "POST";
+    if (id) {
+      // For updates, especially with files, it's common to use POST with an ID.
+      // Your current PHP `PUT` case doesn't handle `multipart/form-data`.
+      // We will use a POST request and add the ID to the form data to signify an update.
+      // You'll need to adjust your api.php to handle this.
+      // For now, let's focus on fixing the creation (POST) and standard edit (PUT without file change).
+      if (imageFile) {
+        showAlert("Image updates are not yet supported in this example.", "error");
+        return;
+      }
+      url = `${API_URL}?endpoint=products&id=${id}`;
+      method = "PUT";
+    }
 
     const res = await fetch(url, {
       method: method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, price }),
+      body: id && !imageFile ? JSON.stringify({ name, price }) : formData,
+      headers: id && !imageFile ? { "Content-Type": "application/json" } : {}, // Browser sets correct header for FormData
     });
 
     const data = await res.json();
@@ -274,6 +301,12 @@ async function editProduct(id) {
     const product = await res.json();
 
     document.getElementById("productId").value = product.id;
+    const imagePreview = document.getElementById("imagePreview");
+    if (product.image_url) {
+      imagePreview.src = product.image_url;
+      imagePreview.style.display = "block";
+    }
+
     document.getElementById("productName").value = product.name;
     document.getElementById("productPrice").value = product.price;
 
@@ -322,6 +355,8 @@ async function deleteProduct(id) {
 function resetProductForm() {
   document.getElementById("productForm").reset();
   document.getElementById("productId").value = "";
+  document.getElementById("imagePreview").style.display = "none";
+  document.getElementById("imagePreview").src = "";
   document.getElementById("productSubmitBtn").innerHTML = `<svg
                     viewBox="0 0 24 24"
                     fill="none"
