@@ -1,5 +1,5 @@
-const API_URL = "http://localhost/restapi/api.php";
-// const API_URL = "http://192.168.1.7/restapi/api.php";
+// const API_URL = "http://localhost/restapi/api.php";
+const API_URL = "http://192.168.1.7/restapi/api.php";
 
 // Sorting state
 let productSort = { field: null, order: "asc" };
@@ -203,7 +203,7 @@ async function loadProducts() {
       .join("");
   } catch (err) {
     console.log(err);
-    showAlert("failed to load products", "error");
+    showAlert("gagal memuat produk", "error");
   }
 }
 
@@ -290,7 +290,7 @@ async function saveProduct(e) {
       loadProducts();
     }
   } catch (err) {
-    showAlert("Failed to save product", "error");
+    showAlert("gagal menyimpan produk", "error");
   }
 }
 
@@ -347,7 +347,7 @@ async function deleteProduct(id) {
     loadProducts();
   } catch (err) {
     // this allert will appear if the data unable to delete due error or something wrong
-    showAlert("Failed to delete product", "error");
+    showAlert("gagal menghapus produk", "error");
   }
 }
 
@@ -396,7 +396,7 @@ async function loadProductsForSelect() {
         )
         .join("");
   } catch (err) {
-    showAlert("Failed to load products", "error");
+    showAlert("gagal memuat produk", "error");
   }
 }
 
