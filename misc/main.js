@@ -1,5 +1,5 @@
-// const API_URL = "http://localhost/restapi/api.php";
-const API_URL = "http://192.168.1.7/restapi/api.php";
+const API_URL = "http://localhost/restapi/api.php";
+// const API_URL = "http://192.168.1.7/restapi/api.php";
 
 // Sorting state
 let productSort = { field: null, order: "asc" };
