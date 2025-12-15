@@ -131,7 +131,7 @@ function handleProducts($method, $id, $input)
 
             if ($stmt->execute()) {
                 sendResponse(201, [
-                    'message' => 'Product created successfully',
+                    'message' => 'produk berhasil dibuat',
                     'id' => $conn->insert_id
                 ]);
             } else {
@@ -201,7 +201,7 @@ function handleProducts($method, $id, $input)
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Product updated successfully']);
+                    sendResponse(200, ['message' => 'produk berhasil di update']);
                 } else {
                     sendResponse(404, ['error' => 'Product not found']);
                 }
@@ -222,7 +222,7 @@ function handleProducts($method, $id, $input)
 
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
-                    sendResponse(200, ['message' => 'Product deleted successfully']);
+                    sendResponse(200, ['message' => 'produk berhasil di hapus']);
                 } else {
                     sendResponse(404, ['error' => 'Product not found']);
                 }
@@ -300,7 +300,7 @@ function handleTransactions($method, $id, $input)
             $verifyResult = $verifyStmt->get_result();
             
             if ($verifyResult->num_rows === 0) {
-                sendResponse(404, ['error' => 'Selected product does not exist']);
+                sendResponse(404, ['error' => 'produk yang di pilih tidak tersedia']);
             }
 
             $stmt = $conn->prepare("INSERT INTO transactions (product_id, quantity) VALUES (?, ?)");
@@ -308,7 +308,7 @@ function handleTransactions($method, $id, $input)
 
             if ($stmt->execute()) {
                 sendResponse(201, [
-                    'message' => 'Transaction created successfully',
+                    'message' => 'transaksi berhasil dibuat',
                     'id' => $conn->insert_id
                 ]);
             } else {
