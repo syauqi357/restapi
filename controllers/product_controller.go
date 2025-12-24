@@ -32,15 +32,16 @@ func (c *ProductController) GetByID(ctx *fiber.Ctx) error {
 func (c *ProductController) Create(ctx *fiber.Ctx) error {
 	name := ctx.FormValue("name")
 	price, _ := strconv.ParseFloat(ctx.FormValue("price"), 64)
+	stock, _ := strconv.Atoi(ctx.FormValue("stock"))
 
 	file, _ := ctx.FormFile("image")
 
-	if err := c.Service.Create(name, price, file); err != nil {
+	filename, err := c.Service.Create(name, price, file, stock)
+	if err != nil {
 		return ctx.Status(400).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	if file != nil {
-		filename := file.Filename
+	if file != nil && filename != "" {
 		err := ctx.SaveFile(file, "./upload/"+filename)
 		if err != nil {
 			return ctx.Status(500).JSON(fiber.Map{"error": err.Error()})
@@ -53,21 +54,45 @@ func (c *ProductController) Create(ctx *fiber.Ctx) error {
 func (c *ProductController) Update(ctx *fiber.Ctx) error {
 	id, _ := strconv.Atoi(ctx.Params("id"))
 
-	var body struct {
-		Name  string  `json:"name"`
-		Price float64 `json:"price"`
-	}
-	ctx.BodyParser(&body)
+	name := ctx.FormValue("name")
+	price, _ := strconv.ParseFloat(ctx.FormValue("price"), 64)
+	stock, _ := strconv.Atoi(ctx.FormValue("stock"))
 
-	if body.Name == "" || body.Price <= 0 {
+	if name == "" || price <= 0 {
 		return ctx.Status(400).JSON(fiber.Map{"error": "invalid input"})
 	}
 
-	if err := c.Service.Repo.Update(id, body.Name, body.Price); err != nil {
+	file, _ := ctx.FormFile("image")
+
+	filename, err := c.Service.Update(id, name, price, file, stock)
+	if err != nil {
 		return ctx.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	if file != nil && filename != "" {
+		err := ctx.SaveFile(file, "./upload/"+filename)
+		if err != nil {
+			return ctx.Status(500).JSON(fiber.Map{"error": err.Error()})
+		}
+	}
+
 	return ctx.JSON(fiber.Map{"message": "produk berhasil di update"})
+}
+
+func (c *ProductController) UpdateStock(ctx *fiber.Ctx) error {
+	id, _ := strconv.Atoi(ctx.Params("id"))
+	var body struct {
+		Delta int `json:"delta"`
+	}
+	if err := ctx.BodyParser(&body); err != nil {
+		return ctx.Status(400).JSON(fiber.Map{"error": "invalid request"})
+	}
+
+	if err := c.Service.UpdateStock(id, body.Delta); err != nil {
+		return ctx.Status(400).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return ctx.JSON(fiber.Map{"message": "stock berhasil diupdate"})
 }
 
 func (c *ProductController) Delete(ctx *fiber.Ctx) error {

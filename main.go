@@ -8,10 +8,17 @@ import (
 	"galon/services"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
 	app := fiber.New()
+
+	// CORS middleware
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	db := config.ConnectDB()
 
@@ -22,7 +29,10 @@ func main() {
 
 	// Transaction Setup
 	transactionRepo := &repositories.TransactionRepository{DB: db}
-	transactionService := &services.TransactionService{Repo: transactionRepo}
+	transactionService := &services.TransactionService{
+		Repo:        transactionRepo,
+		ProductRepo: productRepo,
+	}
 	transactionController := &controllers.TransactionController{Service: transactionService}
 
 	app.Static("/upload", "./upload")

@@ -6,6 +6,7 @@ create table products
         primary key,
     name       varchar(255)                        not null,
     price      decimal(10, 2)                      not null,
+    image      varchar(255)                        null,
     created_at timestamp default CURRENT_TIMESTAMP null
 );
 
