@@ -15,12 +15,19 @@ func main() {
 
 	db := config.ConnectDB()
 
-	repo := &repositories.ProductRepository{DB: db}
-	service := &services.ProductService{Repo: repo}
-	controller := &controllers.ProductController{Service: service}
+	// Product Setup
+	productRepo := &repositories.ProductRepository{DB: db}
+	productService := &services.ProductService{Repo: productRepo}
+	productController := &controllers.ProductController{Service: productService}
+
+	// Transaction Setup
+	transactionRepo := &repositories.TransactionRepository{DB: db}
+	transactionService := &services.TransactionService{Repo: transactionRepo}
+	transactionController := &controllers.TransactionController{Service: transactionService}
 
 	app.Static("/upload", "./upload")
-	routes.ProductRoutes(app, controller)
+	routes.ProductRoutes(app, productController)
+	routes.RegisterTransactionRoutes(app, transactionController)
 
 	app.Listen(":3000")
 }

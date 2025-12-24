@@ -1,4 +1,4 @@
-module restapigalon
+module galon
 
 go 1.25.4
 

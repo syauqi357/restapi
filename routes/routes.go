@@ -13,3 +13,8 @@ func ProductRoutes(app *fiber.App, controller *controllers.ProductController) {
 	app.Put("/products/:id", controller.Update)
 	app.Delete("/products/:id", controller.Delete)
 }
+
+func RegisterTransactionRoutes(app *fiber.App, c *controllers.TransactionController) {
+	app.Get("/transactions", c.GetAll)
+	app.Post("/transactions", c.Create)
+}

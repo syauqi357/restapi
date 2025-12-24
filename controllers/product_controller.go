@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"galon/services"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -39,7 +40,11 @@ func (c *ProductController) Create(ctx *fiber.Ctx) error {
 	}
 
 	if file != nil {
-		ctx.SaveFile(file, "./upload/"+c.Service.Repo.DB.Stats().String())
+		filename := file.Filename
+		err := ctx.SaveFile(file, "./upload/"+filename)
+		if err != nil {
+			return ctx.Status(500).JSON(fiber.Map{"error": err.Error()})
+		}
 	}
 
 	return ctx.JSON(fiber.Map{"message": "produk berhasil dibuat"})
