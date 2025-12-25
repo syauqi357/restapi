@@ -2,4 +2,10 @@ node_modules/
 .DS_Store
 *.log
 .jpg
+.jpeg
 .png
+.webp
+.gif
+.svg
+.ico
+*.mp4
