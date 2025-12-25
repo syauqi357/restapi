@@ -2,15 +2,15 @@ const API_URL = "http://localhost:3000";
 
 function switchTab(tab) {
   document.querySelectorAll(".tab-btn").forEach((btn) => {
-    btn.classList.remove("active-tab", "bg-white", "text-purple-600");
-    btn.classList.add("bg-white/80", "text-gray-700");
+    btn.classList.remove("bg-blue-600", "text-white");
+    btn.classList.add("text-gray-700", "hover:bg-gray-50");
   });
   document.querySelectorAll(".section").forEach((section) => {
     section.classList.add("hidden");
   });
 
-  event.target.classList.add("active-tab", "bg-slate-50", "text-cyan-700");
-  event.target.classList.remove("bg-white/80", "text-gray-700");
+  event.target.classList.add("bg-blue-600", "text-white");
+  event.target.classList.remove("text-gray-700", "hover:bg-gray-50");
   document.getElementById(tab).classList.remove("hidden");
 
   if (tab === "products") {
@@ -24,26 +24,12 @@ function switchTab(tab) {
 // Show alert message
 function showAlert(message, type = "success") {
   const alertDiv = document.getElementById("alert");
-  const bgColor =
-    type === "success"
-      ? "bg-green-100 border-green-400 text-green-700"
-      : "bg-red-100 border-red-400 text-red-700";
+  const bgColor = type === "success" ? "bg-green-600" : "bg-red-600";
   alertDiv.innerHTML = `
-                <div class="${bgColor} flex items-center gap-2 border-2 px-6 py-4 rounded-xl font-semibold shadow-lg animate-pulse">
-                    ${
-                      type === "success"
-                        ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14" id="Check--Streamline-Core" height="14" width="14">
-  <desc>
-    Check Streamline Icon: https://streamlinehq.com
-  </desc>
-  <g id="check--check-form-validation-checkmark-success-add-addition-tick">
-    <path id="Vector (Stroke)" fill="currentColor" fill-rule="evenodd" d="M13.637 1.198a1 1 0 0 1 0.134 1.408l-8.04 9.73 -0.003 0.002a1.922 1.922 0 0 1 -1.5 0.693 1.923 1.923 0 0 1 -1.499 -0.748l-0.001 -0.002L0.21 9.045a1 1 0 1 1 1.578 -1.228l2.464 3.167 7.976 -9.652a1 1 0 0 1 1.408 -0.134Z" clip-rule="evenodd" stroke-width="1"></path>
-  </g>
-</svg>`
-                        : "❌"
-                    } ${message}
-                </div>
-            `;
+    <div class="${bgColor} text-white px-6 py-4 border-2 border-gray-900 font-semibold">
+      ${message}
+    </div>
+  `;
   setTimeout(() => (alertDiv.innerHTML = ""), 3000);
 }
 
@@ -63,66 +49,32 @@ async function loadProducts() {
     tbody.innerHTML = products
       .map(
         (p, i) => {
-          const stockClass = p.stock < 5 ? 'text-red-600 font-bold' : p.stock < 20 ? 'text-yellow-600' : 'text-green-600';
-          const stockBg = p.stock < 5 ? 'bg-red-50' : p.stock < 20 ? 'bg-yellow-50' : 'bg-green-50';
+          const stockClass = p.stock < 5 ? 'text-white bg-red-600' : p.stock < 20 ? 'text-gray-900 bg-yellow-400' : 'text-white bg-green-600';
           return `
-                    <tr class="hover:bg-blue-50 transition-all ${
-                      i % 2 === 0 ? "bg-gray-50" : "bg-white"
-                    }">
-                        <td class="px-6 py-4 font-semibold text-xs md:text-base text-gray-700">${
-                          p.id
-                        }</td>
-                        <td class="px-6 py-4 font-medium text-xs md:text-base text-gray-800 capitalize">
-                            <div class="flex items-center gap-3">
-                                ${p.image && typeof p.image === 'string' && p.image !== '[object Object]' ? `<img src="${API_URL}/upload/${p.image}" class="w-8 h-8 rounded object-cover border border-gray-200" alt="">` : ''}
-                                ${p.name}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-sky-600 text-xs md:text-base font-bold">Rp ${parseFloat(
-                          p.price
-                        ).toLocaleString("id-ID")}</td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <span class="${stockClass} ${stockBg} px-3 py-1 rounded-full text-sm font-semibold">${p.stock}</span>
-                                <button onclick="updateStock(${p.id}, 10)" class="bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-600 font-bold" title="Add 10">+10</button>
-                                <button onclick="updateStock(${p.id}, -10)" class="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 font-bold" title="Remove 10">-10</button>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 flex ">
-                            <button onclick="editProduct(${
-                              p.id
-                            })" class="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all mr-2 font-semibold">
-                                <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="16" width="16">
-  <desc>
-    Edit Streamline Icon: https://streamlinehq.com
-  </desc>
-  <title>edit</title>
-  <path d="M1 13h14v1H1Z" fill="currentColor" stroke-width="0.5"></path>
-  <path d="M12.7 4.5c0.4 -0.4 0.4 -1 0 -1.4l-1.8 -1.8c-0.4 -0.4 -1 -0.4 -1.4 0l-7.5 7.5V12h3.2l7.5 -7.5zm-2.5 -2.5L12 3.8l-1.5 1.5L8.7 3.5l1.5 -1.5zM3 11v-1.8l5 -5 1.8 1.8 -5 5H3z" fill="currentColor" stroke-width="0.5"></path>
-  <path id="_Transparent_Rectangle_" d="M0 0h16v16H0Z" fill="none" stroke-width="0.5"></path>
-</svg></span> 
-<span class="text-xs md:text-base">
-
-  Edit
-</span>
-                            </button>
-                            <button onclick="deleteProduct(${
-                              p.id
-                            })" class=" flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all font-semibold">
-                                <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="24" width="24">
-  <desc>
-    Trash X Streamline Icon: https://streamlinehq.com
-  </desc>
-  <path d="M20 6a1 1 0 0 1 0.117 1.993L20 8h-0.081L19 19a3 3 0 0 1 -2.824 2.995L16 22H8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-0.005 -0.167L4.08 8H4a1 1 0 0 1 -0.117 -1.993L4 6h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567L10.585 14l-1.292 1.293 -0.083 0.094a1 1 0 0 0 1.497 1.32L12 15.415l1.293 1.292 0.094 0.083a1 1 0 0 0 1.32 -1.497L13.415 14l1.292 -1.293 0.083 -0.094a1 1 0 0 0 -1.497 -1.32L12 12.585l-1.293 -1.292 -0.094 -0.083z" stroke-width="1"></path>
-  <path d="M14 2a2 2 0 0 1 2 2 1 1 0 0 1 -1.993 0.117L14 4h-4l-0.007 0.117A1 1 0 0 1 8 4a2 2 0 0 1 1.85 -1.995L10 2h4z" stroke-width="1"></path>
-</svg></span> <span class="text-xs md:text-base">
-
-  Delete
-</span> 
-                            </button>
-                        </td>
-                    </tr>
-                `;
+            <tr class="${i % 2 === 0 ? "bg-white" : "bg-gray-50"}">
+              <td class="px-4 py-3 font-semibold text-gray-700">${p.id}</td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3">
+                  ${p.image && typeof p.image === 'string' && p.image !== '[object Object]' ? `<img src="${API_URL}/upload/${p.image}" class="w-12 h-12 border-2 border-gray-300 object-cover" alt="">` : ''}
+                  <span class="font-medium text-gray-900">${p.name}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(p.price).toLocaleString("id-ID")}</td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-2">
+                  <span class="${stockClass} px-3 py-1 text-sm font-bold">${p.stock}</span>
+                  <button onclick="updateStock(${p.id}, 10)" class="bg-green-600 text-white px-3 py-2 hover:bg-green-700 font-bold">+10</button>
+                  <button onclick="updateStock(${p.id}, -10)" class="bg-red-600 text-white px-3 py-2 hover:bg-red-700 font-bold">-10</button>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex gap-2">
+                  <button onclick="editProduct(${p.id})" class="bg-yellow-500 text-white px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
+                  <button onclick="deleteProduct(${p.id})" class="bg-red-600 text-white px-4 py-2 hover:bg-red-700 font-semibold">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `;
         }
       )
       .join("");
@@ -237,25 +189,7 @@ function resetProductForm() {
   const preview = document.getElementById('imagePreview');
   preview.src = '';
   preview.classList.add('hidden');
-  document.getElementById("productSubmitBtn").innerHTML = `<svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Plus-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Plus Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM12.75 8c0 -0.41421 -0.3358 -0.75 -0.75 -0.75s-0.75 0.33579 -0.75 0.75v3.25H8c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h3.25V16c0 0.4142 0.3358 0.75 0.75 0.75s0.75 -0.3358 0.75 -0.75v-3.25H16c0.4142 0 0.75 -0.3358 0.75 -0.75s-0.3358 -0.75 -0.75 -0.75h-3.25V8Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path></svg
-                > Add Product`;
+  document.getElementById("productSubmitBtn").innerHTML = "Add Product";
 }
 
 // Update stock function
@@ -321,7 +255,7 @@ async function loadTransactions() {
 
     if (transactions.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-500">No transactions found</td></tr>';
+        '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">No transactions found</td></tr>';
       document.getElementById("totalRevenue").textContent = "Rp 0";
       return;
     }
@@ -332,55 +266,25 @@ async function loadTransactions() {
         const total = t.quantity * parseFloat(t.product_price || 0);
         totalRevenue += total;
         return `
-                        <tr class="hover:bg-green-50 transition-all ${
-                          i % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        }">
-                            <td class="px-6 py-4 font-semibold text-gray-700">${
-                              t.id
-                            }</td>
-                            <td class="px-6 py-4 font-medium text-gray-800">
-                                <div class="flex items-center gap-3">
-                                    ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/upload/${t.product_image}" class="w-10 h-10 rounded-lg object-cover border border-gray-200" alt="">` : ''}
-                                    ${t.product_name || "N/A"}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-blue-600 font-bold">${
-                              t.quantity
-                            }x</td>
-                            <td class="px-6 py-4 text-gray-600">Rp ${parseFloat(
-                              t.product_price || 0
-                            ).toLocaleString("id-ID")}</td>
-                            <td class="px-6 py-4 text-green-600 font-bold text-lg">Rp ${total.toLocaleString(
-                              "id-ID"
-                            )}</td>
-                            <td class="px-6 py-4 flex items-center">
-                                <button onclick="editTransaction(${
-                                  t.id
-                                })" class=" flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all mr-2 font-semibold">
-                                    <span><svg version="1.1" id="Edit--Streamline-Carbon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 16 16" xml:space="preserve" enable-background="new 0 0 32 32" height="16" width="16">
-  <desc>
-    Edit Streamline Icon: https://streamlinehq.com
-  </desc>
-  <title>edit</title>
-  <path d="M1 13h14v1H1Z" fill="currentColor" stroke-width="0.5"></path>
-  <path d="M12.7 4.5c0.4 -0.4 0.4 -1 0 -1.4l-1.8 -1.8c-0.4 -0.4 -1 -0.4 -1.4 0l-7.5 7.5V12h3.2l7.5 -7.5zm-2.5 -2.5L12 3.8l-1.5 1.5L8.7 3.5l1.5 -1.5zM3 11v-1.8l5 -5 1.8 1.8 -5 5H3z" fill="currentColor" stroke-width="0.5"></path>
-  <path id="_Transparent_Rectangle_" d="M0 0h16v16H0Z" fill="none" stroke-width="0.5"></path>
-</svg></span> Edit
-                                </button>
-                                <button onclick="deleteTransaction(${
-                                  t.id
-                                })" class="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all font-semibold">
-                                    <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" id="Trash-X--Streamline-Tabler-Filled" height="24" width="24">
-  <desc>
-    Trash X Streamline Icon: https://streamlinehq.com
-  </desc>
-  <path d="M20 6a1 1 0 0 1 0.117 1.993L20 8h-0.081L19 19a3 3 0 0 1 -2.824 2.995L16 22H8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-0.005 -0.167L4.08 8H4a1 1 0 0 1 -0.117 -1.993L4 6h16zm-9.489 5.14a1 1 0 0 0 -1.218 1.567L10.585 14l-1.292 1.293 -0.083 0.094a1 1 0 0 0 1.497 1.32L12 15.415l1.293 1.292 0.094 0.083a1 1 0 0 0 1.32 -1.497L13.415 14l1.292 -1.293 0.083 -0.094a1 1 0 0 0 -1.497 -1.32L12 12.585l-1.293 -1.292 -0.094 -0.083z" stroke-width="1"></path>
-  <path d="M14 2a2 2 0 0 1 2 2 1 1 0 0 1 -1.993 0.117L14 4h-4l-0.007 0.117A1 1 0 0 1 8 4a2 2 0 0 1 1.85 -1.995L10 2h4z" stroke-width="1"></path>
-</svg></span> Delete
-                                </button>
-                            </td>
-                        </tr>
-                    `;
+          <tr class="${i % 2 === 0 ? "bg-white" : "bg-gray-50"}">
+            <td class="px-4 py-3 font-semibold text-gray-900">${t.id}</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
+                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/upload/${t.product_image}" class="w-12 h-12 border-2 border-gray-300 object-contain" alt="">` : ''}
+                <span class="font-medium text-gray-900">${t.product_name || "N/A"}</span>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-gray-900 font-bold">${t.quantity}x</td>
+            <td class="px-4 py-3 text-gray-900">Rp ${parseFloat(t.product_price || 0).toLocaleString("id-ID")}</td>
+            <td class="px-4 py-3 text-gray-900 font-bold">Rp ${total.toLocaleString("id-ID")}</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button onclick="editTransaction(${t.id})" class="bg-yellow-500 text-white px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
+                <button onclick="deleteTransaction(${t.id})" class="bg-red-600 text-white px-4 py-2 hover:bg-red-700 font-semibold">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
       })
       .join("");
 

@@ -1,390 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-gray-50">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Galon Management System</title>
     <link rel="stylesheet" href="./src/output.css" />
   </head>
 
-  <body>
-    <div class="container mx-auto">
-      <!-- Header -->
-      <div class="gap-2 flex flex-col items-center mb-8 m-24">
-        <h1 class="flex items-center text-5xl font-bold text-slate-700 mb-2">
-          <span>
-            <svg
-              fill="#000000"
-              height="54px"
-              width="54px"
-              version="1.1"
-              id="Capa_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              viewBox="0 0 476.801 476.801"
-              xml:space="preserve"
-              stroke="currentColor"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M363.526,415.046V230.763c3.324-0.971,5.754-4.037,5.754-7.674c0-19.841-10.646-38.376-27.783-48.372l-39.828-23.231 c-10.404-6.069-16.868-17.323-16.868-29.369v-17.399h0.04c4.418,0,8-3.582,8-8V22.513C292.841,10.1,282.741,0,270.328,0h-63.855 C194.06,0,183.96,10.1,183.96,22.513v74.204c0,4.418,3.582,8,8,8H192v17.399c0,12.046-6.464,23.3-16.869,29.369l-39.827,23.231 c-17.137,9.996-27.783,28.531-27.783,48.372c0,3.637,2.43,6.703,5.754,7.674v184.283c-3.324,0.971-5.754,4.037-5.754,7.674v10.08 c0,24.262,19.738,44,44,44h173.76c24.262,0,44-19.738,44-44v-10.08C369.28,419.083,366.85,416.018,363.526,415.046z M199.96,88.717 V71.729h76.881v16.987h-0.04H200H199.96z M206.473,16h63.855c3.591,0,6.513,2.922,6.513,6.513v33.217H199.96V22.513 C199.96,18.922,202.882,16,206.473,16z M143.366,188.537l39.826-23.231C198.494,156.381,208,139.831,208,122.116v-17.399h60.801 v17.399c0,17.715,9.506,34.265,24.807,43.189l39.827,23.231c9.898,5.773,16.765,15.534,19.03,26.552h-11.664c-4.418,0-8,3.582-8,8 s3.582,8,8,8h6.726V273.5c-6.065-0.643-9.817-2.249-13.997-4.048c-6.155-2.648-13.132-5.651-26.397-5.651 s-20.242,3.003-26.397,5.651c-5.421,2.334-10.103,4.349-20.071,4.349c-9.967,0-14.648-2.015-20.068-4.349 c-6.154-2.648-13.13-5.651-26.395-5.651s-20.241,3.003-26.396,5.652c-5.42,2.333-10.102,4.348-20.068,4.348 s-14.648-2.015-20.068-4.349c-4.778-2.056-10.066-4.32-18.394-5.232v-33.131h160.326c4.418,0,8-3.582,8-8s-3.582-8-8-8H124.336 C126.602,204.071,133.468,194.311,143.366,188.537z M353.28,432.801c0,15.439-12.561,28-28,28h-173.76c-15.439,0-28-12.561-28-28 v-2.08h166.08c4.418,0,8-3.582,8-8s-3.582-8-8-8H129.274V280.343c4.974,0.753,8.347,2.204,12.067,3.806 c6.154,2.649,13.13,5.652,26.395,5.652s20.24-3.003,26.395-5.651c5.42-2.334,10.102-4.349,20.069-4.349 c9.967,0,14.648,2.015,20.068,4.349c6.154,2.648,13.13,5.651,26.395,5.651c13.266,0,20.242-3.003,26.397-5.651 c5.421-2.334,10.103-4.349,20.071-4.349s14.65,2.015,20.071,4.349c5.138,2.21,10.862,4.662,20.323,5.414v125.158h-6.726 c-4.418,0-8,3.582-8,8s3.582,8,8,8h12.479V432.801z"
-                ></path>
-              </g>
+  <body class="min-h-screen">
+    <!-- Header -->
+    <header class="backdrop-blur-md border border-blue-600">
+      <div class="container mx-auto px-6 py-6">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-blue-600 flex items-center justify-center">
+            <svg fill="#ffffff" height="32px" width="32px" viewBox="0 0 476.801 476.801">
+              <path d="M363.526,415.046V230.763c3.324-0.971,5.754-4.037,5.754-7.674c0-19.841-10.646-38.376-27.783-48.372l-39.828-23.231 c-10.404-6.069-16.868-17.323-16.868-29.369v-17.399h0.04c4.418,0,8-3.582,8-8V22.513C292.841,10.1,282.741,0,270.328,0h-63.855 C194.06,0,183.96,10.1,183.96,22.513v74.204c0,4.418,3.582,8,8,8H192v17.399c0,12.046-6.464,23.3-16.869,29.369l-39.827,23.231 c-17.137,9.996-27.783,28.531-27.783,48.372c0,3.637,2.43,6.703,5.754,7.674v184.283c-3.324,0.971-5.754,4.037-5.754,7.674v10.08 c0,24.262,19.738,44,44,44h173.76c24.262,0,44-19.738,44-44v-10.08C369.28,419.083,366.85,416.018,363.526,415.046z M199.96,88.717 V71.729h76.881v16.987h-0.04H200H199.96z M206.473,16h63.855c3.591,0,6.513,2.922,6.513,6.513v33.217H199.96V22.513 C199.96,18.922,202.882,16,206.473,16z M143.366,188.537l39.826-23.231C198.494,156.381,208,139.831,208,122.116v-17.399h60.801 v17.399c0,17.715,9.506,34.265,24.807,43.189l39.827,23.231c9.898,5.773,16.765,15.534,19.03,26.552h-11.664c-4.418,0-8,3.582-8,8 s3.582,8,8,8h6.726V273.5c-6.065-0.643-9.817-2.249-13.997-4.048c-6.155-2.648-13.132-5.651-26.397-5.651 s-20.242,3.003-26.397,5.651c-5.421,2.334-10.103,4.349-20.071,4.349c-9.967,0-14.648-2.015-20.068-4.349 c-6.154-2.648-13.13-5.651-26.395-5.651s-20.241,3.003-26.396,5.652c-5.42,2.333-10.102,4.348-20.068,4.348 s-14.648-2.015-20.068-4.349c-4.778-2.056-10.066-4.32-18.394-5.232v-33.131h160.326c4.418,0,8-3.582,8-8s-3.582-8-8-8H124.336 C126.602,204.071,133.468,194.311,143.366,188.537z M353.28,432.801c0,15.439-12.561,28-28,28h-173.76c-15.439,0-28-12.561-28-28 v-2.08h166.08c4.418,0,8-3.582,8-8s-3.582-8-8-8H129.274V280.343c4.974,0.753,8.347,2.204,12.067,3.806 c6.154,2.649,13.13,5.652,26.395,5.652s20.24-3.003,26.395-5.651c5.42-2.334,10.102-4.349,20.069-4.349 c9.967,0,14.648,2.015,20.068,4.349c6.154,2.648,13.13,5.651,26.395,5.651c13.266,0,20.242-3.003,26.397-5.651 c5.421-2.334,10.103-4.349,20.071-4.349s14.65,2.015,20.071,4.349c5.138,2.21,10.862,4.662,20.323,5.414v125.158h-6.726 c-4.418,0-8,3.582-8,8s3.582,8,8,8h12.479V432.801z"></path>
             </svg>
-          </span>
-          Galon Management System
-        </h1>
-        <p class="text-slate-700">
-          Manage your water gallon business with ease
-        </p>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-black">Galon Management System</h1>
+            <p class="text-sm text-black">Inventory & Transaction Management</p>
+          </div>
+        </div>
       </div>
+    </header>
 
+    <div class="container mx-auto px-6 py-8">
       <!-- Alert -->
       <div id="alert" class="mb-6"></div>
 
       <!-- Tabs -->
-      <div class="flex gap-2 mb-0">
-        <button
-          onclick="switchTab('products')"
-          class="tab-btn flex-1 text-cyan-700 font-bold py-4 px-6 rounded-t-2xl hover:bg-slate-200 transition-all active-tab"
-        >
-          <span></span> Products
-        </button>
-        <button
-          onclick="switchTab('transactions')"
-          class="tab-btn flex-1 text-cyan-700 font-bold py-4 px-6 rounded-t-2xl hover:bg-slate-200 transition-all"
-        >
-          <span></span> Transactions
-        </button>
-      </div>
-
-      <!-- Content Card -->
-      <div class="bg-slate-50 rounded-xl p-8">
-        <!-- Products Section -->
-        <div id="products" class="section">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6">Manage Products</h2>
-
-          <form
-            id="productForm"
-            onsubmit="saveProduct(event)"
-            class="bg-slate-100 p-6 rounded-xl mb-8 border border-blue-200"
+      <div class="bg-white border-2 border-gray-200 mb-6">
+        <div class="flex border-b-2 border-gray-200">
+          <button
+            onclick="switchTab('products')"
+            class="tab-btn flex-1 py-4 px-6 font-semibold text-gray-700 bg-blue-600 text-white border-r-2 border-gray-200"
           >
+            Products
+          </button>
+          <button
+            onclick="switchTab('transactions')"
+            class="tab-btn flex-1 py-4 px-6 font-semibold text-gray-700 hover:bg-gray-50"
+          >
+            Transactions
+          </button>
+        </div>
+
+        <!-- Products Section -->
+        <div id="products" class="section p-6">
+          <h2 class="text-xl font-bold text-black mb-6 pb-3 border-b-2 border-gray-200">Product Management</h2>
+
+          <!-- Product Form -->
+          <form id="productForm" onsubmit="saveProduct(event)" class="bg-gray-50 border-2 border-gray-200 p-6 mb-8">
             <input type="hidden" id="productId" />
-
-            <div class="flex md:flex-row items-center flex-col gap-6 mb-3">
-              <!-- input text -->
-              <div class="w-full max-w-sm min-w-[200px]">
-                <div class="relative">
-                  <input
-                    type="text"
-                    id="productName"
-                    required
-                    class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm"
-                  />
-                  <label
-                    class="capitalize absolute cursor-text bg-slate-100 px-1 left-2.5 top-2.5 text-slate-600 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90"
-                  >
-                    add or edit
-                  </label>
-                </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-semibold text-black mb-2">Product Name</label>
+                <input type="text" id="productName" required class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
               </div>
-
-              <!-- input price or number -->
-              <div class="w-full max-w-sm min-w-[200px]">
-                <div class="relative">
-                  <input
-                    type="number"
-                    id="productPrice"
-                    required
-                    class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                  />
-                  <label
-                    class="capitalize absolute cursor-text bg-slate-100 px-1 left-2.5 top-2.5 text-slate-600 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90"
-                  >
-                    price
-                  </label>
-                </div>
+              
+              <div>
+                <label class="block text-sm font-semibold text-black mb-2">Price (Rp)</label>
+                <input type="number" id="productPrice" required class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
               </div>
-
-              <!-- input stock -->
-              <div class="w-full max-w-sm min-w-[200px]">
-                <div class="relative">
-                  <input
-                    type="number"
-                    id="productStock"
-                    required
-                    min="0"
-                    value="0"
-                    class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                  />
-                  <label
-                    class="capitalize absolute cursor-text bg-slate-100 px-1 left-2.5 top-2.5 text-slate-600 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90"
-                  >
-                    stock
-                  </label>
-                </div>
+              
+              <div>
+                <label class="block text-sm font-semibold text-black mb-2">Stock</label>
+                <input type="number" id="productStock" required min="0" value="0" class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
               </div>
             </div>
 
-            <!-- input image -->
-            <div class="mb-6 w-full">
-                <label class="block text-sm font-medium text-slate-700 mb-2">Product Image</label>
-                <input type="file" id="productImage" accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
-                <img id="imagePreview" class="mt-4 w-32 h-32 object-cover rounded-lg border border-gray-300 hidden" alt="Image Preview" />
+            <div class="mb-6">
+              <label class="block text-sm font-semibold text-black mb-2">Product Image</label>
+              <input type="file" id="productImage" accept="image/*" class="block w-full text-sm text-black file:mr-4 file:py-2 file:px-4 file:border-2 file:border-gray-300 file:bg-white file:text-black file:font-semibold hover:file:bg-gray-50"/>
+              <img id="imagePreview" class="mt-4 w-32 h-32 object-cover border-2 border-gray-300 hidden" alt="Image Preview" />
             </div>
 
             <div class="flex gap-3">
-              <!-- add or edit button -->
-              <button
-                type="submit"
-                id="productSubmitBtn"
-                class="flex items-center gap-2 bg-blue-700 text-slate-200 text-sm md:text-md font-bold py-3 px-8 rounded-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all shadow-lg"
-              >
-                <span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Plus-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Plus Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM12.75 8c0 -0.41421 -0.3358 -0.75 -0.75 -0.75s-0.75 0.33579 -0.75 0.75v3.25H8c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h3.25V16c0 0.4142 0.3358 0.75 0.75 0.75s0.75 -0.3358 0.75 -0.75v-3.25H16c0.4142 0 0.75 -0.3358 0.75 -0.75s-0.3358 -0.75 -0.75 -0.75h-3.25V8Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path>
-                  </svg>
-                </span>
+              <button type="submit" id="productSubmitBtn" class="bg-blue-600 text-white font-semibold py-3 px-8 hover:bg-blue-700">
                 Add Product
               </button>
-
-              <!-- cancel button -->
-              <button
-                type="button"
-                onclick="resetProductForm()"
-                class="flex items-center gap-2 bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-all"
-              >
-                <span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Xmark-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Xmark Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM9.70164 8.64124c-0.29289 -0.29289 -0.76776 -0.29289 -1.06066 0 -0.29289 0.2929 -0.29289 0.76777 0 1.06066L10.9391 12l-2.29812 2.2981c-0.29289 0.2929 -0.29289 0.7678 0 1.0607 0.2929 0.2929 0.76777 0.2929 1.06066 0l2.29806 -2.2981 2.2981 2.2981c0.2929 0.2929 0.7678 0.2929 1.0607 0 0.2929 -0.2929 0.2929 -0.7678 0 -1.0607L13.0604 12l2.2981 -2.2981c0.2929 -0.29289 0.2929 -0.76776 0 -1.06066 -0.2929 -0.29289 -0.7678 -0.29289 -1.0607 0l-2.2981 2.29806 -2.29806 -2.29806Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path>
-                  </svg>
-                </span>
+              <button type="button" onclick="resetProductForm()" class="bg-gray-600 text-white font-semibold py-3 px-8 hover:bg-gray-700">
                 Cancel
               </button>
             </div>
           </form>
 
           <!-- Products Table -->
-          <div class="overflow-x-auto rounded-xl border-2 border-gray-200">
+          <div class="border-2 border-gray-200 overflow-hidden">
             <table class="w-full">
-              <thead class="bg-blue-800 text-white">
+              <thead class="bg-gray-900 text-white">
                 <tr>
-                  <th class="px-4 py-2 text-left text-sm font-semibold">ID</th>
-                  <th class="px-4 py-2 text-left text-sm font-semibold">Name</th>
-                  <th class="px-4 py-2 text-left text-sm font-semibold">Price (Rp)</th>
-                  <th class="px-4 py-2 text-left text-sm font-semibold">Stock</th>
-                  <th class="px-4 py-2 text-left text-sm font-semibold">Actions</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Name</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Price</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Stock</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody
-                id="productsTable"
-                class="divide-y divide-gray-200"
-              ></tbody>
+              <tbody id="productsTable" class="divide-y-2 divide-gray-200"></tbody>
             </table>
           </div>
         </div>
 
-        <!-- diff section -->
         <!-- Transactions Section -->
-        <div id="transactions" class="section hidden">
-          <h2 class="text-3xl font-bold text-gray-800 mb-6">
-            Manage Transactions
-          </h2>
+        <div id="transactions" class="section hidden p-6">
+          <h2 class="text-xl font-bold text-black mb-6 pb-3 border-b-2 border-gray-200">Transaction Management</h2>
 
-          <!-- Total Revenue Box -->
-          <div
-            class="bg-linear-65 from-blue-500 to-blue-700 text-white p-8 rounded-2xl mb-8 border-blue-950 border"
-          >
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="flex items-center gap-2 text-xl opacity-90 mb-2">
-                  <span
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      height="24"
-                      width="24"
-                    >
-                      <g id="Money-Stack">
-                        <path
-                          id="Vector"
-                          fill="currentColor"
-                          d="M19 22H5v-2h14zm1 -4H4v-2h16zm0 -16c0.5523 0 1 0.44772 1 1v10c0 0.5523 -0.4477 1 -1 1H4c-0.55228 0 -1 -0.4477 -1 -1V3c0 -0.55228 0.44772 -1 1 -1zM7.43457 4c0.04123 0.15999 0.06543 0.32714 0.06543 0.5 0 1.10457 -0.89543 2 -2 2 -0.17295 0 -0.33994 -0.02514 -0.5 -0.06641v3.13184C5.15999 9.5242 5.32714 9.5 5.5 9.5c1.10457 0 2 0.8954 2 2 0 0.1729 -0.0242 0.34 -0.06543 0.5h9.13083c-0.0412 -0.16 -0.0654 -0.3271 -0.0654 -0.5 0 -1.1046 0.8954 -2 2 -2 0.1729 0 0.34 0.0242 0.5 0.06543V6.43359c-0.1601 0.04127 -0.3271 0.06641 -0.5 0.06641 -1.1046 0 -2 -0.89543 -2 -2 0 -0.17286 0.0242 -0.34001 0.0654 -0.5zM12 5c1.6569 0 3 1.34315 3 3s-1.3431 3 -3 3 -3 -1.34315 -3 -3 1.3431 -3 3 -3"
-                          stroke-width="1"
-                        ></path>
-                      </g></svg
-                  ></span>
-                  Total Revenue
-                </p>
-                <p class="text-5xl font-bold" id="totalRevenue">Rp 0</p>
-              </div>
-            </div>
+          <!-- Total Revenue -->
+          <div class="bg-blue-600 text-white p-6 mb-8 border-2 border-blue-700">
+            <p class="text-sm font-semibold mb-2">TOTAL REVENUE</p>
+            <p class="text-4xl font-bold" id="totalRevenue">Rp 0</p>
           </div>
 
-          <form
-            id="transactionForm"
-            onsubmit="saveTransaction(event)"
-            class="flex flex-col bg-sky-100 p-6 rounded-xl mb-8 border border-blue-200"
-          >
+          <!-- Transaction Form -->
+          <form id="transactionForm" onsubmit="saveTransaction(event)" class="bg-gray-50 border-2 border-gray-200 p-6 mb-8">
             <input type="hidden" id="transactionId" />
-
-            <div class="flex flex-col mb-6 gap-2 items-center md:flex-row">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
-                <select
-                  id="transactionProduct"
-                  required
-                  class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                >
+                <label class="block text-sm font-semibold text-black mb-2">Product</label>
+                <select id="transactionProduct" required class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none">
                   <option value="">-- Select Product --</option>
                 </select>
               </div>
-
-              <!-- input quantity -->
-              <div class="w-full max-w-sm min-w-[200px]">
-                <div class="relative">
-                  <input
-                    type="number"
-                    id="transactionQuantity"
-                    required
-                    min="1"
-                    class="peer w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-500 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-                  />
-                  <label
-                    class="capitalize absolute cursor-text bg-sky-100 px-1 left-2.5 top-2.5 text-slate-600 text-sm transition-all transform origin-left peer-focus:-top-2 peer-focus:left-2.5 peer-focus:text-xs peer-focus:text-slate-400 peer-focus:scale-90"
-                  >
-                    jumlah
-                  </label>
-                </div>
+              
+              <div>
+                <label class="block text-sm font-semibold text-black mb-2">Quantity</label>
+                <input type="number" id="transactionQuantity" required min="1" class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
               </div>
-              <!-- <div>
-                <label class="block text-gray-700 font-semibold mb-2"
-                  >Quantity</label
-                >
-                <input
-                  type="number"
-                  id="transactionQuantity"
-                  required
-                  placeholder="e.g., 5"
-                  min="1"
-                  class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-500 transition-all"
-                />
-              </div> -->
             </div>
 
             <div class="flex gap-3">
-              <button
-                type="submit"
-                id="transactionSubmitBtn"
-                class="flex items-center gap-2 bg-sky-500 text-blue-100 font-bold py-3 px-8 rounded-lg transform hover:scale-105 transition-all shadow-lg"
-              >
-                <span
-                  ><svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Plus-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Plus Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM12.75 8c0 -0.41421 -0.3358 -0.75 -0.75 -0.75s-0.75 0.33579 -0.75 0.75v3.25H8c-0.41421 0 -0.75 0.3358 -0.75 0.75s0.33579 0.75 0.75 0.75h3.25V16c0 0.4142 0.3358 0.75 0.75 0.75s0.75 -0.3358 0.75 -0.75v-3.25H16c0.4142 0 0.75 -0.3358 0.75 -0.75s-0.3358 -0.75 -0.75 -0.75h-3.25V8Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path></svg
-                ></span>
+              <button type="submit" id="transactionSubmitBtn" class="bg-blue-600 text-white font-semibold py-3 px-8 hover:bg-blue-700">
                 Add Transaction
               </button>
-              <button
-                type="button"
-                onclick="resetTransactionForm()"
-                class="flex items-center gap-2 bg-red-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 transition-all"
-              >
-                <span
-                  ><svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    id="Xmark-Circle--Streamline-Iconoir"
-                    height="24"
-                    width="24"
-                  >
-                    <desc>
-                      Xmark Circle Streamline Icon: https://streamlinehq.com
-                    </desc>
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12c0 5.9371 4.81294 10.75 10.75 10.75 5.9371 0 10.75 -4.8129 10.75 -10.75 0 -5.93706 -4.8129 -10.75 -10.75 -10.75ZM9.70164 8.64124c-0.29289 -0.29289 -0.76776 -0.29289 -1.06066 0 -0.29289 0.2929 -0.29289 0.76777 0 1.06066L10.9391 12l-2.29812 2.2981c-0.29289 0.2929 -0.29289 0.7678 0 1.0607 0.2929 0.2929 0.76777 0.2929 1.06066 0l2.29806 -2.2981 2.2981 2.2981c0.2929 0.2929 0.7678 0.2929 1.0607 0 0.2929 -0.2929 0.2929 -0.7678 0 -1.0607L13.0604 12l2.2981 -2.2981c0.2929 -0.29289 0.2929 -0.76776 0 -1.06066 -0.2929 -0.29289 -0.7678 -0.29289 -1.0607 0l-2.2981 2.29806 -2.29806 -2.29806Z"
-                      fill="currentColor"
-                      stroke-width="1"
-                    ></path></svg
-                ></span>
+              <button type="button" onclick="resetTransactionForm()" class="bg-gray-600 text-white font-semibold py-3 px-8 hover:bg-gray-700">
                 Cancel
               </button>
             </div>
           </form>
 
           <!-- Transactions Table -->
-          <div class="overflow-x-auto rounded-xl border-2 border-gray-200">
+          <div class="border-2 border-gray-200 overflow-hidden">
             <table class="w-full">
-              <thead class="bg-linear-165 from-sky-600 to-blue-600 text-white">
+              <thead class="bg-gray-900 text-white">
                 <tr>
-                  <th class="px-6 py-4 text-left font-bold">ID</th>
-                  <th class="px-6 py-4 text-left font-bold">Product</th>
-                  <th class="px-6 py-4 text-left font-bold">Quantity</th>
-                  <th class="px-6 py-4 text-left font-bold">Price</th>
-                  <th class="px-6 py-4 text-left font-bold">Total</th>
-                  <th class="px-6 py-4 text-left font-bold">Actions</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Product</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Qty</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Price</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Total</th>
+                  <th class="px-4 py-3 text-left text-sm font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody
-                id="transactionsTable"
-                class="divide-y divide-gray-200"
-              ></tbody>
+              <tbody id="transactionsTable" class="divide-y-2 divide-gray-200"></tbody>
             </table>
           </div>
         </div>
