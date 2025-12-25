@@ -1,5 +1,6 @@
 package models
 
+// Product represents the product model.
 type Product struct {
 	ID    int     `json:"id"`
 	Name  string  `json:"name"`

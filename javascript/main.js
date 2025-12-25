@@ -4,14 +4,14 @@ const API_URL = "http://localhost:3000";
 function switchTab(tab) {
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.classList.remove("bg-blue-600", "text-white");
-    btn.classList.add("text-gray-700", "hover:bg-gray-50");
+    btn.classList.add("text-slate-700", "hover:bg-slate-50");
   });
   document.querySelectorAll(".section").forEach((section) => {
     section.classList.add("hidden");
   });
 
   event.target.classList.add("bg-blue-600", "text-white");
-  event.target.classList.remove("text-gray-700", "hover:bg-gray-50");
+  event.target.classList.remove("text-slate-700", "hover:bg-slate-50");
   document.getElementById(tab).classList.remove("hidden");
 
   if (tab === "products") {
@@ -27,7 +27,7 @@ function showAlert(message, type = "success") {
   const alertDiv = document.getElementById("alert");
   const bgColor = type === "success" ? "bg-emerald-500" : "bg-red-600";
   alertDiv.innerHTML = `
-    <div class="${bgColor} text-white px-6 py-4 border-2 border-gray-900 font-semibold">
+    <div class="${bgColor} text-white px-6 py-4 border border-slate-900 font-semibold">
       ${message}
     </div>
   `;
@@ -43,21 +43,21 @@ async function loadProducts() {
 
     if (products.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">No products found</td></tr>';
+        '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">No products found</td></tr>';
       return;
     }
 
     tbody.innerHTML = products
       .map(
         (parameter, i) => {
-          const stockClass = parameter.stock < 5 ? 'text-white bg-red-600' : parameter.stock < 20 ? 'text-gray-900 bg-yellow-400' : 'text-white bg-green-600';
+          const stockClass = parameter.stock < 5 ? 'text-red-600 bg-red-400 border rounded-md border-red-500' : parameter.stock < 20 ? 'text-amber-900 bg-amber-200 border border-amber-500 rounded-md' : 'text-emerald-800 bg-emerald-400 border border-emerald-500 rounded-md';
           return `
-            <tr class="${i % 2 === 0 ? "bg-white" : "bg-gray-50"}">
-              <td class="px-4 py-3 font-semibold text-gray-700">${parameter.id}</td>
+            <tr class="${i % 2 === 0 ? "bg-white" : "bg-slate-50"}">
+              <td class="px-4 py-3 font-semibold text-slate-700">${parameter.id}</td>
               <td class="px-4 py-3">
-                <div class="flex items-center gap-3">
-                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/upload/${parameter.image}" class="w-12 h-12 border-2 border-gray-300 object-cover" alt="">` : ''}
-                  <span class="font-medium text-gray-900">${parameter.name}</span>
+                <div class="flex items-center gap-3 ">
+                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/upload/${parameter.image}" class="w-12 h-12 border border-slate-300 object-cover rounded-md" alt="">` : ''}
+                  <span class="font-medium text-slate-900">${parameter.name}</span>
                 </div>
               </td>
               <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(parameter.price).toLocaleString("id-ID")}</td>
@@ -66,8 +66,8 @@ async function loadProducts() {
               </td>
               <td class="px-4 py-3">
                 <div class="flex gap-2">
-                  <button onclick="editProduct(${parameter.id})" class="bg-yellow-500 text-white px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
-                  <button onclick="deleteProduct(${parameter.id})" class="bg-red-600 text-white px-4 py-2 hover:bg-red-700 font-semibold">Delete</button>
+                  <button onclick="editProduct(${parameter.id})" class="bg-amber-500 rounded-md capitalize text-amber-100 px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
+                  <button onclick="deleteProduct(${parameter.id})" class="bg-red-600 rounded-md text-white px-4 py-2 hover:bg-red-700 font-semibold capitalize">hapus</button>
                 </div>
               </td>
             </tr>
@@ -252,7 +252,7 @@ async function loadTransactions() {
 
     if (transactions.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500">No transactions found</td></tr>';
+        '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">No transactions found</td></tr>';
       document.getElementById("totalRevenue").textContent = "Rp 0";
       return;
     }
@@ -263,17 +263,17 @@ async function loadTransactions() {
         const total = t.quantity * parseFloat(t.product_price || 0);
         totalRevenue += total;
         return `
-          <tr class="${i % 2 === 0 ? "bg-white" : "bg-gray-50"}">
-            <td class="px-4 py-3 font-semibold text-gray-900">${t.id}</td>
+          <tr class="${i % 2 === 0 ? "bg-white" : "bg-slate-50"}">
+            <td class="px-4 py-3 font-semibold text-slate-900">${t.id}</td>
             <td class="px-4 py-3">
               <div class="flex items-center gap-3">
-                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/upload/${t.product_image}" class="w-12 h-12 border-2 border-gray-300 object-contain" alt="">` : ''}
-                <span class="font-medium text-gray-900">${t.product_name || "N/A"}</span>
+                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/upload/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain" alt="">` : ''}
+                <span class="font-medium text-slate-900">${t.product_name || "N/A"}</span>
               </div>
             </td>
-            <td class="px-4 py-3 text-gray-900 font-bold">${t.quantity}x</td>
-            <td class="px-4 py-3 text-gray-900">Rp ${parseFloat(t.product_price || 0).toLocaleString("id-ID")}</td>
-            <td class="px-4 py-3 text-gray-900 font-bold">Rp ${total.toLocaleString("id-ID")}</td>
+            <td class="px-4 py-3 text-slate-900 font-bold">${t.quantity}x</td>
+            <td class="px-4 py-3 text-slate-900">Rp ${parseFloat(t.product_price || 0).toLocaleString("id-ID")}</td>
+            <td class="px-4 py-3 text-slate-900 font-bold">Rp ${total.toLocaleString("id-ID")}</td>
             <td class="px-4 py-3">
               <div class="flex gap-2">
                 <button onclick="editTransaction(${t.id})" class="bg-yellow-500 text-white px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>

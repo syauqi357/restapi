@@ -1,5 +1,6 @@
 package models
 
+// Transaction represents the transaction model.
 type Transaction struct {
 	ID           int     `json:"id"`
 	ProductID    int     `json:"product_id"`
