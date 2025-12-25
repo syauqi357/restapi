@@ -56,7 +56,7 @@ async function loadProducts() {
               <td class="px-4 py-3 font-semibold text-slate-700">${parameter.id}</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3 ">
-                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/uploads/${parameter.image}" class="w-12 h-12 border border-slate-300 object-cover rounded-md" alt="">` : ''}
+                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/uploads/${parameter.image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">` : ''}
                   <span class="font-medium text-slate-900">${parameter.name}</span>
                 </div>
               </td>
@@ -267,7 +267,7 @@ async function loadTransactions() {
             <td class="px-4 py-3 font-semibold text-slate-900">${t.id}</td>
             <td class="px-4 py-3">
               <div class="flex items-center gap-3">
-                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/uploads/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain" alt="">` : ''}
+                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/uploads/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">` : ''}
                 <span class="font-medium text-slate-900">${t.product_name || "N/A"}</span>
               </div>
             </td>
@@ -276,8 +276,8 @@ async function loadTransactions() {
             <td class="px-4 py-3 text-slate-900 font-bold">Rp ${total.toLocaleString("id-ID")}</td>
             <td class="px-4 py-3">
               <div class="flex gap-2">
-                <button onclick="editTransaction(${t.id})" class="bg-yellow-500 text-white px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
-                <button onclick="deleteTransaction(${t.id})" class="bg-red-600 text-white px-4 py-2 hover:bg-red-700 font-semibold">Delete</button>
+                <button onclick="editTransaction(${t.id})" class="bg-amber-500 text-amber-50 rounded-md px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
+                <button onclick="deleteTransaction(${t.id})" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 font-semibold">Delete</button>
               </div>
             </td>
           </tr>

@@ -1,32 +1,36 @@
+@import "tailwindcss";
+
 @font-face {
   font-family: 'Stack Sans Text';
-  src: url('./fonts/StackSansText-Medium.woff2') format('woff');
-  font-weight: 300;
+  src: url('./fonts/StackSansText-Medium.woff2') format('woff2');
+  font-weight: 500;
   font-style: normal;
 }
 @font-face {
   font-family: 'Stack Sans Text';
-  src: url('./fonts/StackSansText-Bold.woff2') format('woff');
+  src: url('./fonts/StackSansText-Bold.woff2') format('woff2');
   font-weight: 700;
-  font-style: bold;
+  font-style: normal;
 }
 @font-face {
   font-family: 'Stack Sans Text';
-  src: url('./fonts/StackSansText-SemiBold.woff2') format('woff');
+  src: url('./fonts/StackSansText-SemiBold.woff2') format('woff2');
   font-weight: 600;
-  font-style: semibold;
+  font-style: normal;
 }
 @font-face {
   font-family: 'Stack Sans Text';
-  src: url('./fonts/StackSansText-Regular.woff2') format('woff');
+  src: url('./fonts/StackSansText-Regular.woff2') format('woff2');
   font-weight: 400;
-  font-style: regular;
+  font-style: normal;
 }
 @font-face {
   font-family: 'Stack Sans Text';
-  src: url('./fonts/StackSansText-ExtraLight.woff2') format('woff');
+  src: url('./fonts/StackSansText-ExtraLight.woff2') format('woff2');
   font-weight: 200;
-  font-style: extralight;
+  font-style: normal;
 }
 
-@import "tailwindcss";
+@theme {
+  --font-sans: "Stack Sans Text", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
