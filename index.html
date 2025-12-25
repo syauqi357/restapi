@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-gray-50">
+<html lang="en" class="bg-slate-50">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,17 +30,17 @@
       <div id="alert" class="mb-6"></div>
 
       <!-- Tabs -->
-      <div class="bg-white border-2 border-gray-200 mb-6">
-        <div class="flex border-b-2 border-gray-200">
+      <div class="bg-white border-2 border-slate-200 mb-6">
+        <div class="flex border-b-2 border-slate-200">
           <button
             onclick="switchTab('products')"
-            class="tab-btn flex-1 py-4 px-6 font-semibold text-gray-700 bg-blue-600 text-white border-r-2 border-gray-200"
+            class="tab-btn flex-1 py-4 px-6 font-semibold text-slate-200 bg-blue-600 border border-slate-200"
           >
             Products
           </button>
           <button
             onclick="switchTab('transactions')"
-            class="tab-btn flex-1 py-4 px-6 font-semibold text-gray-700 hover:bg-gray-50"
+            class="tab-btn flex-1 py-4 px-6 font-semibold text-slate-700 hover:bg-slate-50"
           >
             Transactions
           </button>
@@ -48,74 +48,74 @@
 
         <!-- Products Section -->
         <div id="products" class="section p-6">
-          <h2 class="text-xl font-bold text-black mb-6 pb-3 border-b-2 border-gray-200">Product Management</h2>
+          <h2 class="text-xl font-bold text-black mb-6 pb-3 border-b-2 border-slate-200 capitalize">manajemen produk</h2>
 
           <!-- Product Form -->
-          <form id="productForm" onsubmit="saveProduct(event)" class="bg-gray-50 border-2 border-gray-200 p-6 mb-8">
+          <form id="productForm" onsubmit="saveProduct(event)" class="bg-slate-50 border-2 border-slate-200 p-6 mb-8">
             <input type="hidden" id="productId" />
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
-                <label class="block text-sm font-semibold text-black mb-2">Product Name</label>
-                <input type="text" id="productName" required class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
+                <label class="block text-sm font-semibold text-black mb-2">nama produk</label>
+                <input type="text" id="productName" required class="w-full px-4 py-2 border rounded-md border-slate-300 focus:border-blue-600 focus:outline-none" />
               </div>
               
               <div>
-                <label class="block text-sm font-semibold text-black mb-2">Price (Rp)</label>
-                <input type="number" id="productPrice" required class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
+                <label class="block text-sm font-semibold text-black mb-2">harga (Rp)</label>
+                <input type="number" id="productPrice" required class="w-full px-4 py-2 border rounded-md border-slate-300 focus:border-blue-600 focus:outline-none" />
               </div>
               
               <div>
-                <label class="block text-sm font-semibold text-black mb-2">Stock</label>
-                <input type="number" id="productStock" required min="0" value="0" class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
+                <label class="block text-sm font-semibold text-black mb-2">stok</label>
+                <input type="number" id="productStock" required min="0" value="0" class="w-full px-4 py-2 border rounded-md border-slate-300 focus:border-blue-600 focus:outline-none" />
               </div>
             </div>
 
-            <div class="mb-6 bg-blue-500">
+            <div class="mb-6 ">
               <label class="block text-sm font-semibold text-black mb-2">Product Image</label>
-              <div id="dropzone" class="relative border-2 border-dashed border-slate-700 bg-blue-500 cursor-pointer group">
+              <div id="dropzone" class="relative border-2 border-dashed border-slate-700 rounded-lg cursor-pointer group">
                 <input type="file" id="productImage" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
                 <div class="flex flex-col items-center justify-center py-12 px-6">
-                  <svg class="w-10 h-10 text-gray-400 group-hover:text-blue-500 transition-colors mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-10 h-10 text-slate-400 group-hover:text-blue-500 transition-colors mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                   </svg>
-                  <p class="text-lg font-semibold text-gray-700 group-hover:text-blue-600 mb-2">Drop your image here or click to browse</p>
-                  <p class="text-sm text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                  <p class="text-lg font-semibold text-center text-slate-700 group-hover:text-blue-600 mb-2">Drop your image here or click to browse</p>
+                  <p class="text-sm text-slate-500">PNG, JPG, GIF up to 10MB</p>
                 </div>
               </div>
-              <img id="imagePreview" class="mt-4 w-32 h-32 object-cover border-2 border-gray-300 hidden" alt="Image Preview" />
+              <img id="imagePreview" class="mt-4 w-32 h-32 object-cover border-2 border-slate-300 hidden" alt="Image Preview" />
             </div>
 
-            <div class="flex gap-3">
-              <button type="submit" id="productSubmitBtn" class="bg-blue-600 text-white font-semibold py-3 px-8 hover:bg-blue-700">
+            <div class="flex gap-3 justify-center items-center">
+              <button type="submit" id="productSubmitBtn" class="bg-blue-600 rounded-md text-white font-semibold py-3 px-8 hover:bg-blue-700">
                 Add Product
               </button>
-              <button type="button" onclick="resetProductForm()" class="bg-gray-600 text-white font-semibold py-3 px-8 hover:bg-gray-700">
+              <button type="button" onclick="resetProductForm()" class="bg-slate-600 rounded-md text-white font-semibold py-3 px-8 hover:bg-slate-700">
                 Cancel
               </button>
             </div>
           </form>
 
           <!-- Products Table -->
-          <div class="border-2 border-gray-200 overflow-hidden">
+          <div class="border-2 border-slate-200 overflow-hidden">
             <table class="w-full">
-              <thead class="bg-gray-900 text-white">
+              <thead class="bg-slate-900 text-white">
                 <tr>
                   <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
-                  <th class="px-4 py-3 text-left text-sm font-semibold">Name</th>
-                  <th class="px-4 py-3 text-left text-sm font-semibold">Price</th>
+                  <th class="px-6 py-6 text-left text-sm font-semibold">Name</th>
+                  <th class="px-6 py-6 text-left text-sm font-semibold">Price</th>
                   <th class="px-4 py-3 text-left text-sm font-semibold">Stock</th>
                   <th class="px-4 py-3 text-left text-sm font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody id="productsTable" class="divide-y-2 divide-gray-200"></tbody>
+              <tbody id="productsTable" class="divide-y-2 divide-slate-200"></tbody>
             </table>
           </div>
         </div>
 
         <!-- Transactions Section -->
         <div id="transactions" class="section hidden p-6">
-          <h2 class="text-xl font-bold text-black mb-6 pb-3 border-b-2 border-gray-200">Transaction Management</h2>
+          <h2 class="text-xl font-bold text-black mb-6 pb-3 border-b-2 border-slate-200">Transaction Management</h2>
 
           <!-- Total Revenue -->
           <div class="bg-blue-600 text-white p-6 mb-8 border-2 border-blue-700">
@@ -124,20 +124,20 @@
           </div>
 
           <!-- Transaction Form -->
-          <form id="transactionForm" onsubmit="saveTransaction(event)" class="bg-gray-50 border-2 border-gray-200 p-6 mb-8">
+          <form id="transactionForm" onsubmit="saveTransaction(event)" class="bg-slate-50 border-2 border-slate-200 p-6 mb-8">
             <input type="hidden" id="transactionId" />
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
                 <label class="block text-sm font-semibold text-black mb-2">Product</label>
-                <select id="transactionProduct" required class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none">
+                <select id="transactionProduct" required class="w-full px-4 py-2 border-2 border-slate-300 focus:border-blue-600 focus:outline-none">
                   <option value="">-- Select Product --</option>
                 </select>
               </div>
               
               <div>
                 <label class="block text-sm font-semibold text-black mb-2">Quantity</label>
-                <input type="number" id="transactionQuantity" required min="1" class="w-full px-4 py-2 border-2 border-gray-300 focus:border-blue-600 focus:outline-none" />
+                <input type="number" id="transactionQuantity" required min="1" class="w-full px-4 py-2 border-2 border-slate-300 focus:border-blue-600 focus:outline-none" />
               </div>
             </div>
 
@@ -145,16 +145,16 @@
               <button type="submit" id="transactionSubmitBtn" class="bg-blue-600 text-white font-semibold py-3 px-8 hover:bg-blue-700">
                 Add Transaction
               </button>
-              <button type="button" onclick="resetTransactionForm()" class="bg-gray-600 text-white font-semibold py-3 px-8 hover:bg-gray-700">
+              <button type="button" onclick="resetTransactionForm()" class="bg-slate-600 text-white font-semibold py-3 px-8 hover:bg-slate-700">
                 Cancel
               </button>
             </div>
           </form>
 
           <!-- Transactions Table -->
-          <div class="border-2 border-gray-200 overflow-hidden">
+          <div class="border-2 border-slate-200 overflow-hidden">
             <table class="w-full">
-              <thead class="bg-gray-900 text-white">
+              <thead class="bg-slate-900 text-white">
                 <tr>
                   <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
                   <th class="px-4 py-3 text-left text-sm font-semibold">Product</th>
@@ -164,7 +164,7 @@
                   <th class="px-4 py-3 text-left text-sm font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody id="transactionsTable" class="divide-y-2 divide-gray-200"></tbody>
+              <tbody id="transactionsTable" class="divide-y-2 divide-slate-200"></tbody>
             </table>
           </div>
         </div>
