@@ -35,7 +35,7 @@ func main() {
 	}
 	transactionController := &controllers.TransactionController{Service: transactionService}
 
-	app.Static("/upload", "./upload")
+	app.Static("/uploads", "./uploads")
 	routes.ProductRoutes(app, productController)
 	routes.RegisterTransactionRoutes(app, transactionController)
 

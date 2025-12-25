@@ -1,8 +1,8 @@
-# Image Upload Fix - Setup Guide
+# Image uploads Fix - Setup Guide
 
 ## Issues Fixed
 
-1. ✅ **Missing Upload Directory** - Created `upload/` folder
+1. ✅ **Missing uploads Directory** - Created `uploads/` folder
 2. ✅ **Filename Mismatch** - Controller now uses generated unique filenames from service
 3. ✅ **Missing Image Column** - Updated SQL schema to include `image` field
 4. ✅ **Update Function** - Added image support to product update functionality
@@ -42,26 +42,26 @@ Open `index.html` in your browser or serve it via Laragon.
 
 ## How It Works
 
-### Image Upload Flow
+### Image uploads Flow
 
 1. **Frontend**: User selects an image file
 2. **Preview**: JavaScript shows preview using FileReader
 3. **Submit**: FormData sends file to backend
 4. **Backend**: 
    - Service generates unique filename (timestamp + extension)
-   - Controller saves file to `./upload/` directory
+   - Controller saves file to `./uploads/` directory
    - Repository stores filename in database
-5. **Display**: Images are served from `/upload/` static route
+5. **Display**: Images are served from `/uploads/` static route
 
 ### File Structure
 
 ```
-upload/                    # Image storage (created)
+uploads/                    # Image storage (created)
 ├── 1735074123456789.jpg  # Unique timestamped filenames
 └── 1735074234567890.png
 
 controllers/
-├── product_controller.go  # Handles file upload
+├── product_controller.go  # Handles file uploads
 └── transaction_controller.go
 
 services/
@@ -102,7 +102,7 @@ models/
 
 ### Images Not Showing
 
-1. Check if `upload/` directory exists
+1. Check if `uploads/` directory exists
 2. Verify database has `image` column
 3. Check browser console for 404 errors
 4. Ensure Go server is running on port 3000

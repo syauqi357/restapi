@@ -56,7 +56,7 @@ async function loadProducts() {
               <td class="px-4 py-3 font-semibold text-slate-700">${parameter.id}</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3 ">
-                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/upload/${parameter.image}" class="w-12 h-12 border border-slate-300 object-cover rounded-md" alt="">` : ''}
+                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/uploads/${parameter.image}" class="w-12 h-12 border border-slate-300 object-cover rounded-md" alt="">` : ''}
                   <span class="font-medium text-slate-900">${parameter.name}</span>
                 </div>
               </td>
@@ -141,7 +141,7 @@ async function editProduct(id) {
 
     const preview = document.getElementById('imagePreview');
     if (product.image && typeof product.image === 'string' && product.image !== '[object Object]') {
-        preview.src = `${API_URL}/upload/${product.image}`;
+        preview.src = `${API_URL}/uploads/${product.image}`;
         preview.classList.remove('hidden');
     } else {
         preview.classList.add('hidden');
@@ -267,7 +267,7 @@ async function loadTransactions() {
             <td class="px-4 py-3 font-semibold text-slate-900">${t.id}</td>
             <td class="px-4 py-3">
               <div class="flex items-center gap-3">
-                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/upload/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain" alt="">` : ''}
+                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/uploads/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain" alt="">` : ''}
                 <span class="font-medium text-slate-900">${t.product_name || "N/A"}</span>
               </div>
             </td>

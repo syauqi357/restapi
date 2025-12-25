@@ -37,7 +37,7 @@ func (c *ProductController) Create(ctx *fiber.Ctx) error {
 	price, _ := strconv.ParseFloat(ctx.FormValue("price"), 64)
 	stock, _ := strconv.Atoi(ctx.FormValue("stock"))
 
-	// image upload
+	// image uploads
 	file, _ := ctx.FormFile("image")
 
 	filename, err := c.Service.Create(name, price, file, stock)
@@ -45,9 +45,9 @@ func (c *ProductController) Create(ctx *fiber.Ctx) error {
 		return ctx.Status(400).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	// save file to upload directory
+	// save file to uploads directory
 	if file != nil && filename != "" {
-		err := ctx.SaveFile(file, "./upload/"+filename)
+		err := ctx.SaveFile(file, "./uploads/"+filename)
 		if err != nil {
 			return ctx.Status(500).JSON(fiber.Map{"error": err.Error()})
 		}
@@ -78,7 +78,7 @@ func (c *ProductController) Update(ctx *fiber.Ctx) error {
 	}
 
 	if file != nil && filename != "" {
-		err := ctx.SaveFile(file, "./upload/"+filename)
+		err := ctx.SaveFile(file, "./uploads/"+filename)
 		if err != nil {
 			return ctx.Status(500).JSON(fiber.Map{"error": err.Error()})
 		}
