@@ -71,9 +71,18 @@
               </div>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-6 bg-blue-500">
               <label class="block text-sm font-semibold text-black mb-2">Product Image</label>
-              <input type="file" id="productImage" accept="image/*" class="block w-full text-sm text-black file:mr-4 file:py-2 file:px-4 file:border-2 file:border-gray-300 file:bg-white file:text-black file:font-semibold hover:file:bg-gray-50"/>
+              <div id="dropzone" class="relative border-2 border-dashed border-slate-700 bg-blue-500 cursor-pointer group">
+                <input type="file" id="productImage" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
+                <div class="flex flex-col items-center justify-center py-12 px-6">
+                  <svg class="w-10 h-10 text-gray-400 group-hover:text-blue-500 transition-colors mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                  </svg>
+                  <p class="text-lg font-semibold text-gray-700 group-hover:text-blue-600 mb-2">Drop your image here or click to browse</p>
+                  <p class="text-sm text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                </div>
+              </div>
               <img id="imagePreview" class="mt-4 w-32 h-32 object-cover border-2 border-gray-300 hidden" alt="Image Preview" />
             </div>
 

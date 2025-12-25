@@ -1,5 +1,6 @@
 const API_URL = "http://localhost:3000";
 
+// switch tab function
 function switchTab(tab) {
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.classList.remove("bg-blue-600", "text-white");
@@ -24,7 +25,7 @@ function switchTab(tab) {
 // Show alert message
 function showAlert(message, type = "success") {
   const alertDiv = document.getElementById("alert");
-  const bgColor = type === "success" ? "bg-green-600" : "bg-red-600";
+  const bgColor = type === "success" ? "bg-emerald-500" : "bg-red-600";
   alertDiv.innerHTML = `
     <div class="${bgColor} text-white px-6 py-4 border-2 border-gray-900 font-semibold">
       ${message}
@@ -48,29 +49,25 @@ async function loadProducts() {
 
     tbody.innerHTML = products
       .map(
-        (p, i) => {
-          const stockClass = p.stock < 5 ? 'text-white bg-red-600' : p.stock < 20 ? 'text-gray-900 bg-yellow-400' : 'text-white bg-green-600';
+        (parameter, i) => {
+          const stockClass = parameter.stock < 5 ? 'text-white bg-red-600' : parameter.stock < 20 ? 'text-gray-900 bg-yellow-400' : 'text-white bg-green-600';
           return `
             <tr class="${i % 2 === 0 ? "bg-white" : "bg-gray-50"}">
-              <td class="px-4 py-3 font-semibold text-gray-700">${p.id}</td>
+              <td class="px-4 py-3 font-semibold text-gray-700">${parameter.id}</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3">
-                  ${p.image && typeof p.image === 'string' && p.image !== '[object Object]' ? `<img src="${API_URL}/upload/${p.image}" class="w-12 h-12 border-2 border-gray-300 object-cover" alt="">` : ''}
-                  <span class="font-medium text-gray-900">${p.name}</span>
+                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/upload/${parameter.image}" class="w-12 h-12 border-2 border-gray-300 object-cover" alt="">` : ''}
+                  <span class="font-medium text-gray-900">${parameter.name}</span>
                 </div>
               </td>
-              <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(p.price).toLocaleString("id-ID")}</td>
+              <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(parameter.price).toLocaleString("id-ID")}</td>
               <td class="px-4 py-3">
-                <div class="flex items-center gap-2">
-                  <span class="${stockClass} px-3 py-1 text-sm font-bold">${p.stock}</span>
-                  <button onclick="updateStock(${p.id}, 10)" class="bg-green-600 text-white px-3 py-2 hover:bg-green-700 font-bold">+10</button>
-                  <button onclick="updateStock(${p.id}, -10)" class="bg-red-600 text-white px-3 py-2 hover:bg-red-700 font-bold">-10</button>
-                </div>
+                <span class="${stockClass} px-3 py-1 text-sm font-bold">${parameter.stock}</span>
               </td>
               <td class="px-4 py-3">
                 <div class="flex gap-2">
-                  <button onclick="editProduct(${p.id})" class="bg-yellow-500 text-white px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
-                  <button onclick="deleteProduct(${p.id})" class="bg-red-600 text-white px-4 py-2 hover:bg-red-700 font-semibold">Delete</button>
+                  <button onclick="editProduct(${parameter.id})" class="bg-yellow-500 text-white px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
+                  <button onclick="deleteProduct(${parameter.id})" class="bg-red-600 text-white px-4 py-2 hover:bg-red-700 font-semibold">Delete</button>
                 </div>
               </td>
             </tr>
@@ -388,12 +385,74 @@ function resetTransactionForm() {
                 > Add Transaction`;
 }
 
-// Image Preview Listener
-document.getElementById('productImage').addEventListener('change', function(e) {
-    const preview = document.getElementById('imagePreview');
-    const file = e.target.files[0];
+// Dropzone functionality
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('productImage');
+const preview = document.getElementById('imagePreview');
 
-    if (file) {
+// Prevent default drag behaviors
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, preventDefaults, false);
+    document.body.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+// Highlight dropzone when item is dragged over it
+['dragenter', 'dragover'].forEach(eventName => {
+    dropzone.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    dropzone.classList.add('border-blue-600', 'bg-blue-100');
+}
+
+function unhighlight(e) {
+    dropzone.classList.remove('border-blue-600', 'bg-blue-100');
+}
+
+// Handle dropped files
+dropzone.addEventListener('drop', handleDrop, false);
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    
+    if (files.length > 0) {
+        fileInput.files = files;
+        handleFiles(files);
+    }
+}
+
+// Handle file selection (both drag-drop and click)
+fileInput.addEventListener('change', function(e) {
+    handleFiles(e.target.files);
+});
+
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            showAlert('Please select an image file', 'error');
+            return;
+        }
+        
+        // Validate file size (10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            showAlert('File size must be less than 10MB', 'error');
+            return;
+        }
+        
+        // Show preview
         const reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
@@ -401,7 +460,7 @@ document.getElementById('productImage').addEventListener('change', function(e) {
         }
         reader.readAsDataURL(file);
     }
-});
+}
 
 // Load initial data
 loadProducts();
