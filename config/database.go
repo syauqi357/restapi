@@ -8,7 +8,7 @@ import (
 )
 
 func ConnectDB() *sql.DB {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/galondb")
+	db, err := sql.Open("mysql", "root:@tcp(localhost:3306)/galondb?parseTime=true")
 	if err != nil {
 		log.Fatal(err)
 	}

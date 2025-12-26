@@ -10,7 +10,7 @@ type ProductRepository struct {
 }
 
 func (r *ProductRepository) GetAll() ([]models.Product, error) {
-	rows, err := r.DB.Query("SELECT id, name, price, COALESCE(image, '') as image, stock FROM products ORDER BY id DESC")
+	rows, err := r.DB.Query("SELECT id, name, price, COALESCE(image, '') as image, stock, created_at FROM products ORDER BY id DESC")
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +19,13 @@ func (r *ProductRepository) GetAll() ([]models.Product, error) {
 	var products []models.Product
 	for rows.Next() {
 		var p models.Product
-		rows.Scan(&p.ID, &p.Name, &p.Price, &p.Image, &p.Stock)
+		var createdAt sql.NullTime
+		if err := rows.Scan(&p.ID, &p.Name, &p.Price, &p.Image, &p.Stock, &createdAt); err != nil {
+			return nil, err
+		}
+		if createdAt.Valid {
+			p.CreatedAt = createdAt.Time
+		}
 		products = append(products, p)
 	}
 	return products, nil
@@ -27,13 +33,17 @@ func (r *ProductRepository) GetAll() ([]models.Product, error) {
 
 func (r *ProductRepository) GetByID(id int) (*models.Product, error) {
 	var p models.Product
+	var createdAt sql.NullTime
 	err := r.DB.QueryRow(
-		"SELECT id, name, price, COALESCE(image, '') as image, stock FROM products WHERE id = ?",
+		"SELECT id, name, price, COALESCE(image, '') as image, stock, created_at FROM products WHERE id = ?",
 		id,
-	).Scan(&p.ID, &p.Name, &p.Price, &p.Image, &p.Stock)
+	).Scan(&p.ID, &p.Name, &p.Price, &p.Image, &p.Stock, &createdAt)
 
 	if err != nil {
 		return nil, err
+	}
+	if createdAt.Valid {
+		p.CreatedAt = createdAt.Time
 	}
 	return &p, nil
 }
