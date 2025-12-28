@@ -46,19 +46,19 @@ async function loadTransactions() {
 
     let totalRevenue = 0;
     tbody.innerHTML = transactions
-      .map((t, i) => {
-        const total = t.quantity * parseFloat(t.product_price || 0);
+      .map((transactionItems, i) => {
+        const total = transactionItems.quantity * parseFloat(transactionItems.product_price || 0);
         totalRevenue += total;
         return `
           <tr class="${i % 2 === 0 ? "bg-white" : "bg-slate-50"}">
-            <td class="px-4 py-3 font-semibold text-slate-900">${t.id}</td>
+            <td class="px-4 py-3 font-semibold text-slate-900">${transactionItems.id}</td>
             <td class="px-4 py-3">
               <div class="flex items-center gap-3">
                 ${
-                  t.product_image &&
-                  typeof t.product_image === "string" &&
-                  t.product_image !== "[object Object]"
-                    ? `<img src="${API_URL}/uploads/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">`
+                  transactionItems.product_image &&
+                  typeof transactionItems.product_image === "string" &&
+                  transactionItems.product_image !== "[object Object]"
+                    ? `<img src="${API_URL}/uploads/${transactionItems.product_image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">`
                     : ""
                 }
               </div>
@@ -66,13 +66,13 @@ async function loadTransactions() {
             <td class="px-4 py-3">
               <div class="flex items-center gap-3">
                 <span class="font-medium text-slate-900">${
-                  t.product_name || "N/A"
+                  transactionItems.product_name || "N/A"
                 }</span>
               </div>
             </td>
-            <td class="px-4 py-3 text-slate-900 font-bold">${t.quantity}x</td>
+            <td class="px-4 py-3 text-slate-900 font-bold">${transactionItems.quantity}x</td>
             <td class="px-4 py-3 text-slate-900">Rp ${parseFloat(
-              t.product_price || 0
+              transactionItems.product_price || 0
             ).toLocaleString("id-ID")}
             </td>
             <td class="px-4 py-3 text-emerald-500 font-bold">Rp ${total.toLocaleString(
@@ -82,10 +82,10 @@ async function loadTransactions() {
             <td class="px-4 py-3">
               <div class="flex gap-2">
                 <button onclick="editTransaction(${
-                  t.id
+                  transactionItems.id
                 })" class="bg-amber-500 text-amber-50 rounded-md px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
                 <button onclick="deleteTransaction(${
-                  t.id
+                  transactionItems.id
                 })" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 font-semibold">Delete</button>
               </div>
             </td>

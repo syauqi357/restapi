@@ -48,7 +48,7 @@
           </button>
           <button
             onclick="switchTab('transactions')"
-            class="m-3 tab-btn rounded-lg flex-1 transition-all ease-in-out py-4 px-6 font-semibold text-slate-700 hover:bg-slate-50"
+            class="m-3 tab-btn rounded-lg flex-1 transition-all ease-in-out py-4 px-6 font-semibold text-slate-700 hover:bg-slate-50 border border-slate-200"
           >
             Transactions
           </button>
@@ -66,11 +66,13 @@
             <form
               id="productForm"
               onsubmit="saveProduct(event)"
-              class="bg-slate-50 border border-slate-200 rounded-md p-6 w-full md:w-1/2 mb-8"
+              class="bg-slate-50 border border-slate-200 rounded-md p-6 w-full md:w-200 mb-8"
             >
               <input type="hidden" id="productId" />
 
-              <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+              <div
+                class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mb-4"
+              >
                 <div>
                   <label class="block text-sm font-semibold text-black mb-2"
                     >nama produk</label
@@ -111,7 +113,7 @@
               </div>
 
               <div
-                class="mb-6 flex gap-3 flex-col text-left justify-center items-center"
+                class="mb-6 flex gap-3 flex-col text-left"
               >
                 <label class="block text-sm font-semibold text-black mb-2"
                   >Product Image</label
@@ -193,13 +195,13 @@
                         sort
                       </button> -->
                     </th>
-                    <th class="px-6 py-6 text-center text-sm font-semibold">
+                    <th class="px-6 py-3 text-center text-sm font-semibold">
                       image
                     </th>
-                    <th class="px-6 py-6 text-center text-sm font-semibold">
+                    <th class="px-6 py-3 text-center text-sm font-semibold">
                       Name
                     </th>
-                    <th class="px-6 py-6 text-center text-sm font-semibold">
+                    <th class="px-6 py-3 text-center text-sm font-semibold">
                       Price
                     </th>
                     <th class="px-4 py-3 text-center text-sm font-semibold">
@@ -240,7 +242,7 @@
             <form
               id="transactionForm"
               onsubmit="saveTransaction(event)"
-              class="bg-slate-50 border rounded-md border-slate-200 p-6 mb-8"
+              class="bg-slate-50 border w-full md:w-175 rounded-md border-slate-200 p-6 mb-8 "
             >
               <input type="hidden" id="transactionId" />
 
@@ -276,14 +278,14 @@
                 <button
                   type="submit"
                   id="transactionSubmitBtn"
-                  class="bg-blue-600 text-white text-sm rounded-md font-semibold py-3 px-8 hover:bg-blue-700"
+                  class="bg-blue-600 text-white md:text-sm text-xs rounded-md font-semibold py-3 px-8 hover:bg-blue-700"
                 >
                   Add Transaction
                 </button>
                 <button
                   type="button"
                   onclick="resetTransactionForm()"
-                  class="bg-slate-600 text-white text-sm rounded-md font-semibold py-3 px-8 hover:bg-slate-700"
+                  class="bg-slate-600 text-white md:text-sm text-xs rounded-md font-semibold py-3 px-8 hover:bg-slate-700"
                 >
                   Cancel
                 </button>

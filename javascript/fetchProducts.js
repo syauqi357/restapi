@@ -22,11 +22,11 @@ async function loadProducts() {
             ? "text-amber-900 bg-amber-200 border border-amber-500 rounded-md"
             : "text-emerald-800 bg-emerald-400 border border-emerald-500 rounded-md";
         return `
-            <tr class="bg-white hover:bg-slate-100 transition-all duration-400 ease-in-out">
-              <td class="px-4 py-3 font-semibold text-slate-700">${
+            <tr class="table-auto bg-white hover:bg-slate-100 transition-all duration-400 ease-in-out">
+              <td class="px-4 py-3 text-center font-semibold text-slate-700">${
                 productsType.id
               }</td>
-              <td class="px-4 py-3">
+              <td class="px-4 py-3 flex justify-center items-center">
                 <div class="flex items-center gap-3 ">
                   ${
                     productsType.image &&
@@ -37,17 +37,15 @@ async function loadProducts() {
                   }
                 </div>
               </td>
-              <td class="px-4 py-3">
-                <div class="flex items-center gap-3 ">
-                  <span class="font-medium text-slate-900">${
-                    productsType.name
-                  }</span>
-                </div>
+              <td class="px-4 py-3 text-center">
+              <span class="font-medium text-slate-900">
+                ${productsType.name}
+              </span>
               </td>
-              <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(
+              <td class="px-4 py-3 text-center text-blue-600 font-bold">Rp ${parseFloat(
                 productsType.price
               ).toLocaleString("id-ID")}</td>
-              <td class="px-4 py-3">
+              <td class="px-4 py-3 text-center">
                 <span class="${stockClass} px-3 py-1 text-sm font-bold">${
           productsType.stock
         }</span>
