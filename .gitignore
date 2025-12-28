@@ -1,5 +1,7 @@
 node_modules/
+bootstrap-5.3.8-dist/
 .idea/
+uploads/
 .DS_Store
 *.log
 .jpg

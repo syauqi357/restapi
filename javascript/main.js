@@ -25,9 +25,11 @@ function switchTab(tab) {
 // Show alert message
 function showAlert(message, type = "success") {
   const alertDiv = document.getElementById("alert");
-  const bgColor = type === "success" ? "bg-emerald-500" : "bg-red-600";
+  const backgroundColor = type === "success" ? "bg-emerald-300" : "bg-red-400";
+  const borderColor =
+    type === "success" ? "border-emerald-500" : "border-red-500";
   alertDiv.innerHTML = `
-    <div class="${bgColor} text-white px-6 py-4 border border-slate-900 font-semibold">
+    <div class="${backgroundColor} ${borderColor} border animate-pulse text-white px-6 py-4 rounded-md font-semibold">
       ${message}
     </div>
   `;
@@ -48,32 +50,53 @@ async function loadProducts() {
     }
 
     tbody.innerHTML = products
-      .map(
-        (parameter, i) => {
-          const stockClass = parameter.stock < 5 ? 'text-red-600 bg-red-400 border rounded-md border-red-500' : parameter.stock < 20 ? 'text-amber-900 bg-amber-200 border border-amber-500 rounded-md' : 'text-emerald-800 bg-emerald-400 border border-emerald-500 rounded-md';
-          return `
+      .map((parameter, i) => {
+        const stockClass =
+          parameter.stock < 5
+            ? "text-red-600 bg-red-400 border rounded-md border-red-500"
+            : parameter.stock < 20
+            ? "text-amber-900 bg-amber-200 border border-amber-500 rounded-md"
+            : "text-emerald-800 bg-emerald-400 border border-emerald-500 rounded-md";
+        return `
             <tr class="${i % 2 === 0 ? "bg-white" : "bg-slate-50"}">
-              <td class="px-4 py-3 font-semibold text-slate-700">${parameter.id}</td>
+              <td class="px-4 py-3 font-semibold text-slate-700">${
+                parameter.id
+              }</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3 ">
-                  ${parameter.image && typeof parameter.image === 'string' && parameter.image !== '[object Object]' ? `<img src="${API_URL}/uploads/${parameter.image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">` : ''}
-                  <span class="font-medium text-slate-900">${parameter.name}</span>
+                  ${
+                    parameter.image &&
+                    typeof parameter.image === "string" &&
+                    parameter.image !== "[object Object]"
+                      ? `<img src="${API_URL}/uploads/${parameter.image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">`
+                      : ""
+                  }
+                  <span class="font-medium text-slate-900">${
+                    parameter.name
+                  }</span>
                 </div>
               </td>
-              <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(parameter.price).toLocaleString("id-ID")}</td>
+              <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(
+                parameter.price
+              ).toLocaleString("id-ID")}</td>
               <td class="px-4 py-3">
-                <span class="${stockClass} px-3 py-1 text-sm font-bold">${parameter.stock}</span>
+                <span class="${stockClass} px-3 py-1 text-sm font-bold">${
+          parameter.stock
+        }</span>
               </td>
               <td class="px-4 py-3">
                 <div class="flex gap-2">
-                  <button onclick="editProduct(${parameter.id})" class="bg-amber-500 rounded-md capitalize text-amber-100 px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
-                  <button onclick="deleteProduct(${parameter.id})" class="bg-red-600 rounded-md text-white px-4 py-2 hover:bg-red-700 font-semibold capitalize">hapus</button>
+                  <button onclick="editProduct(${
+                    parameter.id
+                  })" class="bg-amber-500 rounded-md capitalize text-amber-100 px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
+                  <button onclick="deleteProduct(${
+                    parameter.id
+                  })" class="bg-red-600 rounded-md text-white px-4 py-2 hover:bg-red-700 font-semibold capitalize">hapus</button>
                 </div>
               </td>
             </tr>
           `;
-        }
-      )
+      })
       .join("");
   } catch (err) {
     console.log(err);
@@ -92,9 +115,7 @@ async function saveProduct(e) {
   const imageInput = document.getElementById("productImage");
 
   try {
-    const url = id
-      ? `${API_URL}/products/${id}`
-      : `${API_URL}/products`;
+    const url = id ? `${API_URL}/products/${id}` : `${API_URL}/products`;
 
     //  using post or put method as URL by ternary operator
     const method = id ? "PUT" : "POST";
@@ -104,7 +125,7 @@ async function saveProduct(e) {
     formData.append("price", price);
     formData.append("stock", stock);
     if (imageInput && imageInput.files[0]) {
-        formData.append("image", imageInput.files[0]);
+      formData.append("image", imageInput.files[0]);
     }
 
     const res = await fetch(url, {
@@ -139,18 +160,20 @@ async function editProduct(id) {
     document.getElementById("productPrice").value = product.price;
     document.getElementById("productStock").value = product.stock;
 
-    const preview = document.getElementById('imagePreview');
-    if (product.image && typeof product.image === 'string' && product.image !== '[object Object]') {
-        preview.src = `${API_URL}/uploads/${product.image}`;
-        preview.classList.remove('hidden');
+    const preview = document.getElementById("imagePreview");
+    if (
+      product.image &&
+      typeof product.image === "string" &&
+      product.image !== "[object Object]"
+    ) {
+      preview.src = `${API_URL}/uploads/${product.image}`;
+      preview.classList.remove("hidden");
     } else {
-        preview.classList.add('hidden');
-        preview.src = '';
+      preview.classList.add("hidden");
+      preview.src = "";
     }
 
-    document.getElementById(
-      "productSubmitBtn"
-    ).innerHTML = `Update Product`;
+    document.getElementById("productSubmitBtn").innerHTML = `Update Product`;
     window.scrollTo(0, 0);
   } catch (err) {
     showAlert("Failed to load product", "error");
@@ -183,9 +206,9 @@ function resetProductForm() {
   document.getElementById("productForm").reset();
   document.getElementById("productId").value = "";
   document.getElementById("productStock").value = "0";
-  const preview = document.getElementById('imagePreview');
-  preview.src = '';
-  preview.classList.add('hidden');
+  const preview = document.getElementById("imagePreview");
+  preview.src = "";
+  preview.classList.add("hidden");
   document.getElementById("productSubmitBtn").innerHTML = "Add Product";
 }
 
@@ -193,24 +216,26 @@ function resetProductForm() {
 async function updateStock(id, delta) {
   try {
     const res = await fetch(`${API_URL}/products/${id}/stock`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ delta: delta })
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ delta: delta }),
     });
-    
+
     const data = await res.json();
     if (res.ok) {
       showAlert(data.message);
       loadProducts();
       // Refresh transaction dropdown if on transactions tab
-      if (!document.getElementById('transactions').classList.contains('hidden')) {
+      if (
+        !document.getElementById("transactions").classList.contains("hidden")
+      ) {
         loadProductsForSelect();
       }
     } else {
-      showAlert(data.error || 'Failed to update stock', 'error');
+      showAlert(data.error || "Failed to update stock", "error");
     }
   } catch (err) {
-    showAlert('Failed to update stock', 'error');
+    showAlert("Failed to update stock", "error");
   }
 }
 
@@ -222,10 +247,11 @@ async function loadProductsForSelect() {
     const select = document.getElementById("transactionProduct");
 
     // Filter products to only show those with stock > 0
-    const availableProducts = products.filter(p => p.stock > 0);
+    const availableProducts = products.filter((p) => p.stock > 0);
 
     if (availableProducts.length === 0) {
-      select.innerHTML = '<option value="">-- No products available --</option>';
+      select.innerHTML =
+        '<option value="">-- No products available --</option>';
       return;
     }
 
@@ -267,17 +293,33 @@ async function loadTransactions() {
             <td class="px-4 py-3 font-semibold text-slate-900">${t.id}</td>
             <td class="px-4 py-3">
               <div class="flex items-center gap-3">
-                ${t.product_image && typeof t.product_image === 'string' && t.product_image !== '[object Object]' ? `<img src="${API_URL}/uploads/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">` : ''}
-                <span class="font-medium text-slate-900">${t.product_name || "N/A"}</span>
+                ${
+                  t.product_image &&
+                  typeof t.product_image === "string" &&
+                  t.product_image !== "[object Object]"
+                    ? `<img src="${API_URL}/uploads/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">`
+                    : ""
+                }
+                <span class="font-medium text-slate-900">${
+                  t.product_name || "N/A"
+                }</span>
               </div>
             </td>
             <td class="px-4 py-3 text-slate-900 font-bold">${t.quantity}x</td>
-            <td class="px-4 py-3 text-slate-900">Rp ${parseFloat(t.product_price || 0).toLocaleString("id-ID")}</td>
-            <td class="px-4 py-3 text-slate-900 font-bold">Rp ${total.toLocaleString("id-ID")}</td>
+            <td class="px-4 py-3 text-slate-900">Rp ${parseFloat(
+              t.product_price || 0
+            ).toLocaleString("id-ID")}</td>
+            <td class="px-4 py-3 text-slate-900 font-bold">Rp ${total.toLocaleString(
+              "id-ID"
+            )}</td>
             <td class="px-4 py-3">
               <div class="flex gap-2">
-                <button onclick="editTransaction(${t.id})" class="bg-amber-500 text-amber-50 rounded-md px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
-                <button onclick="deleteTransaction(${t.id})" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 font-semibold">Delete</button>
+                <button onclick="editTransaction(${
+                  t.id
+                })" class="bg-amber-500 text-amber-50 rounded-md px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
+                <button onclick="deleteTransaction(${
+                  t.id
+                })" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 font-semibold">Delete</button>
               </div>
             </td>
           </tr>
@@ -308,9 +350,9 @@ async function saveTransaction(e) {
     const res = await fetch(url, {
       method: method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
-        product_id: parseInt(product_id), 
-        quantity: parseInt(quantity) 
+      body: JSON.stringify({
+        product_id: parseInt(product_id),
+        quantity: parseInt(quantity),
       }),
     });
 
@@ -386,80 +428,80 @@ function resetTransactionForm() {
 }
 
 // Dropzone functionality
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('productImage');
-const preview = document.getElementById('imagePreview');
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("productImage");
+const preview = document.getElementById("imagePreview");
 
 // Prevent default drag behaviors
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    dropzone.addEventListener(eventName, preventDefaults, false);
-    document.body.addEventListener(eventName, preventDefaults, false);
+["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+  dropzone.addEventListener(eventName, preventDefaults, false);
+  document.body.addEventListener(eventName, preventDefaults, false);
 });
 
 function preventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
 }
 
 // Highlight dropzone when item is dragged over it
-['dragenter', 'dragover'].forEach(eventName => {
-    dropzone.addEventListener(eventName, highlight, false);
+["dragenter", "dragover"].forEach((eventName) => {
+  dropzone.addEventListener(eventName, highlight, false);
 });
 
-['dragleave', 'drop'].forEach(eventName => {
-    dropzone.addEventListener(eventName, unhighlight, false);
+["dragleave", "drop"].forEach((eventName) => {
+  dropzone.addEventListener(eventName, unhighlight, false);
 });
 
 function highlight(e) {
-    dropzone.classList.add('border-blue-600', 'bg-blue-100');
+  dropzone.classList.add("border-blue-600", "bg-blue-100");
 }
 
 function unhighlight(e) {
-    dropzone.classList.remove('border-blue-600', 'bg-blue-100');
+  dropzone.classList.remove("border-blue-600", "bg-blue-100");
 }
 
 // Handle dropped files
-dropzone.addEventListener('drop', handleDrop, false);
+dropzone.addEventListener("drop", handleDrop, false);
 
 function handleDrop(e) {
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    
-    if (files.length > 0) {
-        fileInput.files = files;
-        handleFiles(files);
-    }
+  const dt = e.dataTransfer;
+  const files = dt.files;
+
+  if (files.length > 0) {
+    fileInput.files = files;
+    handleFiles(files);
+  }
 }
 
 // Handle file selection (both drag-drop and click)
-fileInput.addEventListener('change', function(e) {
-    handleFiles(e.target.files);
+fileInput.addEventListener("change", function (e) {
+  handleFiles(e.target.files);
 });
 
 function handleFiles(files) {
-    if (files.length > 0) {
-        const file = files[0];
-        
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-            showAlert('Please select an image file', 'error');
-            return;
-        }
-        
-        // Validate file size (10MB)
-        if (file.size > 10 * 1024 * 1024) {
-            showAlert('File size must be less than 10MB', 'error');
-            return;
-        }
-        
-        // Show preview
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-            preview.classList.remove('hidden');
-        }
-        reader.readAsDataURL(file);
+  if (files.length > 0) {
+    const file = files[0];
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      showAlert("Please select an image file", "error");
+      return;
     }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      showAlert("File size must be less than 10MB", "error");
+      return;
+    }
+
+    // Show preview
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      preview.classList.remove("hidden");
+    };
+    reader.readAsDataURL(file);
+  }
 }
 
 // Load initial data

@@ -9,17 +9,23 @@
 
   <body class="min-h-screen font">
     <!-- Header -->
-    <nav class="sticky top-0 z-50  bg-white/80 backdrop-blur-md border-b-2 border-blue-700 shadow-lg transition-all">
+    <nav
+      class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b-2 border-blue-700 shadow-lg transition-all"
+    >
       <div class="container mx-auto px-6 py-4">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 flex items-center justify-center text-white">
-            <img src="./src/logoAqua/Asset 1.png" alt="" srcset="">
+            <img src="./src/logoAqua/Asset 1.png" alt="" srcset="" />
           </div>
           <div>
-            <h1 class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">
+            <h1
+              class="text-xl md:text-2xl font-bold text-slate-800 tracking-tight"
+            >
               Galon Management System
             </h1>
-            <p class="text-sm text-slate-500 font-medium">Inventory & Transaction Management</p>
+            <p class="text-sm text-slate-500 font-medium">
+              Inventory & Transaction Management
+            </p>
           </div>
         </div>
       </div>
@@ -201,7 +207,7 @@
         </section>
 
         <!-- Transactions Section -->
-         <!-- 
+        <!-- 
         TODOS : MAKE THE LAYOUT BETTER
          -->
         <section id="transactions" class="section hidden p-6">
@@ -218,7 +224,7 @@
             <p class="text-sm font-semibold mb-2">TOTAL:</p>
             <p class="text-4xl font-bold" id="totalRevenue">Rp 0</p>
           </div>
-          <div class="flex flex-col md:flex-row  gap-2 md:p-2">
+          <div class="flex flex-col md:flex-row gap-2 md:p-2">
             <!-- Transaction Form -->
             <form
               id="transactionForm"
@@ -227,7 +233,7 @@
             >
               <input type="hidden" id="transactionId" />
 
-              <div class="grid grid-cols-1  md:grid-cols-1 gap-4 mb-6">
+              <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
                 <div>
                   <label class="block text-sm font-semibold text-black mb-2"
                     >Product</label
@@ -277,7 +283,9 @@
             FIXME : FIX LAYOUT TABLE COLOR AND SETUP
             -->
             <!-- Transactions Table -->
-            <div class="border w-full border-slate-200 overflow-hidden rounded-md">
+            <div
+              class="border w-full border-slate-200 overflow-hidden rounded-md"
+            >
               <table class="w-full">
                 <thead class="bg-slate-900 text-white">
                   <tr>
@@ -312,6 +320,7 @@
       </div>
     </div>
 
+    <script src="./src/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     <script src="javascript/main.js"></script>
   </body>
 </html>
