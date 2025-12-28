@@ -7,54 +7,58 @@ async function loadProducts() {
     const products = await res.json();
     const tbody = document.getElementById("productsTable");
 
-    if (products.length === 0) {
+    if (!Array.isArray(products) || products.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">No products found</td></tr>';
+        '<tr><td colspan="6" class="px-6 py-8 text-center text-slate-500">No products found</td></tr>';
       return;
     }
 
     tbody.innerHTML = products
-      .map((parameter, i) => {
+      .map((productsType, i) => {
         const stockClass =
-          parameter.stock < 5
+          productsType.stock < 5
             ? "text-red-600 bg-red-400 border rounded-md border-red-500"
-            : parameter.stock < 20
+            : productsType.stock < 20
             ? "text-amber-900 bg-amber-200 border border-amber-500 rounded-md"
             : "text-emerald-800 bg-emerald-400 border border-emerald-500 rounded-md";
         return `
-            <tr class="${i % 2 === 0 ? "bg-white" : "bg-slate-50"}">
+            <tr class="bg-white hover:bg-slate-100 transition-all duration-400 ease-in-out">
               <td class="px-4 py-3 font-semibold text-slate-700">${
-                parameter.id
+                productsType.id
               }</td>
               <td class="px-4 py-3">
                 <div class="flex items-center gap-3 ">
                   ${
-                    parameter.image &&
-                    typeof parameter.image === "string" &&
-                    parameter.image !== "[object Object]"
-                      ? `<img src="${API_URL}/uploads/${parameter.image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">`
+                    productsType.image &&
+                    typeof productsType.image === "string" &&
+                    productsType.image !== "[object Object]"
+                      ? `<img src="${API_URL}/uploads/${productsType.image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">`
                       : ""
                   }
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-3 ">
                   <span class="font-medium text-slate-900">${
-                    parameter.name
+                    productsType.name
                   }</span>
                 </div>
               </td>
               <td class="px-4 py-3 text-blue-600 font-bold">Rp ${parseFloat(
-                parameter.price
+                productsType.price
               ).toLocaleString("id-ID")}</td>
               <td class="px-4 py-3">
                 <span class="${stockClass} px-3 py-1 text-sm font-bold">${
-          parameter.stock
+          productsType.stock
         }</span>
               </td>
               <td class="px-4 py-3">
                 <div class="flex gap-2">
                   <button onclick="editProduct(${
-                    parameter.id
+                    productsType.id
                   })" class="bg-amber-500 rounded-md capitalize text-amber-100 px-4 py-2 hover:bg-yellow-600 font-semibold">Edit</button>
                   <button onclick="deleteProduct(${
-                    parameter.id
+                    productsType.id
                   })" class="bg-red-600 rounded-md text-white px-4 py-2 hover:bg-red-700 font-semibold capitalize">hapus</button>
                 </div>
               </td>
@@ -63,8 +67,8 @@ async function loadProducts() {
       })
       .join("");
   } catch (err) {
-    console.log(err);
-    showAlert("failed to load products", "error");
+    document.getElementById("productsTable").innerHTML =
+      '<tr><td colspan="6" class="px-6 py-8 text-center text-red-500">Failed to load products</td></tr>';
   }
 }
 

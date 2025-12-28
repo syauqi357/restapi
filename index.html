@@ -31,22 +31,24 @@
       </div>
     </nav>
 
-    <div class="container mx-auto px-6 py-8">
+    <div class="container mx-auto px-3 py-4 md:px-6 md:py-8">
       <!-- Alert -->
       <div id="alert" class="mb-6"></div>
 
-      <div class="bg-white border border-slate-200 mb-6">
+      <div
+        class="bg-white overflow-hidden rounded-xl border border-slate-200 mb-6"
+      >
         <!-- Tabs -->
         <div class="flex border-b-2 border-slate-200">
           <button
             onclick="switchTab('products')"
-            class="tab-btn flex-1 py-4 px-6 font-semibold text-slate-200 bg-blue-600 border border-slate-200"
+            class="m-3 transition-all ease-in-out rounded-lg tab-btn flex-1 py-4 px-6 font-semibold text-slate-200 bg-blue-600 border border-slate-200"
           >
             Products
           </button>
           <button
             onclick="switchTab('transactions')"
-            class="tab-btn flex-1 py-4 px-6 font-semibold text-slate-700 hover:bg-slate-50"
+            class="m-3 tab-btn rounded-lg flex-1 transition-all ease-in-out py-4 px-6 font-semibold text-slate-700 hover:bg-slate-50"
           >
             Transactions
           </button>
@@ -54,7 +56,9 @@
 
         <!-- Products Section -->
         <section id="products" class="section md:p-6">
-          <h2 class="text-xl font-bold text-black mb-6 pb-3 capitalize">
+          <h2
+            class="md:text-2xl text-sm font-bold text-black mb-6 pb-3 capitalize"
+          >
             manajemen produk
           </h2>
           <div class="flex w-full gap-2 flex-col md:flex-row p-2">
@@ -66,7 +70,7 @@
             >
               <input type="hidden" id="productId" />
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label class="block text-sm font-semibold text-black mb-2"
                     >nama produk</label
@@ -180,26 +184,35 @@
               <table class="w-full">
                 <thead class="bg-slate-200 text-slate-900">
                   <tr>
-                    <th class="px-4 py-3 text-left text-sm font-semibold">
+                    <th class="px-4 py-3 text-center text-sm font-semibold">
                       ID
+                      <!-- <button
+                        onclick="sortfunct()"
+                        class="bg-slate-200 p-2 border rounded-sm hover:bg-slate-300 hover:border-slate-400 transition-all ease-in-out border-slate-300"
+                      >
+                        sort
+                      </button> -->
                     </th>
-                    <th class="px-6 py-6 text-left text-sm font-semibold">
+                    <th class="px-6 py-6 text-center text-sm font-semibold">
+                      image
+                    </th>
+                    <th class="px-6 py-6 text-center text-sm font-semibold">
                       Name
                     </th>
-                    <th class="px-6 py-6 text-left text-sm font-semibold">
+                    <th class="px-6 py-6 text-center text-sm font-semibold">
                       Price
                     </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold">
+                    <th class="px-4 py-3 text-center text-sm font-semibold">
                       Stock
                     </th>
-                    <th class="px-4 py-3 text-left text-sm font-semibold">
+                    <th class="px-4 py-3 text-center text-sm font-semibold">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody
                   id="productsTable"
-                  class="divide-y-2 divide-slate-200"
+                  class="divide-y divide-slate-200"
                 ></tbody>
               </table>
             </div>
@@ -211,9 +224,7 @@
         TODOS : MAKE THE LAYOUT BETTER
          -->
         <section id="transactions" class="section hidden p-6">
-          <h2
-            class="text-xl font-bold text-black mb-6 pb-3 border-b-2 border-slate-200"
-          >
+          <h2 class="md:text-2xl text-xs font-bold text-black mb-6 pb-3">
             Transaction Management
           </h2>
 
@@ -241,7 +252,7 @@
                   <select
                     id="transactionProduct"
                     required
-                    class="w-full px-4 py-2 border border-slate-300 focus:border-blue-600 focus:outline-none"
+                    class="w-full px-4 py-2 rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none"
                   >
                     <option value="">-- Select Product --</option>
                   </select>
@@ -256,7 +267,7 @@
                     id="transactionQuantity"
                     required
                     min="1"
-                    class="w-full px-4 py-2 border border-slate-300 focus:border-blue-600 focus:outline-none"
+                    class="w-full p-2 rounded-md border border-slate-300 focus:border-blue-600 focus:outline-none"
                   />
                 </div>
               </div>
@@ -291,6 +302,9 @@
                   <tr>
                     <th class="px-4 py-3 text-left text-sm font-semibold">
                       ID
+                    </th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold">
+                      image
                     </th>
                     <th class="px-4 py-3 text-left text-sm font-semibold">
                       Product

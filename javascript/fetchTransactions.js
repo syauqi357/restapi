@@ -37,7 +37,7 @@ async function loadTransactions() {
     const transactions = await res.json();
     const tbody = document.getElementById("transactionsTable");
 
-    if (transactions.length === 0) {
+    if (!Array.isArray(transactions) || transactions.length === 0) {
       tbody.innerHTML =
         '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">No transactions found</td></tr>';
       document.getElementById("totalRevenue").textContent = "Rp 0";
@@ -61,6 +61,10 @@ async function loadTransactions() {
                     ? `<img src="${API_URL}/uploads/${t.product_image}" class="w-12 h-12 border border-slate-300 object-contain rounded-md" alt="">`
                     : ""
                 }
+              </div>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-3">
                 <span class="font-medium text-slate-900">${
                   t.product_name || "N/A"
                 }</span>
@@ -69,10 +73,12 @@ async function loadTransactions() {
             <td class="px-4 py-3 text-slate-900 font-bold">${t.quantity}x</td>
             <td class="px-4 py-3 text-slate-900">Rp ${parseFloat(
               t.product_price || 0
-            ).toLocaleString("id-ID")}</td>
-            <td class="px-4 py-3 text-slate-900 font-bold">Rp ${total.toLocaleString(
+            ).toLocaleString("id-ID")}
+            </td>
+            <td class="px-4 py-3 text-emerald-500 font-bold">Rp ${total.toLocaleString(
               "id-ID"
-            )}</td>
+            )}
+            </td>
             <td class="px-4 py-3">
               <div class="flex gap-2">
                 <button onclick="editTransaction(${
@@ -92,7 +98,8 @@ async function loadTransactions() {
       "totalRevenue"
     ).textContent = `Rp ${totalRevenue.toLocaleString("id-ID")}`;
   } catch (err) {
-    showAlert("Failed to load transactions", "error");
+    document.getElementById("transactionsTable").innerHTML =
+      '<tr><td colspan="7" class="px-4 py-8 text-center text-red-500">Failed to load transactions</td></tr>';
   }
 }
 
